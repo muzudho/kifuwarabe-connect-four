@@ -1,10 +1,12 @@
 mod command_line_seek;
+mod engine;
 mod log;
 mod look_and_model;
 mod position;
 mod test;
 mod uxi_protocol;
 
+use crate::engine::*;
 use crate::log::LogExt;
 use crate::test::test;
 use casual_logger::{Level, Log, Table};
@@ -29,6 +31,38 @@ fn main() {
     if Log::enabled(Level::Debug) {
         test();
     }
+
+    let mut engine = Engine::default();
+    engine.title();
+
+    // End the loop with 'quit'. Forced termination with [Ctrl]+[C].
+    // 'quit' でループを終了。 [Ctrl]+[C] で強制終了。
+    loop {
+        let mut line: String = String::new();
+        // Wait for command line input from standard input.
+        // 標準入力からのコマンドライン入力を待機します。
+        match std::io::stdin().read_line(&mut line) {
+            Ok(_n) => {}
+            // Tips. You can separate error numbers by simply specifying the line number.
+            // テクニック。 エラー番号は行番号を振っておくだけで少しはばらけます。
+            Err(e) => panic!(Log::print_fatal(&format!(
+                "(Err.373) Failed to read line. / {}",
+                e
+            ))),
+        };
+
+        if let Some(response) = engine.enter(&line) {
+            match response {
+                Response::Quit => {
+                    break;
+                }
+            }
+        }
+    }
+
+    // Wait for logging to complete.
+    // ロギングが完了するまで待ちます。
+    Log::flush();
 }
 
 /// # Return
