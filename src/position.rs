@@ -3,46 +3,13 @@
 use crate::file_to_num;
 use crate::log::LogExt;
 use crate::look_and_model::BOARD_LEN;
+use crate::look_and_model::FILE_LEN;
 use crate::look_and_model::{Piece, Position};
 use casual_logger::{Log, Table};
 
 /// Position. A record of the game used to suspend or resume it.  
 /// 局面。 ゲームを中断したり、再開したりするときに使うゲームの記録です。  
 impl Position {
-    /// It is the bottom of the specified row.  
-    /// 指定した列の最下段の空升です。  
-    pub fn fallen_sq(&mut self, file: char) -> usize {
-        let mut sq = file_to_num(file) as usize;
-        if let Some(_) = self.board[sq] {
-            panic!(Log::print_fatal_t(
-                "(Err.32) File is filled.",
-                Table::default().char("file", file)
-            ));
-        }
-        while sq + 7 < BOARD_LEN {
-            if let None = self.board[sq + 7] {
-                sq += 7;
-            } else {
-                break;
-            }
-        }
-        sq
-    }
-
-    /// The square with the top piece of the specified row.  
-    /// 指定した行の一番上のピースがあるマスです。  
-    pub fn peak_sq_in_file(&mut self, file: char) -> Option<usize> {
-        let mut sq = file_to_num(file) as usize;
-        while sq < BOARD_LEN {
-            if let None = self.board[sq + 7] {
-                sq += 7;
-            } else {
-                return Some(sq);
-            }
-        }
-        None
-    }
-
     /// Place the stone.  
     /// １手指します。  
     pub fn do_move(&mut self, file: char) {
@@ -108,5 +75,39 @@ impl Position {
             Nought => Cross,
             Cross => Nought,
         }
+    }
+
+    /// It is the bottom of the specified row.  
+    /// 指定した列の最下段の空升です。  
+    pub fn fallen_sq(&mut self, file: char) -> usize {
+        let mut sq = file_to_num(file) as usize;
+        if let Some(_) = self.board[sq] {
+            panic!(Log::print_fatal_t(
+                "(Err.32) File is filled.",
+                Table::default().char("file", file)
+            ));
+        }
+        while sq + FILE_LEN < BOARD_LEN {
+            if let None = self.board[sq + FILE_LEN] {
+                sq += FILE_LEN;
+            } else {
+                break;
+            }
+        }
+        sq
+    }
+
+    /// The square with the top piece of the specified row.  
+    /// 指定した行の一番上のピースがあるマスです。  
+    pub fn peak_sq_in_file(&mut self, file: char) -> Option<usize> {
+        let mut sq = file_to_num(file) as usize;
+        while sq < BOARD_LEN {
+            if let None = self.board[sq] {
+                sq += FILE_LEN;
+            } else {
+                return Some(sq);
+            }
+        }
+        None
     }
 }

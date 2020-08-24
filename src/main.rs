@@ -29,15 +29,19 @@ fn main() {
     }
 }
 
+/// # Return
+///
+/// square on top row.
+/// 最上段のマス。
 fn file_to_num(file: char) -> u8 {
     match file {
-        'a' => 1,
-        'b' => 2,
-        'c' => 3,
-        'd' => 4,
-        'e' => 5,
-        'f' => 6,
-        'g' => 7,
+        'a' => 0,
+        'b' => 1,
+        'c' => 2,
+        'd' => 3,
+        'e' => 4,
+        'f' => 5,
+        'g' => 6,
         _ => panic!(Log::print_fatal_t(
             "(Err.32) Invalid file.",
             Table::default().char("file", file)

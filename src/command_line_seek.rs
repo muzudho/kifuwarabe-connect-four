@@ -63,7 +63,7 @@ impl CommandLineSeek {
         let line: String = match line.trim().parse() {
             Ok(n) => n,
             Err(e) => panic!(Log::print_fatal(&format!(
-                "(Err.38)  Failed to parse. / {}",
+                "(Err.66)  Failed to parse. / {}",
                 e
             ))),
         };

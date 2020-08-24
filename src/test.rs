@@ -31,7 +31,7 @@ pub fn test() {
     Log::print_debug(&format!("Lose  =|{}|", GameResult::Lose));
     // Lose  =|lose|
 
-    let pos = Position::default();
+    let mut pos = Position::default();
     Log::print_debug(&pos.pos());
     /*
     [Next 1 piece(s) | Go O]
@@ -100,32 +100,51 @@ pub fn test() {
     ));
     // info json { "nps":   789, "nodes":     0, "pop" :"1", "pieces":0              , "result":"win" , "O":"Hello!", "pv":[] }
 
-    /*
     // Step 4.
-    pos.do_move(1);
+    pos.do_move('d');
     Log::print_debug(&pos.pos());
-    // [Next 2 move(s) | Go x]
-    //
-    //         +---+---+---+ Please select a square. Example `do 7`
-    //         |   |   |   | マスを選んでください。例 `do 7`
-    //         +---+---+---+
-    //         |   |   |   |    7 8 9
-    //         +---+---+---+    4 5 6
-    //         | o |   |   |    1 2 3
-    //         +---+---+---+
+    /*
+    [Next 2 piece(s) | Go X]
+
+      +---+---+---+---+---+---+---+ Please select a file. Example `do d`
+    6 |   |   |   |   |   |   |   | 列を選んでください。例 `do d`
+      +---+---+---+---+---+---+---+
+    5 |   |   |   |   |   |   |   |    a b c d e f g
+      +---+---+---+---+---+---+---+
+    4 |   |   |   |   |   |   |   |
+      +---+---+---+---+---+---+---+
+    3 |   |   |   |   |   |   |   |
+      +---+---+---+---+---+---+---+
+    2 |   |   |   |   |   |   |   |
+      +---+---+---+---+---+---+---+
+    1 |   |   |   | O |   |   |   |
+      +---+---+---+---+---+---+---+
+        a   b   c   d   e   f   g
+    */
     pos.undo_move();
     Log::print_debug(&pos.pos());
-    // [Next 1 move(s) | Go o]
-    //
-    //         +---+---+---+ Please select a square. Example `do 7`
-    //         |   |   |   | マスを選んでください。例 `do 7`
-    //         +---+---+---+
-    //         |   |   |   |    7 8 9
-    //         +---+---+---+    4 5 6
-    //         |   |   |   |    1 2 3
-    //         +---+---+---+
-    Log::print_debug(&format!("opponent={}", pos.opponent()));
+    /*
+    [Next 1 piece(s) | Go O]
 
+      +---+---+---+---+---+---+---+ Please select a file. Example `do d`
+    6 |   |   |   |   |   |   |   | 列を選んでください。例 `do d`
+      +---+---+---+---+---+---+---+
+    5 |   |   |   |   |   |   |   |    a b c d e f g
+      +---+---+---+---+---+---+---+
+    4 |   |   |   |   |   |   |   |
+      +---+---+---+---+---+---+---+
+    3 |   |   |   |   |   |   |   |
+      +---+---+---+---+---+---+---+
+    2 |   |   |   |   |   |   |   |
+      +---+---+---+---+---+---+---+
+    1 |   |   |   |   |   |   |   |
+      +---+---+---+---+---+---+---+
+        a   b   c   d   e   f   g
+    */
+    Log::print_debug(&format!("opponent=|{}|", pos.opponent()));
+    // opponent=|X|
+
+    /*
     // Step 5.
     let mut p = CommandLineSeek::new("Go to the Moon!");
     Log::print_debug(&format!("Go to   =|{}|", p.starts_with("Go to")));
