@@ -2,6 +2,7 @@ mod command_line_seek;
 mod engine;
 mod log;
 mod look_and_model;
+mod performance_measurement;
 mod position;
 mod test;
 mod uxi_protocol;

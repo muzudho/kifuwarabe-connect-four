@@ -5,8 +5,8 @@ use crate::command_line_seek::CommandLineSeek;
 use crate::log::LogExt;
 use crate::look_and_model::{GameResult, Piece, Position, Search, SearchDirection};
 use casual_logger::Log;
+use std::{thread, time};
 // use std;
-// use std::{thread, time};
 
 /// It is a unit test. I am writing it here because it is a hassle.
 /// Check it against the explanation in README.md.
@@ -344,7 +344,6 @@ pub fn test() {
     draw=|true|
     */
 
-    /*
     // Step 10.
     // Since we have not searched, both nodes and nps will be 0.
     // 探索してないので、 nodes も nps も 0 になります。
@@ -356,6 +355,7 @@ pub fn test() {
     Log::print_debug(&format!("nps  ={}", search.nps()));
     // nps  =0
 
+    /*
     // Step 11.
     let xfen = "xfen 3/3/3 o moves 1 5 2 3 7 4";
     pos = if let Some(pos) = Position::from_xfen(xfen) {

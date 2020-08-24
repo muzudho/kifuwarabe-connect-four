@@ -77,9 +77,9 @@ Before you make a computer player, let's judge the outcome. And let's test.
 
 Before creating a computer player, let's create a mechanism to measure performance.  
 
-* [ ] Step 10. 'performance_measurement.rs'
-  * [ ] Seconds. - Stopwatch.
-  * [ ] Node per second.
+* [x] Step 10. 'performance_measurement.rs'
+  * [x] Seconds. - Stopwatch.
+  * [x] Node per second.
 
 Finally, let's make a computer player.  
 
