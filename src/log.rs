@@ -1,6 +1,6 @@
 //! Extend the functionality of the log.  
 //! ログの機能を拡張します。  
-use casual_logger::{Level, Log};
+use casual_logger::{Level, Log, Table};
 
 /// Extend the functionality of the log.  
 /// ログの機能を拡張します。  
@@ -49,6 +49,26 @@ pub trait LogExt {
     ///
     /// メッセージ。
     fn print_fatal(s: &str) -> String;
+
+    /// Display 'fatal' level messages and write to log.  
+    /// 致命的レベル メッセージを表示し、ログに書き込みます。  
+    ///
+    /// # Arguments
+    ///
+    /// * `s` - Message.  
+    ///         メッセージ。  
+    /// * `t` - Table.  
+    ///         テーブル。  
+    ///
+    /// # Returns
+    ///
+    /// メッセージ。
+    fn print_fatal_t(s: &str, t: &mut Table) -> String {
+        // In the Computer Shogi USI protocol, "info string" is a display text.
+        // コンピューター将棋の USIプロトコル で 'info string' というのがあって
+        // 強制終了の直前に画面に出せるかもしれないから付けています。
+        Log::fatal_t(&format!("info string panic! {}", s), t)
+    }
 }
 impl LogExt for Log {
     /// Display 'debug' level messages and write to log.  
@@ -123,5 +143,25 @@ impl LogExt for Log {
         // コンピューター将棋の USIプロトコル で 'info string' というのがあって
         // 強制終了の直前に画面に出せるかもしれないから付けています。
         Log::fatal(&format!("info string panic! {}", s))
+    }
+
+    /// Display 'fatal' level messages and write to log.  
+    /// 致命的レベル メッセージを表示し、ログに書き込みます。  
+    ///
+    /// # Arguments
+    ///
+    /// * `s` - Message.  
+    ///         メッセージ。  
+    /// * `t` - Table.  
+    ///         テーブル。  
+    ///
+    /// # Returns
+    ///
+    /// メッセージ。
+    fn print_fatal_t(s: &str, t: &mut Table) -> String {
+        // In the Computer Shogi USI protocol, "info string" is a display text.
+        // コンピューター将棋の USIプロトコル で 'info string' というのがあって
+        // 強制終了の直前に画面に出せるかもしれないから付けています。
+        Log::fatal_t(&format!("info string panic! {}", s), t)
     }
 }

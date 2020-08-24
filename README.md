@@ -22,19 +22,19 @@ It is difficult to compare the behavior. Instead, it is useful to get the logs a
 The first thing you have to create is your motive.  
 It is important to start with the appearance.  
 
-* [ ] Step 2. Create the 'look_and_model.rs'.
-  * [ ] Piece - "O", "X".
-  * [ ] Game result - Win/Draw/Lose.
-  * [ ] Position - It's the board.
-  * [ ] Search - Computer player search info.
+* [x] Step 2. Create the 'look_and_model.rs'.
+  * [x] Piece - "O", "X".
+  * [x] Game result - Win/Draw/Lose.
+  * [x] Position - It's the board.
+  * [x] Search - Computer player search info.
 
 If you want to play immediately, you have the talent of a game creator.  
 Being able to control your position means being able to play.  
 
-* [ ] Step 3. 'position.rs'
-  * [ ] do_move
-  * [ ] undo_move
-  * [ ] opponent
+* [x] Step 3. 'position.rs'
+  * [x] do_move
+  * [x] undo_move
+  * [x] opponent
 
 Let's enter commands into the computer. Create a command line parser.  
 

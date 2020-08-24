@@ -41,11 +41,11 @@ impl fmt::Display for GameResult {
     }
 }
 
-/// The addresses of the squares start with 1 and end with 42.  
-/// The array starts at 0, so the size is 43.  
-/// マスの番地は1から始まり42で終わります。  
-/// 配列は 0 から始まるのでサイズは43です。  
-pub const BOARD_LEN: usize = 43;
+/// The addresses of the squares start with 0 and end with 41.  
+/// The array starts at 0, so the size is 42.  
+/// マスの番地は 0 から始まり 41 で終わります。  
+/// 配列は 0 から始まるのでサイズは 42 です。  
+pub const BOARD_LEN: usize = 42;
 
 /// There are 7 columns from a to g.
 /// a～gの7列です。
@@ -68,8 +68,8 @@ pub struct Position {
     /// 開始局面での手番。次に置かれる石。  
     pub starting_turn: Piece,
 
-    /// The board at the start. [0] is unused.  
-    /// 開始時の盤面。 [0] は未使用。  
+    /// The board at the start.  
+    /// 開始時の盤面。  
     pub starting_board: [Option<Piece>; BOARD_LEN],
 
     /// The number of stones on the board at the start.  
@@ -80,13 +80,13 @@ pub struct Position {
     /// 手番。次に置かれる石。  
     pub turn: Piece,
 
-    /// The current board. [0] is unused.  
-    /// 現在の盤面。 [0] は未使用。  
+    /// The current board.  
+    /// 現在の盤面。  
     pub board: [Option<Piece>; BOARD_LEN],
 
-    /// Match record. An array of addresses where the pieces will be placed.  
-    /// 棋譜。駒を置いた番地を並べたもの。  
-    pub history: [u8; SQUARES_NUM],
+    /// Match record. An array of files where the pieces will be placed.  
+    /// 棋譜。駒を置いた筋を並べたもの。  
+    pub history: [char; SQUARES_NUM],
 
     /// The number of stones currently on the board.  
     /// 現在、盤の上に有る石の数。  
@@ -108,7 +108,7 @@ impl Default for Position {
             starting_pieces_num: 0,
             turn: Piece::Nought,
             board: [None; BOARD_LEN],
-            history: [0; SQUARES_NUM],
+            history: [' '; SQUARES_NUM],
             pieces_num: 0,
             pv: String::new(),
             info_enabled: true,
@@ -151,6 +151,7 @@ impl Position {
 1 |{35}|{36}|{37}|{38}|{39}|{40}|{41}|
   +---+---+---+---+---+---+---+
     a   b   c   d   e   f   g",
+            self.cell(0),
             self.cell(1),
             self.cell(2),
             self.cell(3),
@@ -191,8 +192,7 @@ impl Position {
             self.cell(38),
             self.cell(39),
             self.cell(40),
-            self.cell(41),
-            self.cell(42)
+            self.cell(41)
         ));
         s.to_string()
     }
@@ -241,21 +241,6 @@ impl Search {
             start_pieces_num: start_pieces_num,
             nodes: 0,
             stopwatch: Instant::now(),
-        }
-    }
-
-    /// Header.
-    /// 見出し。
-    pub fn info_header(pos: &Position) -> String {
-        match pos.turn {
-            Piece::Nought => {
-                "info string \"nps\":......, \"nodes\":......, \"pv\":[O,X,O,X,O,X,O,X,O]"
-                    .to_string()
-            }
-            Piece::Cross => {
-                format!("info string \"nps\":......, \"nodes\":......, \"pv\":[X,O,X,O,X,O,X,O,X]")
-                    .to_string()
-            }
         }
     }
 
