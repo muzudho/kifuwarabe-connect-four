@@ -274,10 +274,9 @@ impl Search {
         comment: Option<&str>,
     ) -> String {
         format!(
-            "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}, \"pv\":[{: <17}]{}{}{}{}{} }}",
+            "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"pv\":[{: <17}] }}",
             nps,
             nodes,
-            pv,
             match search_direction {
                 SearchDirection::Forward => {
                     format!(", \"push\":\"{}\"", sq)
@@ -286,15 +285,15 @@ impl Search {
                     format!(", \"pop\" :\"{}\"", sq)
                 }
             },
-            if leaf {
-                ", \"leaf\": true"
-            } else {
-                "              "
-            },
             if let Some(pieces_num) = pieces_num {
                 format!(", \"pieces\":{}", pieces_num)
             } else {
                 "            ".to_string()
+            },
+            if leaf {
+                ", \"leaf\": true"
+            } else {
+                "              "
             },
             if let Some(result) = result {
                 format!(", \"result\":{:6}", format!("\"{}\"", result.to_string()))
@@ -306,6 +305,7 @@ impl Search {
             } else {
                 format!(", \"{}\":\"\"", turn).to_string()
             },
+            pv,
         )
         .to_string()
     }
