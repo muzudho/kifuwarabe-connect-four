@@ -167,66 +167,101 @@ pub fn test() {
     ));
     // p.rest  =| the Moon!|
 
-    /*
     // Step 6.
     Log::print_debug(&format!("xfen=|{}|", pos.to_xfen()));
-    // xfen=|xfen 3/3/3 o|
-    pos.do_("2");
+    // xfen=|xfen 7/7/7/7/7/7 O|
+    pos.do_("d");
     Log::print_debug(&pos.pos());
-    // [Next 2 move(s) | Go x]
-    //
-    // +---+---+---+ Please select a square. Example `do 7`
-    // |   |   |   | マスを選んでください。例 `do 7`
-    // +---+---+---+
-    // |   |   |   |    7 8 9
-    // +---+---+---+    4 5 6
-    // |   | o |   |    1 2 3
-    // +---+---+---+
-    let xfen = "xfen xo1/xox/oxo o";
+    /*
+    [Next 2 piece(s) | Go X]
+
+      +---+---+---+---+---+---+---+ Please select a file. Example `do d`
+    6 |   |   |   |   |   |   |   | 列を選んでください。例 `do d`
+      +---+---+---+---+---+---+---+
+    5 |   |   |   |   |   |   |   |    a b c d e f g
+      +---+---+---+---+---+---+---+
+    4 |   |   |   |   |   |   |   |
+      +---+---+---+---+---+---+---+
+    3 |   |   |   |   |   |   |   |
+      +---+---+---+---+---+---+---+
+    2 |   |   |   |   |   |   |   |
+      +---+---+---+---+---+---+---+
+    1 |   |   |   | O |   |   |   |
+      +---+---+---+---+---+---+---+
+        a   b   c   d   e   f   g
+    */
+    let xfen = "xfen 7/7/7/7/5X1/1O1O1X1 O";
     pos = if let Some(pos) = Position::from_xfen(xfen) {
         pos
     } else {
         panic!(Log::print_fatal(&format!("Invalid xfen=|{}|", xfen)))
     };
     Log::print_debug(&pos.pos());
-    // [Next 9 move(s) | Go o]
-    //
-    // +---+---+---+ Please select a square. Example `do 7`
-    // | x | o |   | マスを選んでください。例 `do 7`
-    // +---+---+---+
-    // | x | o | x |    7 8 9
-    // +---+---+---+    4 5 6
-    // | o | x | o |    1 2 3
-    // +---+---+---+
-    let xfen = "xfen 3/3/3 x moves 1 7 4 8 9 3 6 2 5";
+    /*
+    [Next 5 piece(s) | Go O]
+
+      +---+---+---+---+---+---+---+ Please select a file. Example `do d`
+    6 |   |   |   |   |   |   |   | 列を選んでください。例 `do d`
+      +---+---+---+---+---+---+---+
+    5 |   |   |   |   |   |   |   |    a b c d e f g
+      +---+---+---+---+---+---+---+
+    4 |   |   |   |   |   |   |   |
+      +---+---+---+---+---+---+---+
+    3 |   |   |   |   |   |   |   |
+      +---+---+---+---+---+---+---+
+    2 |   |   |   |   |   | X |   |
+      +---+---+---+---+---+---+---+
+    1 |   | O |   | O |   | X |   |
+      +---+---+---+---+---+---+---+
+        a   b   c   d   e   f   g
+    */
+    let xfen = "xfen 7/7/7/7/7/7 O moves d f b f d f b f";
     pos = if let Some(pos) = Position::from_xfen(xfen) {
         pos
     } else {
         panic!(Log::print_fatal(&format!("Invalid xfen=|{}|", xfen)))
     };
     Log::print_debug(&pos.pos());
-    // win x
-    // [Next 10 move(s) | Go o]
-    //
-    // +---+---+---+ Please select a square. Example `do 7`
-    // | o | o | x | マスを選んでください。例 `do 7`
-    // +---+---+---+
-    // | x | x | x |    7 8 9
-    // +---+---+---+    4 5 6
-    // | x | o | o |    1 2 3
-    // +---+---+---+
+    /*
+    [Next 9 piece(s) | Go O]
+
+      +---+---+---+---+---+---+---+ Please select a file. Example `do d`
+    6 |   |   |   |   |   |   |   | 列を選んでください。例 `do d`
+      +---+---+---+---+---+---+---+
+    5 |   |   |   |   |   |   |   |    a b c d e f g
+      +---+---+---+---+---+---+---+
+    4 |   |   |   |   |   | X |   |
+      +---+---+---+---+---+---+---+
+    3 |   |   |   |   |   | X |   |
+      +---+---+---+---+---+---+---+
+    2 |   | O |   | O |   | X |   |
+      +---+---+---+---+---+---+---+
+    1 |   | O |   | O |   | X |   |
+      +---+---+---+---+---+---+---+
+        a   b   c   d   e   f   g
+    */
     pos.undo();
     Log::print_debug(&pos.pos());
-    // [Next 9 move(s) | Go x]
-    //
-    // +---+---+---+ Please select a square. Example `do 7`
-    // | o | o | x | マスを選んでください。例 `do 7`
-    // +---+---+---+
-    // | x |   | x |    7 8 9
-    // +---+---+---+    4 5 6
-    // | x | o | o |    1 2 3
-    // +---+---+---+
+    /*
+    [Next 8 piece(s) | Go X]
 
+      +---+---+---+---+---+---+---+ Please select a file. Example `do d`
+    6 |   |   |   |   |   |   |   | 列を選んでください。例 `do d`
+      +---+---+---+---+---+---+---+
+    5 |   |   |   |   |   |   |   |    a b c d e f g
+      +---+---+---+---+---+---+---+
+    4 |   |   |   |   |   |   |   |
+      +---+---+---+---+---+---+---+
+    3 |   |   |   |   |   | X |   |
+      +---+---+---+---+---+---+---+
+    2 |   | O |   | O |   | X |   |
+      +---+---+---+---+---+---+---+
+    1 |   | O |   | O |   | X |   |
+      +---+---+---+---+---+---+---+
+        a   b   c   d   e   f   g
+    */
+
+    /*
     // Step 7.
     // Step 8.
     let xfen = "xfen o2/xox/oxo x";

@@ -3,6 +3,7 @@ mod log;
 mod look_and_model;
 mod position;
 mod test;
+mod uxi_protocol;
 
 use crate::log::LogExt;
 use crate::test::test;

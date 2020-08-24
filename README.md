@@ -51,11 +51,11 @@ Let's enter commands into the computer. Create a command line parser.
 People who are looking for something 10 minutes a day are looking for something for a week in a year.  
 Before creating the game itself, let's first create the replay function. Let's get it for a week.  
 
-* [ ] Step 6. 'uxi_protocol.rs'
-  * [ ] Do. (Before 'From XFEN') Excludes legal moves and winning/losing decisions.
-  * [ ] To XFEN.
-  * [ ] From XFEN.
-  * [ ] Undo.
+* [x] Step 6. 'uxi_protocol.rs'
+  * [x] Do. (Before 'From XFEN') Excludes legal moves and winning/losing decisions.
+  * [x] To XFEN.
+  * [x] From XFEN.
+  * [x] Undo.
 
 Let's make a principal command.  
 

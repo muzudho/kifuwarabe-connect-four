@@ -110,4 +110,15 @@ impl Position {
         }
         None
     }
+
+    /// Is the file fill?  
+    /// 列は埋まっていますか？  
+    pub fn is_file_fill(&mut self, file: char) -> bool {
+        let mut sq = file_to_num(file) as usize;
+        if let Some(_) = self.board[sq] {
+            true
+        } else {
+            false
+        }
+    }
 }
