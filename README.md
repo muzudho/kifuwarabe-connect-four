@@ -19,6 +19,10 @@ It is difficult to compare the behavior. Instead, it is useful to get the logs a
   * [x] Create the 'log.rs' file.
     * [x] Extend the logger.
 
+Let's proceed with development while testing.  
+
+* [ ] Step 2. Create the `test.rs` file.
+
 The first thing you have to create is your motive.  
 It is important to start with the appearance.  
 

@@ -136,8 +136,7 @@ impl Position {
             self.turn
         );
         s.push_str(&format!(
-            "\
-  +---+---+---+---+---+---+---+ Please select a file. Example `do d`
+            "  +---+---+---+---+---+---+---+ Please select a file. Example `do d`
 6 |{0}|{1}|{2}|{3}|{4}|{5}|{6}| 列を選んでください。例 `do d`
   +---+---+---+---+---+---+---+
 5 |{7}|{8}|{9}|{10}|{11}|{12}|{13}|    a b c d e f g
@@ -259,7 +258,7 @@ impl Search {
         comment: Option<&str>,
     ) -> String {
         format!(
-            "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"pv\":[{: <17}] }}",
+            "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"pv\":[{}] }}",
             nps,
             nodes,
             match search_direction {

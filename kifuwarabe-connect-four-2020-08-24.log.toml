@@ -1,0 +1,168 @@
+["Now=2020-08-24T20:29:30+0900&Pid=15948&Thr=ThreadId(1)&Seq=1"]
+Debug = "Hello, world!!\\r\\n"
+
+["Now=2020-08-24T20:29:30+0900&Pid=15948&Thr=ThreadId(1)&Seq=2"]
+Debug = 'こんにちわ、世界！！'
+
+["Now=2020-08-24T20:29:30+0900&Pid=15948&Thr=ThreadId(1)&Seq=3"]
+Debug = 'Nought=|O|'
+
+["Now=2020-08-24T20:29:30+0900&Pid=15948&Thr=ThreadId(1)&Seq=4"]
+Debug = 'Cross =|X|'
+
+["Now=2020-08-24T20:29:30+0900&Pid=15948&Thr=ThreadId(1)&Seq=5"]
+Debug = 'Win   =|win|'
+
+["Now=2020-08-24T20:29:30+0900&Pid=15948&Thr=ThreadId(1)&Seq=6"]
+Debug = 'Draw  =|draw|'
+
+["Now=2020-08-24T20:29:30+0900&Pid=15948&Thr=ThreadId(1)&Seq=7"]
+Debug = 'Lose  =|lose|'
+
+["Now=2020-08-24T20:29:30+0900&Pid=15948&Thr=ThreadId(1)&Seq=8"]
+Debug = '''
+[Next 1 piece(s) | Go O]
+
++---+---+---+---+---+---+---+ Please select a file. Example `do d`
+6 |   |   |   |   |   |   |   | 列を選んでください。例 `do d`
+  +---+---+---+---+---+---+---+
+5 |   |   |   |   |   |   |   |    a b c d e f g
+  +---+---+---+---+---+---+---+
+4 |   |   |   |   |   |   |   |
+  +---+---+---+---+---+---+---+
+3 |   |   |   |   |   |   |   |
+  +---+---+---+---+---+---+---+
+2 |   |   |   |   |   |   |   |
+  +---+---+---+---+---+---+---+
+1 |   |   |   |   |   |   |   |
+  +---+---+---+---+---+---+---+
+    a   b   c   d   e   f   g
+'''
+
+["Now=2020-08-24T20:29:30+0900&Pid=15948&Thr=ThreadId(1)&Seq=9"]
+Debug = 'win O'
+
+["Now=2020-08-24T20:29:30+0900&Pid=15948&Thr=ThreadId(1)&Seq=10"]
+Debug = 'pv=||'
+
+["Now=2020-08-24T20:29:30+0900&Pid=15948&Thr=ThreadId(1)&Seq=11"]
+Debug = 'info json { "nps":   123, "nodes":     0, "push":"1"                                           , "O":"Hello!", "pv":[                 ] }'
+
+["Now=2020-08-24T20:29:30+0900&Pid=15948&Thr=ThreadId(1)&Seq=12"]
+Debug = 'info json { "nps":   456, "nodes":     0, "push":"1"            , "leaf": true, "result":"win" , "X":"Hello!", "pv":[                 ] }'
+
+["Now=2020-08-24T20:29:30+0900&Pid=15948&Thr=ThreadId(1)&Seq=13"]
+Debug = 'info json { "nps":   789, "nodes":     0, "pop" :"1", "pieces":0              , "result":"win" , "O":"Hello!", "pv":[                 ] }'
+
+["Now=2020-08-24T20:30:41+0900&Pid=2648&Thr=ThreadId(1)&Seq=1"]
+Debug = "Hello, world!!\\r\\n"
+
+["Now=2020-08-24T20:30:41+0900&Pid=2648&Thr=ThreadId(1)&Seq=2"]
+Debug = 'こんにちわ、世界！！'
+
+["Now=2020-08-24T20:30:41+0900&Pid=2648&Thr=ThreadId(1)&Seq=3"]
+Debug = 'Nought=|O|'
+
+["Now=2020-08-24T20:30:41+0900&Pid=2648&Thr=ThreadId(1)&Seq=4"]
+Debug = 'Cross =|X|'
+
+["Now=2020-08-24T20:30:41+0900&Pid=2648&Thr=ThreadId(1)&Seq=5"]
+Debug = 'Win   =|win|'
+
+["Now=2020-08-24T20:30:41+0900&Pid=2648&Thr=ThreadId(1)&Seq=6"]
+Debug = 'Draw  =|draw|'
+
+["Now=2020-08-24T20:30:41+0900&Pid=2648&Thr=ThreadId(1)&Seq=7"]
+Debug = 'Lose  =|lose|'
+
+["Now=2020-08-24T20:30:41+0900&Pid=2648&Thr=ThreadId(1)&Seq=8"]
+Debug = '''
+[Next 1 piece(s) | Go O]
+
+  +---+---+---+---+---+---+---+ Please select a file. Example `do d`
+6 |   |   |   |   |   |   |   | 列を選んでください。例 `do d`
+  +---+---+---+---+---+---+---+
+5 |   |   |   |   |   |   |   |    a b c d e f g
+  +---+---+---+---+---+---+---+
+4 |   |   |   |   |   |   |   |
+  +---+---+---+---+---+---+---+
+3 |   |   |   |   |   |   |   |
+  +---+---+---+---+---+---+---+
+2 |   |   |   |   |   |   |   |
+  +---+---+---+---+---+---+---+
+1 |   |   |   |   |   |   |   |
+  +---+---+---+---+---+---+---+
+    a   b   c   d   e   f   g
+'''
+
+["Now=2020-08-24T20:30:41+0900&Pid=2648&Thr=ThreadId(1)&Seq=9"]
+Debug = 'win O'
+
+["Now=2020-08-24T20:30:41+0900&Pid=2648&Thr=ThreadId(1)&Seq=10"]
+Debug = 'pv=||'
+
+["Now=2020-08-24T20:30:41+0900&Pid=2648&Thr=ThreadId(1)&Seq=11"]
+Debug = 'info json { "nps":   123, "nodes":     0, "push":"1"                                           , "O":"Hello!", "pv":[                 ] }'
+
+["Now=2020-08-24T20:30:41+0900&Pid=2648&Thr=ThreadId(1)&Seq=12"]
+Debug = 'info json { "nps":   456, "nodes":     0, "push":"1"            , "leaf": true, "result":"win" , "X":"Hello!", "pv":[                 ] }'
+
+["Now=2020-08-24T20:30:41+0900&Pid=2648&Thr=ThreadId(1)&Seq=13"]
+Debug = 'info json { "nps":   789, "nodes":     0, "pop" :"1", "pieces":0              , "result":"win" , "O":"Hello!", "pv":[                 ] }'
+
+["Now=2020-08-24T20:32:49+0900&Pid=1368&Thr=ThreadId(1)&Seq=1"]
+Debug = "Hello, world!!\\r\\n"
+
+["Now=2020-08-24T20:32:49+0900&Pid=1368&Thr=ThreadId(1)&Seq=2"]
+Debug = 'こんにちわ、世界！！'
+
+["Now=2020-08-24T20:32:49+0900&Pid=1368&Thr=ThreadId(1)&Seq=3"]
+Debug = 'Nought=|O|'
+
+["Now=2020-08-24T20:32:49+0900&Pid=1368&Thr=ThreadId(1)&Seq=4"]
+Debug = 'Cross =|X|'
+
+["Now=2020-08-24T20:32:49+0900&Pid=1368&Thr=ThreadId(1)&Seq=5"]
+Debug = 'Win   =|win|'
+
+["Now=2020-08-24T20:32:49+0900&Pid=1368&Thr=ThreadId(1)&Seq=6"]
+Debug = 'Draw  =|draw|'
+
+["Now=2020-08-24T20:32:49+0900&Pid=1368&Thr=ThreadId(1)&Seq=7"]
+Debug = 'Lose  =|lose|'
+
+["Now=2020-08-24T20:32:49+0900&Pid=1368&Thr=ThreadId(1)&Seq=8"]
+Debug = '''
+[Next 1 piece(s) | Go O]
+
+  +---+---+---+---+---+---+---+ Please select a file. Example `do d`
+6 |   |   |   |   |   |   |   | 列を選んでください。例 `do d`
+  +---+---+---+---+---+---+---+
+5 |   |   |   |   |   |   |   |    a b c d e f g
+  +---+---+---+---+---+---+---+
+4 |   |   |   |   |   |   |   |
+  +---+---+---+---+---+---+---+
+3 |   |   |   |   |   |   |   |
+  +---+---+---+---+---+---+---+
+2 |   |   |   |   |   |   |   |
+  +---+---+---+---+---+---+---+
+1 |   |   |   |   |   |   |   |
+  +---+---+---+---+---+---+---+
+    a   b   c   d   e   f   g
+'''
+
+["Now=2020-08-24T20:32:49+0900&Pid=1368&Thr=ThreadId(1)&Seq=9"]
+Debug = 'win O'
+
+["Now=2020-08-24T20:32:49+0900&Pid=1368&Thr=ThreadId(1)&Seq=10"]
+Debug = 'pv=||'
+
+["Now=2020-08-24T20:32:49+0900&Pid=1368&Thr=ThreadId(1)&Seq=11"]
+Debug = 'info json { "nps":   123, "nodes":     0, "push":"1"                                           , "O":"Hello!", "pv":[] }'
+
+["Now=2020-08-24T20:32:49+0900&Pid=1368&Thr=ThreadId(1)&Seq=12"]
+Debug = 'info json { "nps":   456, "nodes":     0, "push":"1"            , "leaf": true, "result":"win" , "X":"Hello!", "pv":[] }'
+
+["Now=2020-08-24T20:32:49+0900&Pid=1368&Thr=ThreadId(1)&Seq=13"]
+Debug = 'info json { "nps":   789, "nodes":     0, "pop" :"1", "pieces":0              , "result":"win" , "O":"Hello!", "pv":[] }'
+
