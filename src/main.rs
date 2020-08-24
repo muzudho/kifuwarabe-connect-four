@@ -5,6 +5,7 @@ mod look_and_model;
 mod position;
 mod test;
 mod uxi_protocol;
+mod win_lose_judgment;
 
 use crate::engine::*;
 use crate::log::LogExt;

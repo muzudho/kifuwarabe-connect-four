@@ -190,6 +190,31 @@ pub fn test() {
       +---+---+---+---+---+---+---+
         a   b   c   d   e   f   g
     */
+    let xfen = "xfen XOXOXOX/OXOXOXO/XOXOXOX/OXOXOXO/XOXOXOX/OXOXOXO O";
+    pos = if let Some(pos) = Position::from_xfen(xfen) {
+        pos
+    } else {
+        panic!(Log::print_fatal(&format!("Invalid xfen=|{}|", xfen)))
+    };
+    Log::print_debug(&pos.pos());
+    /*
+    [Next 43 piece(s) | Go O]
+
+      +---+---+---+---+---+---+---+ Please select a file. Example `do d`
+    6 | X | O | X | O | X | O | X | 列を選んでください。例 `do d`
+      +---+---+---+---+---+---+---+
+    5 | O | X | O | X | O | X | O |    a b c d e f g
+      +---+---+---+---+---+---+---+
+    4 | X | O | X | O | X | O | X |
+      +---+---+---+---+---+---+---+
+    3 | O | X | O | X | O | X | O |
+      +---+---+---+---+---+---+---+
+    2 | X | O | X | O | X | O | X |
+      +---+---+---+---+---+---+---+
+    1 | O | X | O | X | O | X | O |
+      +---+---+---+---+---+---+---+
+        a   b   c   d   e   f   g
+    */
     let xfen = "xfen 7/7/7/7/5X1/1O1O1X1 O";
     pos = if let Some(pos) = Position::from_xfen(xfen) {
         pos
@@ -261,27 +286,65 @@ pub fn test() {
         a   b   c   d   e   f   g
     */
 
-    /*
     // Step 7.
     // Step 8.
     // Step 9.
-    let xfen = "xfen o2/xox/oxo x";
+    let xfen = "xfen 7/7/5X1/5X1/1O1O1X1/1O1O1X1 O";
     pos = if let Some(pos) = Position::from_xfen(xfen) {
         pos
     } else {
         panic!(Log::print_fatal(&format!("Invalid xfen=|{}|", xfen)))
     };
+    Log::print_debug(&pos.pos());
     Log::print_debug(&format!("win=|{}|", pos.is_opponent_win()));
-    // win=|True|
-    let xfen = "xfen xox/oxo/oxo x";
+    /*
+    [Next 9 piece(s) | Go O]
+
+      +---+---+---+---+---+---+---+ Please select a file. Example `do d`
+    6 |   |   |   |   |   |   |   | 列を選んでください。例 `do d`
+      +---+---+---+---+---+---+---+
+    5 |   |   |   |   |   |   |   |    a b c d e f g
+      +---+---+---+---+---+---+---+
+    4 |   |   |   |   |   | X |   |
+      +---+---+---+---+---+---+---+
+    3 |   |   |   |   |   | X |   |
+      +---+---+---+---+---+---+---+
+    2 |   | O |   | O |   | X |   |
+      +---+---+---+---+---+---+---+
+    1 |   | O |   | O |   | X |   |
+      +---+---+---+---+---+---+---+
+        a   b   c   d   e   f   g
+    win=|true|
+    */
+    let xfen = "xfen XOXOXOX/OXOXOXO/XOXOXOX/XOXOXOX/OXOXOXO/OXOXOXO O";
     pos = if let Some(pos) = Position::from_xfen(xfen) {
         pos
     } else {
         panic!(Log::print_fatal(&format!("Invalid xfen=|{}|", xfen)))
     };
+    Log::print_debug(&pos.pos());
     Log::print_debug(&format!("draw=|{}|", pos.is_draw()));
-    // draw=|True|
+    /*
+    [Next 43 piece(s) | Go O]
 
+      +---+---+---+---+---+---+---+ Please select a file. Example `do d`
+    6 | X | O | X | O | X | O | X | 列を選んでください。例 `do d`
+      +---+---+---+---+---+---+---+
+    5 | O | X | O | X | O | X | O |    a b c d e f g
+      +---+---+---+---+---+---+---+
+    4 | X | O | X | O | X | O | X |
+      +---+---+---+---+---+---+---+
+    3 | X | O | X | O | X | O | X |
+      +---+---+---+---+---+---+---+
+    2 | O | X | O | X | O | X | O |
+      +---+---+---+---+---+---+---+
+    1 | O | X | O | X | O | X | O |
+      +---+---+---+---+---+---+---+
+        a   b   c   d   e   f   g
+    draw=|true|
+    */
+
+    /*
     // Step 10.
     // Since we have not searched, both nodes and nps will be 0.
     // 探索してないので、 nodes も nps も 0 になります。

@@ -70,10 +70,10 @@ Let's make a principal command.
 
 Before you make a computer player, let's judge the outcome. And let's test.  
 
-* [ ] Step 9. 'win_lose_judgment.rs'
-  * [ ] Win.
-  * [ ] Draw - Not win, not lose, can not play.
-  * [ ] Lose. - Not win is lose.
+* [x] Step 9. 'win_lose_judgment.rs'
+  * [x] Win.
+  * [x] Draw - Not win, not lose, can not play.
+  * [x] Lose. - Not win is lose.
 
 Before creating a computer player, let's create a mechanism to measure performance.  
 
