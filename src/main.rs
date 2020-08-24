@@ -1,3 +1,4 @@
+mod command_line_seek;
 mod log;
 mod look_and_model;
 mod position;

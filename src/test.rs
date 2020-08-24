@@ -1,6 +1,7 @@
 //! Let's proceed with development while testing.  
 //! テストしながら開発を進めましょう。  
 
+use crate::command_line_seek::CommandLineSeek;
 use crate::log::LogExt;
 use crate::look_and_model::{GameResult, Piece, Position, Search, SearchDirection};
 use casual_logger::Log;
@@ -144,13 +145,12 @@ pub fn test() {
     Log::print_debug(&format!("opponent=|{}|", pos.opponent()));
     // opponent=|X|
 
-    /*
     // Step 5.
     let mut p = CommandLineSeek::new("Go to the Moon!");
     Log::print_debug(&format!("Go to   =|{}|", p.starts_with("Go to")));
-    // Go to   =|True|
+    // Go to   =|true|
     Log::print_debug(&format!("Goto    =|{}|", p.starts_with("Goto")));
-    // Goto    =|False|
+    // Goto    =|false|
     Log::print_debug(&format!("p.starts=|{}|", p.current()));
     // p.starts=|0|
     Log::print_debug(&format!(
@@ -167,6 +167,7 @@ pub fn test() {
     ));
     // p.rest  =| the Moon!|
 
+    /*
     // Step 6.
     Log::print_debug(&format!("xfen=|{}|", pos.to_xfen()));
     // xfen=|xfen 3/3/3 o|
