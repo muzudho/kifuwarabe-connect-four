@@ -27,7 +27,28 @@ impl Search {
     /// * `GameResult` - Evaluation.  
     ///                     評価値。  
     pub fn go(&mut self, pos: &mut Position) -> (Option<char>, GameResult) {
-        self.first_node(pos)
+        let (win_file, win_result) = self.first_node(pos, &EvaluationWay::Win);
+        match win_result {
+            GameResult::Win => {
+                return (win_file, win_result);
+            }
+            _ => {}
+        }
+
+        let (draw_file, draw_result) = self.first_node(pos, &EvaluationWay::Draw);
+        match draw_result {
+            GameResult::Draw => {
+                return (draw_file, draw_result);
+            }
+            _ => {}
+        }
+
+        let number = rand::thread_rng().gen_range(0, 2);
+        if number == 0 {
+            (win_file, win_result)
+        } else {
+            (draw_file, draw_result)
+        }
     }
 
     /// The state node of the search tree. Commonly called search.  
@@ -42,7 +63,11 @@ impl Search {
     ///                     マスの番地。  
     /// * `GameResult` - Evaluation.  
     ///                     評価値。  
-    fn first_node(&mut self, pos: &mut Position) -> (Option<char>, GameResult) {
+    fn first_node(
+        &mut self,
+        pos: &mut Position,
+        way: &EvaluationWay,
+    ) -> (Option<char>, GameResult) {
         let mut best_file = None;
         let mut best_result = GameResult::Lose;
 
@@ -57,7 +82,7 @@ impl Search {
                 if let None = forward_cut_off {
                     // If you move forward, it's your opponent's turn.
                     // 前向きに探索したら、次は対戦相手の番です。
-                    let (_opponent_sq, opponent_game_result) = self.node(pos, &EvaluationWay::Win);
+                    let (_opponent_sq, opponent_game_result) = self.node(pos, way);
                     // I'm back.
                     // 戻ってきました。
                     info_backwarding = Some(opponent_game_result);
@@ -323,27 +348,29 @@ impl Search {
     fn choose_file(&mut self, pos: &Position, way: &EvaluationWay) -> Option<char> {
         let w = self.evaluation.ways_weight(pos, way);
         // Upper bound.
-        let a_up = w[0];
-        let b_up = a_up + w[1];
-        let c_up = b_up + w[2];
-        let d_up = c_up + w[3];
-        let e_up = d_up + w[4];
-        let f_up = e_up + w[5];
-        let total = f_up + w[6];
-        let secret_number = rand::thread_rng().gen_range(0, total);
+        let a_up: u16 = w[0] as u16;
+        let b_up = a_up + w[1] as u16;
+        let c_up = b_up + w[2] as u16;
+        let d_up = c_up + w[3] as u16;
+        let e_up = d_up + w[4] as u16;
+        let f_up = e_up + w[5] as u16;
+        let total = f_up + w[6] as u16;
         if total == 0 {
-            None
-        } else if secret_number < a_up {
+            return None;
+        }
+
+        let number = rand::thread_rng().gen_range(0, total);
+        if number < a_up {
             Some('a')
-        } else if secret_number < b_up {
+        } else if number < b_up {
             Some('b')
-        } else if secret_number < c_up {
+        } else if number < c_up {
             Some('c')
-        } else if secret_number < d_up {
+        } else if number < d_up {
             Some('d')
-        } else if secret_number < e_up {
+        } else if number < e_up {
             Some('e')
-        } else if secret_number < f_up {
+        } else if number < f_up {
             Some('f')
         } else {
             Some('g')

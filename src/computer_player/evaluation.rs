@@ -49,10 +49,7 @@ impl Default for Evaluation {
 }
 impl Evaluation {
     /// [a, b, c, d, e, f, g]
-    pub fn ways_weight(&self, pos: &Position, way: &EvaluationWay) -> [u16; 7] {
-        // 25の特徴の状態を調べます。
-        let features25 = self.get_25_features(pos);
-
+    pub fn ways_weight(&self, pos: &Position, way: &EvaluationWay) -> [u8; 7] {
         // マスの特徴量を求めます。
         // 7つの指し手のマスを調べます。
         let win_way_values = [
@@ -76,13 +73,13 @@ impl Evaluation {
         ]
     }
 
-    pub fn get_value_by_sq(&self, pos: &Position, sq: Option<usize>, way: &EvaluationWay) -> u16 {
+    pub fn get_value_by_sq(&self, pos: &Position, sq: Option<usize>, way: &EvaluationWay) -> u8 {
         let mut sum = 0;
         for feature in &self.get_elemental_features_by_sq(sq) {
             sum += self.get_value_by_feature(pos, *feature, way);
         }
 
-        105 // TODO sum
+        sum
     }
 
     pub fn get_value_by_feature(
@@ -218,13 +215,6 @@ impl Evaluation {
         } else {
             [None, None, None, None]
         }
-    }
-
-    pub fn get_25_features(&self, pos: &Position) -> [u16; 25] {
-        // TODO
-        [
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        ]
     }
 
     pub fn get_feature_state_by_figures(&self, pos: &Position, figures: Vec<u8>) -> u16 {
