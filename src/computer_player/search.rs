@@ -327,10 +327,11 @@ impl Search {
         let d_up = c_up + w[3];
         let e_up = d_up + w[4];
         let f_up = e_up + w[5];
-        let g_up = f_up + w[6];
-        let total = g_up + w[7];
+        let total = f_up + w[6];
         let secret_number = rand::thread_rng().gen_range(0, total);
-        if secret_number < a_up {
+        if total == 0 {
+            None
+        } else if secret_number < a_up {
             Some('a')
         } else if secret_number < b_up {
             Some('b')
@@ -342,10 +343,8 @@ impl Search {
             Some('e')
         } else if secret_number < f_up {
             Some('f')
-        } else if secret_number < g_up {
-            Some('g')
         } else {
-            None
+            Some('g')
         }
     }
 }

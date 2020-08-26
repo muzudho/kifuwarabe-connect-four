@@ -2,12 +2,48 @@ use crate::log::LogExt;
 use crate::look_and_model::{Piece, Position};
 use casual_logger::Log;
 
+/// Win and draw.
+/// 勝ちと負け。
+pub const WIN_AND_DRAW_LEN: usize = 2;
+
+/// 3^4
+pub const N3POW4: usize = 81;
+
+/// 3^5
+pub const N3POW5: usize = 243;
+
+/// 3^6
+pub const N3POW6: usize = 729;
+
+/// 3^7
+pub const N3POW7: usize = 2187;
+
+/// Initial value of evaluation.
+/// 評価値の初期値。
+///
+/// 0 <= x < 255/8
+pub const INIT_VAL: u8 = 25;
+
 /// Evaluation.
 /// 評価値。
-pub struct Evaluation {}
+pub struct Evaluation {
+    // Win and draw value.
+    // 勝ち評価値と、引き分け評価値。
+    pub features_1_to_7: [[[u8; WIN_AND_DRAW_LEN]; N3POW6]; 7],
+    pub features_8_to_11: [[[u8; WIN_AND_DRAW_LEN]; N3POW7]; 6],
+    pub features_14_19_20_25: [[[u8; WIN_AND_DRAW_LEN]; N3POW4]; 4],
+    pub features_15_18_21_24: [[[u8; WIN_AND_DRAW_LEN]; N3POW5]; 4],
+    pub features_16_17_22_23: [[[u8; WIN_AND_DRAW_LEN]; N3POW6]; 4],
+}
 impl Default for Evaluation {
     fn default() -> Self {
-        Evaluation {}
+        Evaluation {
+            features_1_to_7: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW6]; 7],
+            features_8_to_11: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW7]; 6],
+            features_14_19_20_25: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW4]; 4],
+            features_15_18_21_24: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW5]; 4],
+            features_16_17_22_23: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW6]; 4],
+        }
     }
 }
 impl Evaluation {
@@ -19,7 +55,7 @@ impl Evaluation {
     /// 1 から 8 の最小公倍数は 840。
     ///
     /// [a, b, c, d, e, f, g, resign]
-    pub fn ways_weight(&self, pos: &Position) -> [u16; 8] {
+    pub fn ways_weight(&self, pos: &Position) -> [u16; 7] {
         // 25の特徴の状態を調べます。
         let features25 = self.get_25_features(pos);
 
@@ -35,15 +71,6 @@ impl Evaluation {
             self.get_value_by_sq(pos, pos.fallen_sq_or_none('g')),
         ];
 
-        // 投了の評価値を求めます。
-        let resign_value = 840
-            - way_values[0]
-            - way_values[1]
-            - way_values[2]
-            - way_values[3]
-            - way_values[4]
-            - way_values[5]
-            - way_values[6];
         [
             way_values[0],
             way_values[1],
@@ -52,7 +79,6 @@ impl Evaluation {
             way_values[4],
             way_values[5],
             way_values[6],
-            resign_value,
         ]
     }
 
