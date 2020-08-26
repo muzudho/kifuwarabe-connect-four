@@ -2,7 +2,6 @@
 //! See 'Search' struct in 'look_and_model' for details.  
 //! コンピューターの思考部です。  
 //! 詳しくは 'look_and_model' の 'Search' 構造体 を見てください。  
-use crate::computer_player::evaluation::*;
 use crate::log::LogExt;
 use crate::look_and_model::{GameResult, Position, Search, SearchDirection, SQUARES_NUM};
 use casual_logger::{Level, Log};
@@ -320,7 +319,7 @@ impl Search {
     /// Select one file at random.
     /// TODO 重みを付けて、ランダムに列を１つ選びます。
     fn choose_file(&mut self, pos: &Position) -> Option<char> {
-        let w = Evaluation::ways_weight(pos);
+        let w = self.evaluation.ways_weight(pos);
         // Upper bound.
         let a_up = w[0];
         let b_up = a_up + w[1];

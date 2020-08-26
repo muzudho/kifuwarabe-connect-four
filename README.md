@@ -8,6 +8,14 @@ WIP
 cargo run
 ```
 
+## Evaluation design
+
+### Elemental features
+
+![elemental-features.png](./doc/img/elemental-features.png)
+
+![features-square.png](./doc/img/features-square.png)
+
 ## How to program a connect-four game?
 
 During development, you may need to reproduce the behavior of your computer.  

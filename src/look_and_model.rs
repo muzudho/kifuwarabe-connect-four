@@ -1,5 +1,6 @@
 //! Display and data structure.  
 //! 表示と、データ構造です。  
+use crate::computer_player::evaluation::Evaluation;
 use std::fmt;
 use std::time::Instant;
 
@@ -233,6 +234,9 @@ pub struct Search {
     /// Start the stopwatch when this structure is created.  
     /// この構造体を生成した時点からストップ・ウォッチを開始します。  
     pub stopwatch: Instant,
+    /// Evaluation.
+    /// 評価値。
+    pub evaluation: Evaluation,
 }
 impl Search {
     pub fn new(start_pieces_num: usize) -> Self {
@@ -240,6 +244,7 @@ impl Search {
             start_pieces_num: start_pieces_num,
             nodes: 0,
             stopwatch: Instant::now(),
+            evaluation: Evaluation::default(),
         }
     }
 
