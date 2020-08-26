@@ -2,6 +2,7 @@
 //! See 'Search' struct in 'look_and_model' for details.  
 //! コンピューターの思考部です。  
 //! 詳しくは 'look_and_model' の 'Search' 構造体 を見てください。  
+use crate::computer_player::evaluation::*;
 use crate::log::LogExt;
 use crate::look_and_model::{GameResult, Position, Search, SearchDirection, SQUARES_NUM};
 use casual_logger::{Level, Log};
@@ -319,26 +320,17 @@ impl Search {
     /// Select one file at random.
     /// TODO 重みを付けて、ランダムに列を１つ選びます。
     fn choose_file(&mut self) -> Option<char> {
-        // The least common multiple of 1 to 8 is 840.
-        // 1 から 8 の最小公倍数は 840。
-        let secret_number = rand::thread_rng().gen_range(0, 840);
-        // Weight is a per 840.
-        // 840分率です。
-        let w_a = 105;
-        let w_b = 105;
-        let w_c = 105;
-        let w_d = 105;
-        let w_e = 105;
-        let w_f = 105;
-        let w_g = 105;
+        let w = Evaluation::ways_weight();
         // Upper bound.
-        let a_up = w_a;
-        let b_up = a_up + w_b;
-        let c_up = b_up + w_c;
-        let d_up = c_up + w_d;
-        let e_up = d_up + w_e;
-        let f_up = e_up + w_f;
-        let g_up = f_up + w_g;
+        let a_up = w[0];
+        let b_up = a_up + w[1];
+        let c_up = b_up + w[2];
+        let d_up = c_up + w[3];
+        let e_up = d_up + w[4];
+        let f_up = e_up + w[5];
+        let g_up = f_up + w[6];
+        let total = g_up + w[7];
+        let secret_number = rand::thread_rng().gen_range(0, total);
         if secret_number < a_up {
             Some('a')
         } else if secret_number < b_up {
