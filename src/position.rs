@@ -88,9 +88,17 @@ impl Position {
         }
     }
 
+    pub fn fallen_sq_or_none(&self, file: char) -> Option<usize> {
+        if self.is_file_fill(file) {
+            None
+        } else {
+            Some(self.fallen_sq(file))
+        }
+    }
+
     /// It is the bottom of the specified row.  
     /// 指定した列の最下段の空升です。  
-    pub fn fallen_sq(&mut self, file: char) -> usize {
+    pub fn fallen_sq(&self, file: char) -> usize {
         let mut sq = file_to_num(file) as usize;
         if let Some(_) = self.board[sq] {
             panic!(Log::print_fatal_t(
@@ -124,7 +132,7 @@ impl Position {
 
     /// Is the file fill?  
     /// 列は埋まっていますか？  
-    pub fn is_file_fill(&mut self, file: char) -> bool {
+    pub fn is_file_fill(&self, file: char) -> bool {
         let sq = file_to_num(file) as usize;
         if let Some(_) = self.board[sq] {
             true

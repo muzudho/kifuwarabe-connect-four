@@ -100,7 +100,7 @@ impl Search {
 
         // Select one at random.
         // ランダムに１つ選びます。
-        if let Some(file) = self.choose_file() {
+        if let Some(file) = self.choose_file(pos) {
             // I only look at the empty square.
             // 空きマスだけを見ます。
             if !pos.is_file_fill(file) {
@@ -319,8 +319,8 @@ impl Search {
 
     /// Select one file at random.
     /// TODO 重みを付けて、ランダムに列を１つ選びます。
-    fn choose_file(&mut self) -> Option<char> {
-        let w = Evaluation::ways_weight();
+    fn choose_file(&mut self, pos: &Position) -> Option<char> {
+        let w = Evaluation::ways_weight(pos);
         // Upper bound.
         let a_up = w[0];
         let b_up = a_up + w[1];
