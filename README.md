@@ -12,9 +12,17 @@ cargo run
 
 ### Elemental features
 
-![elemental-features.png](./doc/img/elemental-features.png)
+elemental features:  
 
-![features-square.png](./doc/img/features-square.png)
+![elemental-features.png](./doc/img/elemental-features.png)  
+
+features square:  
+
+![features-square.png](./doc/img/features-square.png)  
+
+feature size:  
+
+![feature-size.png](./doc/img/feature-size.png)  
 
 ## How to program a connect-four game?
 

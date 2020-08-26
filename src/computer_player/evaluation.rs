@@ -1,5 +1,5 @@
 use crate::log::LogExt;
-use crate::look_and_model::Position;
+use crate::look_and_model::{Piece, Position};
 use casual_logger::Log;
 
 /// Evaluation.
@@ -67,15 +67,45 @@ impl Evaluation {
 
     pub fn get_value_by_feature(&self, pos: &Position, feature: Option<u8>) -> u16 {
         if let Some(feature) = feature {
-            let state = self.get_state_by_feature(feature);
+            let state = self.get_state_by_feature(pos, feature);
             0 // TODO
         } else {
             0
         }
     }
 
-    pub fn get_state_by_feature(&self, feature: u8) -> u16 {
-        0 // TODO
+    pub fn get_state_by_feature(&self, pos: &Position, feature: u8) -> u16 {
+        match feature {
+            1 => self.get_feature_state_by_figures(pos, vec![0, 7, 14, 21, 28, 35]),
+            2 => self.get_feature_state_by_figures(pos, vec![1, 8, 15, 22, 29, 36]),
+            3 => self.get_feature_state_by_figures(pos, vec![2, 9, 16, 23, 30, 37]),
+            4 => self.get_feature_state_by_figures(pos, vec![3, 10, 17, 24, 31, 38]),
+            5 => self.get_feature_state_by_figures(pos, vec![4, 11, 18, 25, 32, 39]),
+            6 => self.get_feature_state_by_figures(pos, vec![5, 12, 19, 26, 33, 40]),
+            7 => self.get_feature_state_by_figures(pos, vec![6, 13, 20, 27, 34, 41]),
+            8 => self.get_feature_state_by_figures(pos, vec![35, 36, 37, 38, 39, 40, 41]),
+            9 => self.get_feature_state_by_figures(pos, vec![28, 29, 30, 31, 32, 33, 34]),
+            10 => self.get_feature_state_by_figures(pos, vec![21, 22, 23, 24, 25, 26, 27]),
+            11 => self.get_feature_state_by_figures(pos, vec![14, 15, 16, 17, 18, 19, 20]),
+            12 => self.get_feature_state_by_figures(pos, vec![7, 8, 9, 10, 11, 12, 13]),
+            13 => self.get_feature_state_by_figures(pos, vec![0, 1, 2, 3, 4, 5, 6]),
+            14 => self.get_feature_state_by_figures(pos, vec![21, 15, 9, 3]),
+            15 => self.get_feature_state_by_figures(pos, vec![28, 22, 16, 10, 4]),
+            16 => self.get_feature_state_by_figures(pos, vec![35, 29, 23, 27, 11, 5]),
+            17 => self.get_feature_state_by_figures(pos, vec![36, 30, 24, 18, 12, 6]),
+            18 => self.get_feature_state_by_figures(pos, vec![37, 31, 25, 19, 13]),
+            19 => self.get_feature_state_by_figures(pos, vec![38, 32, 26, 20]),
+            20 => self.get_feature_state_by_figures(pos, vec![14, 22, 30, 38]),
+            21 => self.get_feature_state_by_figures(pos, vec![7, 15, 23, 31, 39]),
+            22 => self.get_feature_state_by_figures(pos, vec![0, 8, 16, 24, 32, 40]),
+            23 => self.get_feature_state_by_figures(pos, vec![1, 9, 17, 25, 33, 41]),
+            24 => self.get_feature_state_by_figures(pos, vec![2, 10, 18, 26, 34]),
+            25 => self.get_feature_state_by_figures(pos, vec![3, 11, 19, 27]),
+            _ => panic!(Log::print_fatal(&format!(
+                "(Err.113)  Invalid feature. / {}",
+                feature
+            ))),
+        }
     }
 
     /// Elemental features of the square.
@@ -140,5 +170,21 @@ impl Evaluation {
         [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ]
+    }
+
+    pub fn get_feature_state_by_figures(&self, pos: &Position, figures: Vec<u8>) -> u16 {
+        let mut sum = 0;
+        for figure in figures {
+            sum *= 3;
+            sum += if let Some(piece) = pos.board[figure as usize] {
+                match piece {
+                    Piece::Nought => 1,
+                    Piece::Cross => 2,
+                }
+            } else {
+                0
+            };
+        }
+        sum
     }
 }
