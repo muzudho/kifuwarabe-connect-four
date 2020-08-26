@@ -20,6 +20,10 @@ features square:
 
 ![features-square.png](./doc/img/features-square.png)  
 
+square value:  
+
+![square-value.png](./doc/img/square-value.png)  
+
 feature size:  
 
 ![feature-size.png](./doc/img/feature-size.png)  
