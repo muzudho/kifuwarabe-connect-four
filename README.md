@@ -101,12 +101,16 @@ Before creating a computer player, let's create a mechanism to measure performan
   * [x] Seconds. - Stopwatch.
   * [x] Node per second.
 
-Finally, let's make a computer player.  
+Let's make a computer player.  
 
 * [x] Step 11. 'computer_player/search.rs'
   * [x] Search.
-* [ ] Step 12. 'computer_player/evaluation.rs'
-  * [ ] Evaluation - None.
+* [x] Step 12. 'computer_player/evaluation.rs'
+  * [x] Evaluation - None.
 * [ ] 'main.py'
   * [ ] Create "go" command.
 * [ ] Remeve all 'TODO' tasks. Examples: '// TODO Write a code here.'
+
+Finally, let's larning a computer thinking.
+
+* [ ] Step 13. `computer_player/learn.rs`

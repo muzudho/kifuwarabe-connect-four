@@ -248,6 +248,23 @@ impl Search {
         }
     }
 
+    pub fn info_choose_str(way: &EvaluationWay, ways: &[u8; 7], total: u16, file: char) -> String {
+        format!(
+            "info json {{ \"way\":{:?}, \"choose\":\"{}\", \"total\":{}, \"a\":{}, \"b\":{}, \"c\":{}, \"d\":{}, \"e\":{}, \"f\":{}, \"g\":{} }}",
+            way,
+            file,
+            total,
+            ways[0],
+            ways[1],
+            ways[2],
+            ways[3],
+            ways[4],
+            ways[5],
+            ways[6],
+        )
+        .to_string()
+    }
+
     /// Information during a forward/backward search.
     /// 前向き/後ろ向き 探索中の情報。
     pub fn info_str(
@@ -302,7 +319,7 @@ impl Search {
 
 /// Win evaluation and draw evaluation.
 /// 勝ち評価値と、引き分け評価値。
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub enum EvaluationWay {
     Win,
     Draw,

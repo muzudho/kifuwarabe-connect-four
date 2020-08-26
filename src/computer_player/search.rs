@@ -71,6 +71,8 @@ impl Search {
         let mut best_file = None;
         let mut best_result = GameResult::Lose;
 
+        // Full width search.
+        // 全幅探索。
         for file in &['a', 'b', 'c', 'd', 'e', 'f', 'g'] {
             // I only look at the empty square.
             // 空きマスだけを見ます。
@@ -360,21 +362,27 @@ impl Search {
         }
 
         let number = rand::thread_rng().gen_range(0, total);
-        if number < a_up {
-            Some('a')
+        let file = if number < a_up {
+            'a'
         } else if number < b_up {
-            Some('b')
+            'b'
         } else if number < c_up {
-            Some('c')
+            'c'
         } else if number < d_up {
-            Some('d')
+            'd'
         } else if number < e_up {
-            Some('e')
+            'e'
         } else if number < f_up {
-            Some('f')
+            'f'
         } else {
-            Some('g')
+            'g'
+        };
+
+        if pos.info_enabled {
+            Log::print_info(&Search::info_choose_str(way, &w, total, file));
         }
+
+        Some(file)
     }
 }
 
