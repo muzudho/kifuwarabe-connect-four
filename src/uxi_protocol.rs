@@ -213,7 +213,6 @@ impl Position {
 
         self.redo_move(file);
 
-        /* TODO
         // Win/loss judgment. Let's implement this after creating Position::result and is_opponent_win().
         // 勝ち負け判定。 これは Position::result, is_opponent_win() を作ったあとで実装しましょう。
         if self.is_opponent_win() {
@@ -225,7 +224,6 @@ impl Position {
                 Log::print_notice(&result);
             }
         }
-        */
     }
 
     /// 1 back.  

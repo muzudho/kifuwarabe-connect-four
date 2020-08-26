@@ -85,6 +85,7 @@ Finally, let's make a computer player.
 
 * [ ] Step 11. 'computer_player.rs'
   * [ ] Search.
+* [ ] Step 12. 'evaluation.rs'
   * [ ] Evaluation - None.
 * [ ] 'main.py'
   * [ ] Create "go" command.

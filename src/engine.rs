@@ -84,7 +84,6 @@ Let's input from `pos`.
             if let Some(rest) = p.rest() {
                 self.pos.do_(rest);
             }
-        /* TODO
         } else if p.starts_with("go") {
             let mut search = Search::new(self.pos.pieces_num);
             let (sq, result) = search.go(&mut self.pos);
@@ -102,7 +101,6 @@ Let's input from `pos`.
                     "resign".to_string()
                 }
             ));
-            */
         } else if p.starts_with("info-off") {
             self.pos.info_enabled = false;
         } else if p.starts_with("info-on") {

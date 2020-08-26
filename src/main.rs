@@ -1,4 +1,5 @@
 mod command_line_seek;
+mod computer_player;
 mod engine;
 mod log;
 mod look_and_model;

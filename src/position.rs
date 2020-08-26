@@ -16,7 +16,7 @@ impl Position {
         // Write on the pv.
         // 読み筋に書きます。
         if self.pv.is_empty() {
-            self.pv.push(file);
+            self.pv.push_str(&format!("\"{}\"", file).to_string());
         } else {
             self.pv.push_str(&format!(",\"{}\"", file).to_string());
         }
@@ -114,7 +114,7 @@ impl Position {
     /// Is the file fill?  
     /// 列は埋まっていますか？  
     pub fn is_file_fill(&mut self, file: char) -> bool {
-        let mut sq = file_to_num(file) as usize;
+        let sq = file_to_num(file) as usize;
         if let Some(_) = self.board[sq] {
             true
         } else {

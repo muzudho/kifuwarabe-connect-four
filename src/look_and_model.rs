@@ -250,7 +250,7 @@ impl Search {
         nodes: u32,
         pv: &str,
         search_direction: SearchDirection,
-        sq: usize,
+        file: char,
         leaf: bool,
         pieces_num: Option<usize>,
         result: Option<GameResult>,
@@ -263,10 +263,10 @@ impl Search {
             nodes,
             match search_direction {
                 SearchDirection::Forward => {
-                    format!(", \"push\":\"{}\"", sq)
+                    format!(", \"push\":\"{}\"", file)
                 }
                 SearchDirection::Backward => {
-                    format!(", \"pop\" :\"{}\"", sq)
+                    format!(", \"pop\" :\"{}\"", file)
                 }
             },
             if let Some(pieces_num) = pieces_num {
