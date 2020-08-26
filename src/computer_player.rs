@@ -47,10 +47,29 @@ impl Search {
             // I only look at the empty square.
             // 空きマスだけを見ます。
             if !pos.is_file_fill(*file) {
-                let (best_file_child, best_result_child) =
-                    self.node_exit_to_child_side(pos, *file, &mut best_file, &mut best_result);
-                best_file = best_file_child;
-                best_result = best_result_child;
+                let (
+                    forward_cut_off,
+                    info_leaf_child,
+                    info_backwarding,
+                    mut info_result,
+                    mut info_comment,
+                ) = self.node_exit_to_child_side(pos, *file);
+
+                let (best_file_child, best_result_child) = {
+                    &self.node_enter_from_child_side(
+                        pos,
+                        *file,
+                        &mut best_file,
+                        &mut best_result,
+                        forward_cut_off,
+                        info_leaf_child,
+                        info_backwarding,
+                        &mut info_result,
+                        &mut info_comment,
+                    )
+                };
+                best_file = *best_file_child;
+                best_result = *best_result_child;
             }
         }
 
@@ -63,10 +82,13 @@ impl Search {
         &mut self,
         pos: &mut Position,
         file: char,
-        best_file: &mut Option<char>,
-        best_result: &mut GameResult,
-    ) -> (Option<char>, GameResult) {
-        let mut backward_cut_off = None;
+    ) -> (
+        Option<ForwardCutOff>,
+        bool,
+        Option<GameResult>,
+        Option<GameResult>,
+        Option<String>,
+    ) {
         let mut info_leaf = false;
         let mut info_backwarding = None;
         let mut info_result = None;
@@ -85,7 +107,7 @@ impl Search {
             // 対戦相手の勝ち。
             if Log::enabled(Level::Info) && pos.info_enabled {
                 info_result = Some(GameResult::Win);
-                info_comment = Some("Resign.");
+                info_comment = Some("Resign.".to_string());
             }
             Some(ForwardCutOff::OpponentWin)
         } else if SQUARES_NUM <= pos.pieces_num {
@@ -94,12 +116,12 @@ impl Search {
             if Log::enabled(Level::Info) && pos.info_enabled {
                 info_leaf = true;
                 info_result = Some(GameResult::Draw);
-                info_comment = Some("It is ok.");
+                info_comment = Some("It is ok.".to_string());
             }
             Some(ForwardCutOff::Draw)
         } else {
             if Log::enabled(Level::Info) && pos.info_enabled {
-                info_comment = Some("Search.");
+                info_comment = Some("Search.".to_string());
             }
             None
         };
@@ -117,7 +139,7 @@ impl Search {
                 None,
                 info_result,
                 pos.turn,
-                info_comment,
+                &info_comment,
             ));
         }
 
@@ -131,6 +153,28 @@ impl Search {
             info_backwarding = Some(opponent_game_result);
         }
 
+        return (
+            forward_cut_off,
+            info_leaf,
+            info_backwarding,
+            info_result,
+            info_comment,
+        );
+    }
+
+    fn node_enter_from_child_side(
+        &mut self,
+        pos: &mut Position,
+        file: char,
+        best_file: &mut Option<char>,
+        best_result: &mut GameResult,
+        forward_cut_off: Option<ForwardCutOff>,
+        info_leaf: bool,
+        info_backwarding: Option<GameResult>,
+        info_result: &mut Option<GameResult>,
+        info_comment: &mut Option<String>,
+    ) -> (Option<char>, GameResult) {
+        let mut backward_cut_off = None;
         // (2) Remove the placed stone.
         // (二) 置いた石は取り除きます。
         pos.undo_move();
@@ -179,20 +223,20 @@ impl Search {
                     GameResult::Lose => {
                         // I beat the opponent.
                         // 相手を負かしました。
-                        info_result = Some(GameResult::Win);
-                        info_comment = Some("Hooray!");
+                        *info_result = Some(GameResult::Win);
+                        *info_comment = Some("Hooray!".to_string());
                     }
                     GameResult::Draw => {
                         // If neither is wrong, draw.
                         // お互いがミスしなければ引き分け。
-                        info_result = Some(GameResult::Draw);
-                        info_comment = Some("Fmmm.");
+                        *info_result = Some(GameResult::Draw);
+                        *info_comment = Some("Fmmm.".to_string());
                     }
                     GameResult::Win => {
                         // Don't choose to lose.
                         // 自分が負ける手は選びません。
-                        info_result = Some(GameResult::Lose);
-                        info_comment = Some("Damn!");
+                        *info_result = Some(GameResult::Lose);
+                        *info_comment = Some("Damn!".to_string());
                     }
                 }
             }
@@ -204,9 +248,9 @@ impl Search {
                 file,
                 info_leaf,
                 Some(pos.pieces_num),
-                info_result,
+                *info_result,
                 pos.turn,
-                info_comment,
+                &info_comment,
             ));
         }
 
@@ -231,21 +275,11 @@ impl Search {
 
         return (*best_file, *best_result);
     }
-
-    /*
-    fn node_enter_from_child_side(
-        &mut self,
-        pos: &mut Position,
-        file: char,
-        best_file: &mut Option<char>,
-        best_result: &mut GameResult,
-    ) -> (Option<char>, GameResult) {
-    }
-    */
 }
 
 /// The reason for ending the forward search.  
 /// 前向き探索を終了した理由。  
+#[derive(Clone, Copy)]
 enum ForwardCutOff {
     /// End with a opponent win.  
     /// 相手の勝ちにつき、終了。  

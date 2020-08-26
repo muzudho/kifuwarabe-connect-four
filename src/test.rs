@@ -71,7 +71,7 @@ pub fn test() {
     None,
     None,
     Piece::Nought,
-    Some("Hello!"),
+    &Some("Hello!".to_string()),
   ));
   // info json { "nps":   123, "nodes":     0, "push":"d"                                           , "O":"Hello!", "pv":[] }
   Log::print_debug(&Search::info_str(
@@ -84,7 +84,7 @@ pub fn test() {
     None,
     Some(GameResult::Win),
     Piece::Cross,
-    Some("Hello!"),
+    &Some("Hello!".to_string()),
   ));
   // info json { "nps":   456, "nodes":     0, "push":"d"            , "leaf": true, "result":"win" , "X":"Hello!", "pv":[] }
   Log::print_debug(&Search::info_str(
@@ -97,7 +97,7 @@ pub fn test() {
     Some(pos.pieces_num),
     Some(GameResult::Win),
     Piece::Nought,
-    Some("Hello!"),
+    &Some("Hello!".to_string()),
   ));
   // info json { "nps":   789, "nodes":     0, "pop" :"d", "pieces":0              , "result":"win" , "O":"Hello!", "pv":[] }
 

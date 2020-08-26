@@ -255,7 +255,7 @@ impl Search {
         pieces_num: Option<usize>,
         result: Option<GameResult>,
         turn: Piece,
-        comment: Option<&str>,
+        comment: &Option<String>,
     ) -> String {
         format!(
             "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"pv\":[{}] }}",
