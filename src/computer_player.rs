@@ -99,13 +99,7 @@ impl Search {
 
         // Select one at random.
         // ランダムに１つ選びます。
-        let file: char = if let Some(file) =
-            ['a', 'b', 'c', 'd', 'e', 'f', 'g'].choose(&mut rand::thread_rng())
-        {
-            *file
-        } else {
-            panic!(Log::print_fatal("(Err.108)  Invalid random file."))
-        };
+        let file = self.choose_file();
         // I only look at the empty square.
         // 空きマスだけを見ます。
         if !pos.is_file_fill(file) {
@@ -319,6 +313,16 @@ impl Search {
         }
 
         return (*best_file, *best_result);
+    }
+
+    /// Select one file at random.
+    /// ランダムに列を１つ選びます。
+    fn choose_file(&mut self) -> char {
+        if let Some(file) = ['a', 'b', 'c', 'd', 'e', 'f', 'g'].choose(&mut rand::thread_rng()) {
+            *file
+        } else {
+            panic!(Log::print_fatal("(Err.108)  Invalid random file."))
+        }
     }
 }
 
