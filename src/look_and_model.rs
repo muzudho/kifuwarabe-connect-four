@@ -299,3 +299,11 @@ impl Search {
         .to_string()
     }
 }
+
+/// Win evaluation and draw evaluation.
+/// 勝ち評価値と、引き分け評価値。
+#[derive(Clone, Copy)]
+pub enum EvaluationWay {
+    Win,
+    Draw,
+}

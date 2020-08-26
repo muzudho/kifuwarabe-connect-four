@@ -3,7 +3,9 @@
 //! コンピューターの思考部です。  
 //! 詳しくは 'look_and_model' の 'Search' 構造体 を見てください。  
 use crate::log::LogExt;
-use crate::look_and_model::{GameResult, Position, Search, SearchDirection, SQUARES_NUM};
+use crate::look_and_model::{
+    EvaluationWay, GameResult, Position, Search, SearchDirection, SQUARES_NUM,
+};
 use casual_logger::{Level, Log};
 use rand::Rng;
 
@@ -55,7 +57,7 @@ impl Search {
                 if let None = forward_cut_off {
                     // If you move forward, it's your opponent's turn.
                     // 前向きに探索したら、次は対戦相手の番です。
-                    let (_opponent_sq, opponent_game_result) = self.node(pos);
+                    let (_opponent_sq, opponent_game_result) = self.node(pos, &EvaluationWay::Win);
                     // I'm back.
                     // 戻ってきました。
                     info_backwarding = Some(opponent_game_result);
@@ -93,13 +95,13 @@ impl Search {
     ///                     マスの番地。  
     /// * `GameResult` - Evaluation.  
     ///                     評価値。  
-    fn node(&mut self, pos: &mut Position) -> (Option<char>, GameResult) {
-        let mut best_file = None;
-        let mut best_result = GameResult::Lose;
+    fn node(&mut self, pos: &mut Position, way: &EvaluationWay) -> (Option<char>, GameResult) {
+        let mut best_win_file = None;
+        let mut best_win_result = GameResult::Lose;
 
         // Select one at random.
         // ランダムに１つ選びます。
-        if let Some(file) = self.choose_file(pos) {
+        if let Some(file) = self.choose_file(pos, way) {
             // I only look at the empty square.
             // 空きマスだけを見ます。
             if !pos.is_file_fill(file) {
@@ -110,7 +112,7 @@ impl Search {
                 if let None = forward_cut_off {
                     // If you move forward, it's your opponent's turn.
                     // 前向きに探索したら、次は対戦相手の番です。
-                    let (_opponent_sq, opponent_game_result) = self.node(pos);
+                    let (_opponent_sq, opponent_game_result) = self.node(pos, way);
                     // I'm back.
                     // 戻ってきました。
                     info_backwarding = Some(opponent_game_result);
@@ -118,22 +120,22 @@ impl Search {
                 let (best_file_child, best_result_child) = &self.node_enter_from_child_side(
                     pos,
                     file,
-                    &mut best_file,
-                    &mut best_result,
+                    &mut best_win_file,
+                    &mut best_win_result,
                     forward_cut_off,
                     info_leaf_child,
                     info_backwarding,
                     &mut info_result,
                     &mut info_comment,
                 );
-                best_file = *best_file_child;
-                best_result = *best_result_child;
+                best_win_file = *best_file_child;
+                best_win_result = *best_result_child;
             }
         }
 
         // End of turn.
         // 手番の終わり。
-        (best_file, best_result)
+        (best_win_file, best_win_result)
     }
 
     fn node_exit_to_child_side(
@@ -318,8 +320,8 @@ impl Search {
 
     /// Select one file at random.
     /// TODO 重みを付けて、ランダムに列を１つ選びます。
-    fn choose_file(&mut self, pos: &Position) -> Option<char> {
-        let w = self.evaluation.ways_weight(pos);
+    fn choose_file(&mut self, pos: &Position, way: &EvaluationWay) -> Option<char> {
+        let w = self.evaluation.ways_weight(pos, way);
         // Upper bound.
         let a_up = w[0];
         let b_up = a_up + w[1];

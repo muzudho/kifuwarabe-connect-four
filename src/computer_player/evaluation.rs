@@ -1,4 +1,5 @@
 use crate::log::LogExt;
+use crate::look_and_model::EvaluationWay;
 use crate::look_and_model::{Piece, Position};
 use casual_logger::Log;
 
@@ -30,7 +31,7 @@ pub struct Evaluation {
     // Win and draw value.
     // 勝ち評価値と、引き分け評価値。
     pub features_1_to_7: [[[u8; WIN_AND_DRAW_LEN]; N3POW6]; 7],
-    pub features_8_to_11: [[[u8; WIN_AND_DRAW_LEN]; N3POW7]; 6],
+    pub features_8_to_13: [[[u8; WIN_AND_DRAW_LEN]; N3POW7]; 6],
     pub features_14_19_20_25: [[[u8; WIN_AND_DRAW_LEN]; N3POW4]; 4],
     pub features_15_18_21_24: [[[u8; WIN_AND_DRAW_LEN]; N3POW5]; 4],
     pub features_16_17_22_23: [[[u8; WIN_AND_DRAW_LEN]; N3POW6]; 4],
@@ -39,7 +40,7 @@ impl Default for Evaluation {
     fn default() -> Self {
         Evaluation {
             features_1_to_7: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW6]; 7],
-            features_8_to_11: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW7]; 6],
+            features_8_to_13: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW7]; 6],
             features_14_19_20_25: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW4]; 4],
             features_15_18_21_24: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW5]; 4],
             features_16_17_22_23: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW6]; 4],
@@ -47,54 +48,82 @@ impl Default for Evaluation {
     }
 }
 impl Evaluation {
-    /// Returns the probability of a move.  
-    /// Weight is a per 840.
-    /// The least common multiple of 1 to 8 is 840.
-    /// 指し手の確率を返します。  
-    /// 840分率です。
-    /// 1 から 8 の最小公倍数は 840。
-    ///
-    /// [a, b, c, d, e, f, g, resign]
-    pub fn ways_weight(&self, pos: &Position) -> [u16; 7] {
+    /// [a, b, c, d, e, f, g]
+    pub fn ways_weight(&self, pos: &Position, way: &EvaluationWay) -> [u16; 7] {
         // 25の特徴の状態を調べます。
         let features25 = self.get_25_features(pos);
 
         // マスの特徴量を求めます。
         // 7つの指し手のマスを調べます。
-        let way_values = [
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('a')),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('b')),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('c')),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('d')),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('e')),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('f')),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('g')),
+        let win_way_values = [
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('a'), way),
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('b'), way),
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('c'), way),
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('d'), way),
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('e'), way),
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('f'), way),
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('g'), way),
         ];
 
         [
-            way_values[0],
-            way_values[1],
-            way_values[2],
-            way_values[3],
-            way_values[4],
-            way_values[5],
-            way_values[6],
+            win_way_values[0],
+            win_way_values[1],
+            win_way_values[2],
+            win_way_values[3],
+            win_way_values[4],
+            win_way_values[5],
+            win_way_values[6],
         ]
     }
 
-    pub fn get_value_by_sq(&self, pos: &Position, sq: Option<usize>) -> u16 {
+    pub fn get_value_by_sq(&self, pos: &Position, sq: Option<usize>, way: &EvaluationWay) -> u16 {
         let mut sum = 0;
         for feature in &self.get_elemental_features_by_sq(sq) {
-            sum += self.get_value_by_feature(pos, *feature);
+            sum += self.get_value_by_feature(pos, *feature, way);
         }
 
         105 // TODO sum
     }
 
-    pub fn get_value_by_feature(&self, pos: &Position, feature: Option<u8>) -> u16 {
+    pub fn get_value_by_feature(
+        &self,
+        pos: &Position,
+        feature: Option<u8>,
+        way: &EvaluationWay,
+    ) -> u8 {
         if let Some(feature) = feature {
-            let state = self.get_state_by_feature(pos, feature);
-            0 // TODO
+            let state = self.get_state_by_feature(pos, feature) as usize;
+            match feature {
+                1 => self.features_1_to_7[0][state][*way as usize],
+                2 => self.features_1_to_7[1][state][*way as usize],
+                3 => self.features_1_to_7[2][state][*way as usize],
+                4 => self.features_1_to_7[3][state][*way as usize],
+                5 => self.features_1_to_7[4][state][*way as usize],
+                6 => self.features_1_to_7[5][state][*way as usize],
+                7 => self.features_1_to_7[6][state][*way as usize],
+                8 => self.features_8_to_13[0][state][*way as usize],
+                9 => self.features_8_to_13[1][state][*way as usize],
+                10 => self.features_8_to_13[2][state][*way as usize],
+                11 => self.features_8_to_13[3][state][*way as usize],
+                12 => self.features_8_to_13[4][state][*way as usize],
+                13 => self.features_8_to_13[5][state][*way as usize],
+                14 => self.features_14_19_20_25[0][state][*way as usize],
+                15 => self.features_15_18_21_24[0][state][*way as usize],
+                16 => self.features_16_17_22_23[0][state][*way as usize],
+                17 => self.features_16_17_22_23[1][state][*way as usize],
+                18 => self.features_15_18_21_24[1][state][*way as usize],
+                19 => self.features_14_19_20_25[1][state][*way as usize],
+                20 => self.features_14_19_20_25[2][state][*way as usize],
+                21 => self.features_15_18_21_24[2][state][*way as usize],
+                22 => self.features_16_17_22_23[2][state][*way as usize],
+                23 => self.features_16_17_22_23[3][state][*way as usize],
+                24 => self.features_15_18_21_24[3][state][*way as usize],
+                25 => self.features_14_19_20_25[3][state][*way as usize],
+                _ => panic!(Log::print_fatal(&format!(
+                    "(Err.123)  Invalid feature. / {}",
+                    feature
+                ))),
+            }
         } else {
             0
         }
@@ -128,7 +157,7 @@ impl Evaluation {
             24 => self.get_feature_state_by_figures(pos, vec![2, 10, 18, 26, 34]),
             25 => self.get_feature_state_by_figures(pos, vec![3, 11, 19, 27]),
             _ => panic!(Log::print_fatal(&format!(
-                "(Err.113)  Invalid feature. / {}",
+                "(Err.160)  Invalid feature. / {}",
                 feature
             ))),
         }
