@@ -5,6 +5,7 @@
 use crate::log::LogExt;
 use crate::look_and_model::{GameResult, Position, Search, SearchDirection, SQUARES_NUM};
 use casual_logger::{Level, Log};
+use rand::seq::SliceRandom;
 
 /// Search.  
 /// 探索部。  
@@ -24,7 +25,60 @@ impl Search {
     /// * `GameResult` - Evaluation.  
     ///                     評価値。  
     pub fn go(&mut self, pos: &mut Position) -> (Option<char>, GameResult) {
-        self.node(pos)
+        self.first_node(pos)
+    }
+
+    /// The state node of the search tree. Commonly called search.  
+    /// 検索ツリーの状態ノード。一般に 'search' と呼ばれます。  
+    ///
+    /// * `pos` - Position.  
+    ///             局面。  
+    ///
+    /// # Returns
+    ///
+    /// * `Option<u8>` - Address of square.  
+    ///                     マスの番地。  
+    /// * `GameResult` - Evaluation.  
+    ///                     評価値。  
+    fn first_node(&mut self, pos: &mut Position) -> (Option<char>, GameResult) {
+        let mut best_file = None;
+        let mut best_result = GameResult::Lose;
+
+        for file in &['a', 'b', 'c', 'd', 'e', 'f', 'g'] {
+            // I only look at the empty square.
+            // 空きマスだけを見ます。
+            if !pos.is_file_fill(*file) {
+                let mut info_backwarding = None;
+                let (forward_cut_off, info_leaf_child, mut info_result, mut info_comment) =
+                    self.node_exit_to_child_side(pos, *file);
+
+                if let None = forward_cut_off {
+                    // If you move forward, it's your opponent's turn.
+                    // 前向きに探索したら、次は対戦相手の番です。
+                    let (_opponent_sq, opponent_game_result) = self.node(pos);
+                    // I'm back.
+                    // 戻ってきました。
+                    info_backwarding = Some(opponent_game_result);
+                }
+                let (best_file_child, best_result_child) = &self.node_enter_from_child_side(
+                    pos,
+                    *file,
+                    &mut best_file,
+                    &mut best_result,
+                    forward_cut_off,
+                    info_leaf_child,
+                    info_backwarding,
+                    &mut info_result,
+                    &mut info_comment,
+                );
+                best_file = *best_file_child;
+                best_result = *best_result_child;
+            }
+        }
+
+        // End of turn.
+        // 手番の終わり。
+        (best_file, best_result)
     }
 
     /// The state node of the search tree. Commonly called search.  
@@ -43,34 +97,43 @@ impl Search {
         let mut best_file = None;
         let mut best_result = GameResult::Lose;
 
-        for file in &['a', 'b', 'c', 'd', 'e', 'f', 'g'] {
-            // I only look at the empty square.
-            // 空きマスだけを見ます。
-            if !pos.is_file_fill(*file) {
-                let (
-                    forward_cut_off,
-                    info_leaf_child,
-                    info_backwarding,
-                    mut info_result,
-                    mut info_comment,
-                ) = self.node_exit_to_child_side(pos, *file);
+        // Select one at random.
+        // ランダムに１つ選びます。
+        let file: char = if let Some(file) =
+            ['a', 'b', 'c', 'd', 'e', 'f', 'g'].choose(&mut rand::thread_rng())
+        {
+            *file
+        } else {
+            panic!(Log::print_fatal("(Err.108)  Invalid random file."))
+        };
+        // I only look at the empty square.
+        // 空きマスだけを見ます。
+        if !pos.is_file_fill(file) {
+            let mut info_backwarding = None;
+            let (forward_cut_off, info_leaf_child, mut info_result, mut info_comment) =
+                self.node_exit_to_child_side(pos, file);
 
-                let (best_file_child, best_result_child) = {
-                    &self.node_enter_from_child_side(
-                        pos,
-                        *file,
-                        &mut best_file,
-                        &mut best_result,
-                        forward_cut_off,
-                        info_leaf_child,
-                        info_backwarding,
-                        &mut info_result,
-                        &mut info_comment,
-                    )
-                };
-                best_file = *best_file_child;
-                best_result = *best_result_child;
+            if let None = forward_cut_off {
+                // If you move forward, it's your opponent's turn.
+                // 前向きに探索したら、次は対戦相手の番です。
+                let (_opponent_sq, opponent_game_result) = self.node(pos);
+                // I'm back.
+                // 戻ってきました。
+                info_backwarding = Some(opponent_game_result);
             }
+            let (best_file_child, best_result_child) = &self.node_enter_from_child_side(
+                pos,
+                file,
+                &mut best_file,
+                &mut best_result,
+                forward_cut_off,
+                info_leaf_child,
+                info_backwarding,
+                &mut info_result,
+                &mut info_comment,
+            );
+            best_file = *best_file_child;
+            best_result = *best_result_child;
         }
 
         // End of turn.
@@ -86,11 +149,9 @@ impl Search {
         Option<ForwardCutOff>,
         bool,
         Option<GameResult>,
-        Option<GameResult>,
         Option<String>,
     ) {
         let mut info_leaf = false;
-        let mut info_backwarding = None;
         let mut info_result = None;
         let mut info_comment = None;
         // Let's put a stone for now.
@@ -143,23 +204,7 @@ impl Search {
             ));
         }
 
-        if let None = forward_cut_off {
-            // If you move forward, it's your opponent's turn.
-            // 前向きに探索したら、次は対戦相手の番です。
-            let (_opponent_sq, opponent_game_result) = self.node(pos);
-
-            // I'm back.
-            // 戻ってきました。
-            info_backwarding = Some(opponent_game_result);
-        }
-
-        return (
-            forward_cut_off,
-            info_leaf,
-            info_backwarding,
-            info_result,
-            info_comment,
-        );
+        return (forward_cut_off, info_leaf, info_result, info_comment);
     }
 
     fn node_enter_from_child_side(
