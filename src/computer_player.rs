@@ -319,22 +319,39 @@ impl Search {
     /// Select one file at random.
     /// TODO 重みを付けて、ランダムに列を１つ選びます。
     fn choose_file(&mut self) -> Option<char> {
+        // The least common multiple of 1 to 8 is 840.
         // 1 から 8 の最小公倍数は 840。
         let secret_number = rand::thread_rng().gen_range(0, 840);
-        // TODO 重みを付けて、ランダムに列を１つ選びます。
-        if secret_number < 105 {
+        // Weight is a per 840.
+        // 840分率です。
+        let w_a = 105;
+        let w_b = 105;
+        let w_c = 105;
+        let w_d = 105;
+        let w_e = 105;
+        let w_f = 105;
+        let w_g = 105;
+        // Upper bound.
+        let a_up = w_a;
+        let b_up = a_up + w_b;
+        let c_up = b_up + w_c;
+        let d_up = c_up + w_d;
+        let e_up = d_up + w_e;
+        let f_up = e_up + w_f;
+        let g_up = f_up + w_g;
+        if secret_number < a_up {
             Some('a')
-        } else if secret_number < 2 * 105 {
+        } else if secret_number < b_up {
             Some('b')
-        } else if secret_number < 3 * 105 {
+        } else if secret_number < c_up {
             Some('c')
-        } else if secret_number < 4 * 105 {
+        } else if secret_number < d_up {
             Some('d')
-        } else if secret_number < 5 * 105 {
+        } else if secret_number < e_up {
             Some('e')
-        } else if secret_number < 6 * 105 {
+        } else if secret_number < f_up {
             Some('f')
-        } else if secret_number < 7 * 105 {
+        } else if secret_number < g_up {
             Some('g')
         } else {
             None

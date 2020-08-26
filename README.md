@@ -83,8 +83,8 @@ Before creating a computer player, let's create a mechanism to measure performan
 
 Finally, let's make a computer player.  
 
-* [ ] Step 11. 'computer_player.rs'
-  * [ ] Search.
+* [x] Step 11. 'computer_player.rs'
+  * [x] Search.
 * [ ] Step 12. 'evaluation.rs'
   * [ ] Evaluation - None.
 * [ ] 'main.py'
