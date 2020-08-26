@@ -5,7 +5,7 @@
 use crate::log::LogExt;
 use crate::look_and_model::{GameResult, Position, Search, SearchDirection, SQUARES_NUM};
 use casual_logger::{Level, Log};
-use rand::seq::SliceRandom;
+use rand::Rng;
 
 /// Search.  
 /// 探索部。  
@@ -99,35 +99,36 @@ impl Search {
 
         // Select one at random.
         // ランダムに１つ選びます。
-        let file = self.choose_file();
-        // I only look at the empty square.
-        // 空きマスだけを見ます。
-        if !pos.is_file_fill(file) {
-            let mut info_backwarding = None;
-            let (forward_cut_off, info_leaf_child, mut info_result, mut info_comment) =
-                self.node_exit_to_child_side(pos, file);
+        if let Some(file) = self.choose_file() {
+            // I only look at the empty square.
+            // 空きマスだけを見ます。
+            if !pos.is_file_fill(file) {
+                let mut info_backwarding = None;
+                let (forward_cut_off, info_leaf_child, mut info_result, mut info_comment) =
+                    self.node_exit_to_child_side(pos, file);
 
-            if let None = forward_cut_off {
-                // If you move forward, it's your opponent's turn.
-                // 前向きに探索したら、次は対戦相手の番です。
-                let (_opponent_sq, opponent_game_result) = self.node(pos);
-                // I'm back.
-                // 戻ってきました。
-                info_backwarding = Some(opponent_game_result);
+                if let None = forward_cut_off {
+                    // If you move forward, it's your opponent's turn.
+                    // 前向きに探索したら、次は対戦相手の番です。
+                    let (_opponent_sq, opponent_game_result) = self.node(pos);
+                    // I'm back.
+                    // 戻ってきました。
+                    info_backwarding = Some(opponent_game_result);
+                }
+                let (best_file_child, best_result_child) = &self.node_enter_from_child_side(
+                    pos,
+                    file,
+                    &mut best_file,
+                    &mut best_result,
+                    forward_cut_off,
+                    info_leaf_child,
+                    info_backwarding,
+                    &mut info_result,
+                    &mut info_comment,
+                );
+                best_file = *best_file_child;
+                best_result = *best_result_child;
             }
-            let (best_file_child, best_result_child) = &self.node_enter_from_child_side(
-                pos,
-                file,
-                &mut best_file,
-                &mut best_result,
-                forward_cut_off,
-                info_leaf_child,
-                info_backwarding,
-                &mut info_result,
-                &mut info_comment,
-            );
-            best_file = *best_file_child;
-            best_result = *best_result_child;
         }
 
         // End of turn.
@@ -316,12 +317,27 @@ impl Search {
     }
 
     /// Select one file at random.
-    /// ランダムに列を１つ選びます。
-    fn choose_file(&mut self) -> char {
-        if let Some(file) = ['a', 'b', 'c', 'd', 'e', 'f', 'g'].choose(&mut rand::thread_rng()) {
-            *file
+    /// TODO 重みを付けて、ランダムに列を１つ選びます。
+    fn choose_file(&mut self) -> Option<char> {
+        // 1 から 8 の最小公倍数は 840。
+        let secret_number = rand::thread_rng().gen_range(0, 840);
+        // TODO 重みを付けて、ランダムに列を１つ選びます。
+        if secret_number < 105 {
+            Some('a')
+        } else if secret_number < 2 * 105 {
+            Some('b')
+        } else if secret_number < 3 * 105 {
+            Some('c')
+        } else if secret_number < 4 * 105 {
+            Some('d')
+        } else if secret_number < 5 * 105 {
+            Some('e')
+        } else if secret_number < 6 * 105 {
+            Some('f')
+        } else if secret_number < 7 * 105 {
+            Some('g')
         } else {
-            panic!(Log::print_fatal("(Err.108)  Invalid random file."))
+            None
         }
     }
 }

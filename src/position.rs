@@ -55,9 +55,20 @@ impl Position {
         // Remove from the pv.
         // 読み筋から消します。
         if 1 < self.pv.len() {
+            // ,
             self.pv.pop();
+            // "
+            self.pv.pop();
+            // alphabet
+            self.pv.pop();
+            // "
             self.pv.pop();
         } else if 0 < self.pv.len() {
+            // "
+            self.pv.pop();
+            // alphabet
+            self.pv.pop();
+            // "
             self.pv.pop();
         }
         // Turn off the stone.
