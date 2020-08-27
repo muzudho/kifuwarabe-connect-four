@@ -255,20 +255,19 @@ impl Search {
         nodes: u32,
         pv: &str,
         search_direction: SearchDirection,
-        file: char,
         search_info: &SearchInfo,
     ) -> String {
         format!(
             "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"pv\":[{}] }}",
             nps,
             nodes,
-            match search_direction {
-                SearchDirection::Forward => {
-                    format!(", \"push\":\"{}\"", file)
+            if let Some(file) = search_info.chosen_file {
+                match search_direction {
+                    SearchDirection::Forward => format!(", \"push\":\"{}\"", file),
+                    SearchDirection::Backward => format!(", \"pop\" :\"{}\"", file),
                 }
-                SearchDirection::Backward => {
-                    format!(", \"pop\" :\"{}\"", file)
-                }
+            } else {
+                "".to_string()
             },
             if let Some(pieces_num) = search_info.pieces_num {
                 format!(", \"pieces\":{}", pieces_num)

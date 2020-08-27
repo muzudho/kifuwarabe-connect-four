@@ -215,7 +215,6 @@ impl Search {
                 self.nodes,
                 &pos.pv,
                 SearchDirection::Forward,
-                file,
                 &search_info,
             ));
         }
@@ -308,7 +307,6 @@ impl Search {
                 self.nodes,
                 &pos.pv,
                 SearchDirection::Backward,
-                file,
                 search_info,
             ));
         }

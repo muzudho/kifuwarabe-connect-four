@@ -64,6 +64,7 @@ pub fn test() {
   // pv=||
   // 適当な内容を入れて、入れ物として、入れた中身を見せてくれるか、チェックしろだぜ☆（＾～＾）
   let mut search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  search_info.chosen_file = Some('d');
   search_info.leaf = false;
   search_info.pieces_num = None;
   search_info.turn = Piece::Nought;
@@ -73,11 +74,11 @@ pub fn test() {
     search.nodes,
     &pos.pv,
     SearchDirection::Forward,
-    'd',
     &search_info,
   ));
   // info json { "nps":   123, "nodes":     0, "push":"d"                                           , "O":"Hello!", "pv":[] }
   search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  search_info.chosen_file = Some('d');
   search_info.leaf = true;
   search_info.pieces_num = None;
   search_info.result = Some(GameResult::Win);
@@ -88,11 +89,11 @@ pub fn test() {
     search.nodes,
     &pos.pv,
     SearchDirection::Forward,
-    'd',
     &search_info,
   ));
   // info json { "nps":   456, "nodes":     0, "push":"d"            , "leaf": true, "result":"win" , "X":"Hello!", "pv":[] }
   search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  search_info.chosen_file = Some('d');
   search_info.leaf = false;
   search_info.pieces_num = Some(pos.pieces_num);
   search_info.result = Some(GameResult::Win);
@@ -103,7 +104,6 @@ pub fn test() {
     search.nodes,
     &pos.pv,
     SearchDirection::Backward,
-    'd',
     &search_info,
   ));
   // info json { "nps":   789, "nodes":     0, "pop" :"d", "pieces":0              , "result":"win" , "O":"Hello!", "pv":[] }
