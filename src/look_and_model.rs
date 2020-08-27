@@ -1,6 +1,6 @@
 //! Display and data structure.  
 //! 表示と、データ構造です。  
-use crate::computer_player::evaluation::Evaluation;
+use crate::computer_player::Evaluation;
 use std::fmt;
 use std::time::Instant;
 
@@ -48,12 +48,12 @@ impl fmt::Display for GameResult {
 /// 配列は 0 から始まるのでサイズは 42 です。  
 pub const BOARD_LEN: usize = 42;
 
-/// There are 7 columns from a to g.
-/// a～gの7列です。
+/// There are 7 columns from a to g.  
+/// a～gの7列です。  
 pub const FILE_LEN: usize = 7;
 
-/// There are 6 rows from 1 to 6.
-/// 1～6の6列です。
+/// There are 6 rows from 1 to 6.  
+/// 1～6の6列です。  
 pub const RANK_LEN: usize = 6;
 
 /// The maximum number of stones that can be placed on the board.  
@@ -209,10 +209,10 @@ impl Position {
     }
 }
 
-/// Proceeding from the root toward the leaves is called a forward search.
-/// The process of returning from the leaves toward the root is called backward search.
-/// 根から葉に向かって進んでいることを前向き探索と呼びます。
-/// 葉から根に戻っていることを後ろ向き探索と呼びます。
+/// Proceeding from the root toward the leaves is called a forward search.  
+/// The process of returning from the leaves toward the root is called backward search.  
+/// 根から葉に向かって進んでいることを前向き探索と呼びます。  
+/// 葉から根に戻っていることを後ろ向き探索と呼びます。  
 pub enum SearchDirection {
     /// Forward search.
     /// 前向き探索。
@@ -335,8 +335,8 @@ impl SearchInfo {
         sum
     }
 
-    /// Information during a forward/backward search.
-    /// 前向き/後ろ向き 探索中の情報。
+    /// Information during a forward/backward search.  
+    /// 前向き/後ろ向き 探索中の情報。  
     pub fn to_string(&self) -> String {
         format!(
             "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"way\":{:?}, \"choose\":\"{}\", \"total\":{}, \"a\":{}, \"b\":{}, \"c\":{}, \"d\":{}, \"e\":{}, \"f\":{}, \"g\":{}, \"pv\":[{}] }}",

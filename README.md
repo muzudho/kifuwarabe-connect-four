@@ -51,7 +51,8 @@ It is important to start with the appearance.
   * [x] Piece - "O", "X".
   * [x] Game result - Win/Draw/Lose.
   * [x] Position - It's the board.
-  * [x] Search - Computer player search info.
+  * [x] Search - Computer player search.
+  * [x] Search info - Computer player search info.
 
 If you want to play immediately, you have the talent of a game creator.  
 Being able to control your position means being able to play.  
@@ -105,12 +106,18 @@ Let's make a computer player.
 
 * [x] Step 11. 'computer_player/search.rs'
   * [x] Search.
-* [x] Step 12. 'computer_player/evaluation.rs'
-  * [x] Evaluation - None.
-* [ ] 'main.py'
-  * [ ] Create "go" command.
-* [ ] Remeve all 'TODO' tasks. Examples: '// TODO Write a code here.'
+* [x] 'main.py'
+  * [x] Create "go" command.
 
-Finally, let's larning a computer thinking.
+Let's larning a computer thinking.
 
+* [ ] Step 12. 'computer_player/evaluation.rs'
+  * [ ] Evaluation - None.
+    * [x] ways_weight.
+    * [ ] Save.
+    * [ ] Load.
 * [ ] Step 13. `computer_player/learn.rs`
+
+Finally.
+
+* [ ] Remeve all 'TODO' tasks. Examples: '// TODO Write a code here.'

@@ -1,6 +1,7 @@
 mod command_line_seek;
 mod computer_player;
 mod engine;
+mod learn;
 mod log;
 mod look_and_model;
 mod performance_measurement;

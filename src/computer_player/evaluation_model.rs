@@ -1,3 +1,4 @@
+use crate::computer_player::Evaluation;
 use crate::log::LogExt;
 use crate::look_and_model::EvaluationWay;
 use crate::look_and_model::FILE_LEN;
@@ -26,17 +27,6 @@ pub const N3POW7: usize = 2187;
 /// 0 <= x < 255/8
 pub const INIT_VAL: u8 = 25;
 
-/// Evaluation.
-/// 評価値。
-pub struct Evaluation {
-    // Win and draw value.
-    // 勝ち評価値と、引き分け評価値。
-    pub features_1_to_7: [[[u8; WIN_AND_DRAW_LEN]; N3POW6]; 7],
-    pub features_8_to_13: [[[u8; WIN_AND_DRAW_LEN]; N3POW7]; 6],
-    pub features_14_19_20_25: [[[u8; WIN_AND_DRAW_LEN]; N3POW4]; 4],
-    pub features_15_18_21_24: [[[u8; WIN_AND_DRAW_LEN]; N3POW5]; 4],
-    pub features_16_17_22_23: [[[u8; WIN_AND_DRAW_LEN]; N3POW6]; 4],
-}
 impl Default for Evaluation {
     fn default() -> Self {
         Evaluation {
@@ -74,7 +64,7 @@ impl Evaluation {
         ]
     }
 
-    pub fn get_value_by_sq(&self, pos: &Position, sq: Option<usize>, way: &EvaluationWay) -> u8 {
+    fn get_value_by_sq(&self, pos: &Position, sq: Option<usize>, way: &EvaluationWay) -> u8 {
         let mut sum = 0;
         for feature in &self.get_elemental_features_by_sq(sq) {
             sum += self.get_value_by_feature(pos, *feature, way);
@@ -83,12 +73,7 @@ impl Evaluation {
         sum
     }
 
-    pub fn get_value_by_feature(
-        &self,
-        pos: &Position,
-        feature: Option<u8>,
-        way: &EvaluationWay,
-    ) -> u8 {
+    fn get_value_by_feature(&self, pos: &Position, feature: Option<u8>, way: &EvaluationWay) -> u8 {
         if let Some(feature) = feature {
             let state = self.get_state_by_feature(pos, feature) as usize;
             match feature {
@@ -127,7 +112,7 @@ impl Evaluation {
         }
     }
 
-    pub fn get_state_by_feature(&self, pos: &Position, feature: u8) -> u16 {
+    fn get_state_by_feature(&self, pos: &Position, feature: u8) -> u16 {
         match feature {
             1 => self.get_feature_state_by_figures(pos, vec![0, 7, 14, 21, 28, 35]),
             2 => self.get_feature_state_by_figures(pos, vec![1, 8, 15, 22, 29, 36]),
@@ -163,7 +148,7 @@ impl Evaluation {
 
     /// Elemental features of the square.
     /// そのマスの成分特徴。
-    pub fn get_elemental_features_by_sq(&self, sq: Option<usize>) -> [Option<u8>; 4] {
+    fn get_elemental_features_by_sq(&self, sq: Option<usize>) -> [Option<u8>; 4] {
         if let Some(sq) = sq {
             match sq {
                 0 => [Some(1), Some(13), None, Some(22)],
@@ -218,7 +203,7 @@ impl Evaluation {
         }
     }
 
-    pub fn get_feature_state_by_figures(&self, pos: &Position, figures: Vec<u8>) -> u16 {
+    fn get_feature_state_by_figures(&self, pos: &Position, figures: Vec<u8>) -> u16 {
         let mut sum = 0;
         for figure in figures {
             sum *= 3;

@@ -105,6 +105,8 @@ Let's input from `pos`.
             self.pos.info_enabled = false;
         } else if p.starts_with("info-on") {
             self.pos.info_enabled = true;
+        } else if p.starts_with("learn") {
+            // TODO
         } else if p.starts_with("position") {
             p.go_next_to("position ");
             if let Some(rest) = p.rest() {
