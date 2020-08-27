@@ -64,6 +64,7 @@ pub fn test() {
   // pv=||
   // 適当な内容を入れて、入れ物として、入れた中身を見せてくれるか、チェックしろだぜ☆（＾～＾）
   let mut search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  search_info.nps = 123;
   search_info.nodes = search.nodes;
   search_info.pv = pos.pv.to_string();
   search_info.search_direction = SearchDirection::Forward;
@@ -72,9 +73,10 @@ pub fn test() {
   search_info.pieces_num = None;
   search_info.turn = Piece::Nought;
   search_info.comment = Some("Hello!".to_string());
-  Log::print_debug(&Search::info_str(123, &search_info));
+  Log::print_debug(&Search::info_str(&search_info));
   // info json { "nps":   123, "nodes":     0, "push":"d"                                           , "O":"Hello!", "pv":[] }
   search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  search_info.nps = 456;
   search_info.nodes = search.nodes;
   search_info.pv = pos.pv.to_string();
   search_info.search_direction = SearchDirection::Forward;
@@ -84,9 +86,10 @@ pub fn test() {
   search_info.result = Some(GameResult::Win);
   search_info.turn = Piece::Cross;
   search_info.comment = Some("Hello!".to_string());
-  Log::print_debug(&Search::info_str(456, &search_info));
+  Log::print_debug(&Search::info_str(&search_info));
   // info json { "nps":   456, "nodes":     0, "push":"d"            , "leaf": true, "result":"win" , "X":"Hello!", "pv":[] }
   search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  search_info.nps = 789;
   search_info.nodes = search.nodes;
   search_info.pv = pos.pv.to_string();
   search_info.search_direction = SearchDirection::Backward;
@@ -96,7 +99,7 @@ pub fn test() {
   search_info.result = Some(GameResult::Win);
   search_info.turn = Piece::Nought;
   search_info.comment = Some("Hello!".to_string());
-  Log::print_debug(&Search::info_str(789, &search_info));
+  Log::print_debug(&Search::info_str(&search_info));
   // info json { "nps":   789, "nodes":     0, "pop" :"d", "pieces":0              , "result":"win" , "O":"Hello!", "pv":[] }
 
   // Step 4.
