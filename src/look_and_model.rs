@@ -259,7 +259,6 @@ impl Search {
         leaf: bool,
         pieces_num: Option<usize>,
         result: Option<GameResult>,
-        turn: Piece,
         search_info: &SearchInfo,
     ) -> String {
         format!(
@@ -290,9 +289,9 @@ impl Search {
                 "                 ".to_string()
             },
             if let Some(comment) = &search_info.comment {
-                format!(", \"{}\":\"{}\"", turn, comment).to_string()
+                format!(", \"{}\":\"{}\"", search_info.turn, comment).to_string()
             } else {
-                format!(", \"{}\":\"\"", turn).to_string()
+                format!(", \"{}\":\"\"", search_info.turn).to_string()
             },
             pv,
         )
@@ -300,33 +299,37 @@ impl Search {
     }
 }
 
-/// Win evaluation and draw evaluation.
-/// 勝ち評価値と、引き分け評価値。
+/// Win evaluation and draw evaluation.  
+/// 勝ち評価値と、引き分け評価値。  
 #[derive(Clone, Copy, Debug)]
 pub enum EvaluationWay {
     Win,
     Draw,
 }
 
-/// It is for displaying the thinking process.
-/// 思考過程の表示用です。
+/// It is for displaying the thinking process.  
+/// 思考過程の表示用です。  
 pub struct SearchInfo {
-    /// Win evaluation or Draw evaluation.
-    /// 勝ち評価または、引き分け評価。
+    /// Win evaluation or Draw evaluation.  
+    /// 勝ち評価または、引き分け評価。  
     pub way: EvaluationWay,
 
-    /// Weight of move probability.
-    /// 指し手確率の重み。
+    /// Weight of move probability.  
+    /// 指し手確率の重み。  
     ///
-    /// [a, b, c, d, e, f, g]
+    /// [a, b, c, d, e, f, g]  
     pub ways_weight: [u8; FILE_LEN],
 
-    /// Chosen file.
-    /// 選んだ列。
+    /// Chosen file.  
+    /// 選んだ列。  
     pub chosen_file: Option<char>,
 
-    /// Comment.
-    /// コメント。
+    /// Turn.  
+    /// 手番。  
+    pub turn: Piece,
+
+    /// Comment.  
+    /// コメント。  
     pub comment: Option<String>,
 }
 impl SearchInfo {
@@ -335,6 +338,7 @@ impl SearchInfo {
             way: *way,
             ways_weight: *ways_weight,
             chosen_file: None,
+            turn: Piece::Nought,
             comment: None,
         }
     }
