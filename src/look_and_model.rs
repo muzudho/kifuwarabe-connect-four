@@ -250,19 +250,13 @@ impl Search {
 
     /// Information during a forward/backward search.
     /// 前向き/後ろ向き 探索中の情報。
-    pub fn info_str(
-        nps: u64,
-        nodes: u32,
-        pv: &str,
-        search_direction: SearchDirection,
-        search_info: &SearchInfo,
-    ) -> String {
+    pub fn info_str(nps: u64, nodes: u32, pv: &str, search_info: &SearchInfo) -> String {
         format!(
             "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"pv\":[{}] }}",
             nps,
             nodes,
             if let Some(file) = search_info.chosen_file {
-                match search_direction {
+                match search_info.search_direction {
                     SearchDirection::Forward => format!(", \"push\":\"{}\"", file),
                     SearchDirection::Backward => format!(", \"pop\" :\"{}\"", file),
                 }
@@ -316,6 +310,10 @@ pub struct SearchInfo {
     /// [a, b, c, d, e, f, g]  
     pub ways_weight: [u8; FILE_LEN],
 
+    /// Search direction.  
+    /// 探索方向。  
+    pub search_direction: SearchDirection,
+
     /// Chosen file.  
     /// 選んだ列。  
     pub chosen_file: Option<char>,
@@ -345,6 +343,7 @@ impl SearchInfo {
         SearchInfo {
             way: *way,
             ways_weight: *ways_weight,
+            search_direction: SearchDirection::Forward,
             chosen_file: None,
             leaf: false,
             pieces_num: None,
