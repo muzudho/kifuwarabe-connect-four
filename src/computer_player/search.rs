@@ -368,7 +368,6 @@ impl Search {
 
         if pos.info_enabled {
             search_info.chosen_file = Some(file);
-            Log::print_info(&search_info.info_choose_str());
         }
 
         (Some(file), search_info)

@@ -334,32 +334,12 @@ impl SearchInfo {
         }
         sum
     }
-    pub fn info_choose_str(&self) -> String {
-        format!(
-            "info json {{ \"way\":{:?}, \"choose\":\"{}\", \"total\":{}, \"a\":{}, \"b\":{}, \"c\":{}, \"d\":{}, \"e\":{}, \"f\":{}, \"g\":{} }}",
-            self.way,
-            if let Some(file) = self.chosen_file {
-                file
-            }else{
-                ' '
-            },
-            self.get_total_weight(),
-            self.ways_weight[0],
-            self.ways_weight[1],
-            self.ways_weight[2],
-            self.ways_weight[3],
-            self.ways_weight[4],
-            self.ways_weight[5],
-            self.ways_weight[6],
-        )
-        .to_string()
-    }
 
     /// Information during a forward/backward search.
     /// 前向き/後ろ向き 探索中の情報。
     pub fn info_str(&self) -> String {
         format!(
-            "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"pv\":[{}] }}",
+            "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"way\":{:?}, \"choose\":\"{}\", \"total\":{}, \"a\":{}, \"b\":{}, \"c\":{}, \"d\":{}, \"e\":{}, \"f\":{}, \"g\":{}, \"pv\":[{}] }}",
             self.nps,
             self.nodes,
             if let Some(file) = self.chosen_file {
@@ -368,7 +348,7 @@ impl SearchInfo {
                     SearchDirection::Backward => format!(", \"pop\" :\"{}\"", file),
                 }
             } else {
-                "".to_string()
+                "            ".to_string()
             },
             if let Some(pieces_num) = self.pieces_num {
                 format!(", \"pieces\":{}", pieces_num)
@@ -390,6 +370,20 @@ impl SearchInfo {
             } else {
                 format!(", \"{}\":\"\"", self.turn).to_string()
             },
+            self.way,
+            if let Some(file) = self.chosen_file {
+                file
+            }else{
+                ' '
+            },
+            self.get_total_weight(),
+            self.ways_weight[0],
+            self.ways_weight[1],
+            self.ways_weight[2],
+            self.ways_weight[3],
+            self.ways_weight[4],
+            self.ways_weight[5],
+            self.ways_weight[6],
             self.pv,
         )
         .to_string()
