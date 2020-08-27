@@ -63,6 +63,8 @@ pub fn test() {
   Log::print_debug(&format!("pv=|{}|", pos.pv));
   // pv=||
   // 適当な内容を入れて、入れ物として、入れた中身を見せてくれるか、チェックしろだぜ☆（＾～＾）
+  let mut search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  search_info.comment = Some("Hello!".to_string());
   Log::print_debug(&Search::info_str(
     123,
     search.nodes,
@@ -73,10 +75,11 @@ pub fn test() {
     None,
     None,
     Piece::Nought,
-    &Some("Hello!".to_string()),
-    &SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]),
+    &search_info,
   ));
   // info json { "nps":   123, "nodes":     0, "push":"d"                                           , "O":"Hello!", "pv":[] }
+  search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  search_info.comment = Some("Hello!".to_string());
   Log::print_debug(&Search::info_str(
     456,
     search.nodes,
@@ -87,10 +90,11 @@ pub fn test() {
     None,
     Some(GameResult::Win),
     Piece::Cross,
-    &Some("Hello!".to_string()),
-    &SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]),
+    &search_info,
   ));
   // info json { "nps":   456, "nodes":     0, "push":"d"            , "leaf": true, "result":"win" , "X":"Hello!", "pv":[] }
+  search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  search_info.comment = Some("Hello!".to_string());
   Log::print_debug(&Search::info_str(
     789,
     search.nodes,
@@ -101,8 +105,7 @@ pub fn test() {
     Some(pos.pieces_num),
     Some(GameResult::Win),
     Piece::Nought,
-    &Some("Hello!".to_string()),
-    &SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]),
+    &search_info,
   ));
   // info json { "nps":   789, "nodes":     0, "pop" :"d", "pieces":0              , "result":"win" , "O":"Hello!", "pv":[] }
 

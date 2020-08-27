@@ -79,7 +79,7 @@ impl Search {
             // 空きマスだけを見ます。
             if !pos.is_file_fill(*file) {
                 let mut info_backwarding = None;
-                let (forward_cut_off, info_leaf_child, mut info_result, mut info_comment) =
+                let (forward_cut_off, info_leaf_child, mut info_result) =
                     self.node_exit_to_child_side(pos, *file, &mut search_info);
 
                 if let None = forward_cut_off {
@@ -99,7 +99,6 @@ impl Search {
                     info_leaf_child,
                     info_backwarding,
                     &mut info_result,
-                    &mut info_comment,
                     &mut search_info,
                 );
                 best_file = *best_file_child;
@@ -135,7 +134,7 @@ impl Search {
             // 空きマスだけを見ます。
             if !pos.is_file_fill(file) {
                 let mut info_backwarding = None;
-                let (forward_cut_off, info_leaf_child, mut info_result, mut info_comment) =
+                let (forward_cut_off, info_leaf_child, mut info_result) =
                     self.node_exit_to_child_side(pos, file, &mut search_info);
 
                 if let None = forward_cut_off {
@@ -155,7 +154,6 @@ impl Search {
                     info_leaf_child,
                     info_backwarding,
                     &mut info_result,
-                    &mut info_comment,
                     &mut search_info,
                 );
                 best_win_file = *best_file_child;
@@ -173,15 +171,9 @@ impl Search {
         pos: &mut Position,
         file: char,
         search_info: &mut SearchInfo,
-    ) -> (
-        Option<ForwardCutOff>,
-        bool,
-        Option<GameResult>,
-        Option<String>,
-    ) {
+    ) -> (Option<ForwardCutOff>, bool, Option<GameResult>) {
         let mut info_leaf = false;
         let mut info_result = None;
-        let mut info_comment = None;
         // Let's put a stone for now.
         // とりあえず石を置きましょう。
         pos.do_move(file);
@@ -196,7 +188,7 @@ impl Search {
             // 対戦相手の勝ち。
             if Log::enabled(Level::Info) && pos.info_enabled {
                 info_result = Some(GameResult::Win);
-                info_comment = Some("Resign.".to_string());
+                search_info.comment = Some("Resign.".to_string());
             }
             Some(ForwardCutOff::OpponentWin)
         } else if SQUARES_NUM <= pos.pieces_num {
@@ -205,12 +197,12 @@ impl Search {
             if Log::enabled(Level::Info) && pos.info_enabled {
                 info_leaf = true;
                 info_result = Some(GameResult::Draw);
-                info_comment = Some("It is ok.".to_string());
+                search_info.comment = Some("It is ok.".to_string());
             }
             Some(ForwardCutOff::Draw)
         } else {
             if Log::enabled(Level::Info) && pos.info_enabled {
-                info_comment = Some("Search.".to_string());
+                search_info.comment = Some("Search.".to_string());
             }
             None
         };
@@ -228,12 +220,11 @@ impl Search {
                 None,
                 info_result,
                 pos.turn,
-                &info_comment,
                 &search_info,
             ));
         }
 
-        return (forward_cut_off, info_leaf, info_result, info_comment);
+        return (forward_cut_off, info_leaf, info_result);
     }
 
     fn node_enter_from_child_side(
@@ -246,7 +237,6 @@ impl Search {
         info_leaf: bool,
         info_backwarding: Option<GameResult>,
         info_result: &mut Option<GameResult>,
-        info_comment: &mut Option<String>,
         search_info: &mut SearchInfo,
     ) -> (Option<char>, GameResult) {
         let mut backward_cut_off = None;
@@ -299,19 +289,19 @@ impl Search {
                         // I beat the opponent.
                         // 相手を負かしました。
                         *info_result = Some(GameResult::Win);
-                        *info_comment = Some("Hooray!".to_string());
+                        search_info.comment = Some("Hooray!".to_string());
                     }
                     GameResult::Draw => {
                         // If neither is wrong, draw.
                         // お互いがミスしなければ引き分け。
                         *info_result = Some(GameResult::Draw);
-                        *info_comment = Some("Fmmm.".to_string());
+                        search_info.comment = Some("Fmmm.".to_string());
                     }
                     GameResult::Win => {
                         // Don't choose to lose.
                         // 自分が負ける手は選びません。
                         *info_result = Some(GameResult::Lose);
-                        *info_comment = Some("Damn!".to_string());
+                        search_info.comment = Some("Damn!".to_string());
                     }
                 }
             }
@@ -325,7 +315,6 @@ impl Search {
                 Some(pos.pieces_num),
                 *info_result,
                 pos.turn,
-                &info_comment,
                 search_info,
             ));
         }

@@ -260,7 +260,6 @@ impl Search {
         pieces_num: Option<usize>,
         result: Option<GameResult>,
         turn: Piece,
-        comment: &Option<String>,
         search_info: &SearchInfo,
     ) -> String {
         format!(
@@ -290,7 +289,7 @@ impl Search {
             } else {
                 "                 ".to_string()
             },
-            if let Some(comment) = comment {
+            if let Some(comment) = &search_info.comment {
                 format!(", \"{}\":\"{}\"", turn, comment).to_string()
             } else {
                 format!(", \"{}\":\"\"", turn).to_string()
@@ -325,6 +324,10 @@ pub struct SearchInfo {
     /// Chosen file.
     /// 選んだ列。
     pub chosen_file: Option<char>,
+
+    /// Comment.
+    /// コメント。
+    pub comment: Option<String>,
 }
 impl SearchInfo {
     pub fn new(way: &EvaluationWay, ways_weight: &[u8; FILE_LEN]) -> Self {
@@ -332,6 +335,7 @@ impl SearchInfo {
             way: *way,
             ways_weight: *ways_weight,
             chosen_file: None,
+            comment: None,
         }
     }
     pub fn get_total_weight(&self) -> u16 {
