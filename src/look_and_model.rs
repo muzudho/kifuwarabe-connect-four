@@ -257,7 +257,6 @@ impl Search {
         search_direction: SearchDirection,
         file: char,
         leaf: bool,
-        pieces_num: Option<usize>,
         search_info: &SearchInfo,
     ) -> String {
         format!(
@@ -272,7 +271,7 @@ impl Search {
                     format!(", \"pop\" :\"{}\"", file)
                 }
             },
-            if let Some(pieces_num) = pieces_num {
+            if let Some(pieces_num) = search_info.pieces_num {
                 format!(", \"pieces\":{}", pieces_num)
             } else {
                 "            ".to_string()
@@ -323,6 +322,10 @@ pub struct SearchInfo {
     /// 選んだ列。  
     pub chosen_file: Option<char>,
 
+    /// The number of pieces on the board.  
+    /// 盤に置いてあるピースの数。  
+    pub pieces_num: Option<usize>,
+
     /// Result.  
     /// 結果。  
     pub result: Option<GameResult>,
@@ -341,6 +344,7 @@ impl SearchInfo {
             way: *way,
             ways_weight: *ways_weight,
             chosen_file: None,
+            pieces_num: None,
             result: None,
             turn: Piece::Nought,
             comment: None,
