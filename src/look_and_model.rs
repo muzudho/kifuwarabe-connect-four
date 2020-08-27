@@ -256,7 +256,6 @@ impl Search {
         pv: &str,
         search_direction: SearchDirection,
         file: char,
-        leaf: bool,
         search_info: &SearchInfo,
     ) -> String {
         format!(
@@ -276,7 +275,7 @@ impl Search {
             } else {
                 "            ".to_string()
             },
-            if leaf {
+            if search_info.leaf {
                 ", \"leaf\": true"
             } else {
                 "              "
@@ -322,6 +321,10 @@ pub struct SearchInfo {
     /// 選んだ列。  
     pub chosen_file: Option<char>,
 
+    /// Is leaf?  
+    /// 葉ですか？  
+    pub leaf: bool,
+
     /// The number of pieces on the board.  
     /// 盤に置いてあるピースの数。  
     pub pieces_num: Option<usize>,
@@ -344,6 +347,7 @@ impl SearchInfo {
             way: *way,
             ways_weight: *ways_weight,
             chosen_file: None,
+            leaf: false,
             pieces_num: None,
             result: None,
             turn: Piece::Nought,

@@ -207,6 +207,7 @@ impl Search {
         // (1) Outputs information for forward search.
         // (一) 前向き探索の情報を出力します。
         if pos.info_enabled {
+            search_info.leaf = info_leaf;
             search_info.pieces_num = None;
             search_info.turn = pos.turn;
             Log::print_info(&Search::info_str(
@@ -215,7 +216,6 @@ impl Search {
                 &pos.pv,
                 SearchDirection::Forward,
                 file,
-                info_leaf,
                 &search_info,
             ));
         }
@@ -300,6 +300,7 @@ impl Search {
                     }
                 }
             }
+            search_info.leaf = info_leaf;
             search_info.pieces_num = Some(pos.pieces_num);
             search_info.turn = pos.turn;
             Log::print_info(&Search::info_str(
@@ -308,7 +309,6 @@ impl Search {
                 &pos.pv,
                 SearchDirection::Backward,
                 file,
-                info_leaf,
                 search_info,
             ));
         }
