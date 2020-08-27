@@ -3,7 +3,9 @@
 
 use crate::command_line_seek::CommandLineSeek;
 use crate::log::LogExt;
-use crate::look_and_model::{GameResult, Piece, Position, Search, SearchDirection};
+use crate::look_and_model::{
+  EvaluationWay, GameResult, Piece, Position, Search, SearchDirection, SearchInfo,
+};
 use casual_logger::Log;
 use std::{thread, time};
 // use std;
@@ -72,6 +74,7 @@ pub fn test() {
     None,
     Piece::Nought,
     &Some("Hello!".to_string()),
+    &SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]),
   ));
   // info json { "nps":   123, "nodes":     0, "push":"d"                                           , "O":"Hello!", "pv":[] }
   Log::print_debug(&Search::info_str(
@@ -85,6 +88,7 @@ pub fn test() {
     Some(GameResult::Win),
     Piece::Cross,
     &Some("Hello!".to_string()),
+    &SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]),
   ));
   // info json { "nps":   456, "nodes":     0, "push":"d"            , "leaf": true, "result":"win" , "X":"Hello!", "pv":[] }
   Log::print_debug(&Search::info_str(
@@ -98,6 +102,7 @@ pub fn test() {
     Some(GameResult::Win),
     Piece::Nought,
     &Some("Hello!".to_string()),
+    &SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]),
   ));
   // info json { "nps":   789, "nodes":     0, "pop" :"d", "pieces":0              , "result":"win" , "O":"Hello!", "pv":[] }
 

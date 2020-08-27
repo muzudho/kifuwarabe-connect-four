@@ -261,6 +261,7 @@ impl Search {
         result: Option<GameResult>,
         turn: Piece,
         comment: &Option<String>,
+        search_info: &SearchInfo,
     ) -> String {
         format!(
             "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"pv\":[{}] }}",

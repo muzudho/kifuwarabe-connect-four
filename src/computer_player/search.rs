@@ -74,12 +74,13 @@ impl Search {
         // Full width search.
         // 全幅探索。
         for file in &['a', 'b', 'c', 'd', 'e', 'f', 'g'] {
+            let mut search_info = SearchInfo::new(&way, &[1, 1, 1, 1, 1, 1, 1]);
             // I only look at the empty square.
             // 空きマスだけを見ます。
             if !pos.is_file_fill(*file) {
                 let mut info_backwarding = None;
                 let (forward_cut_off, info_leaf_child, mut info_result, mut info_comment) =
-                    self.node_exit_to_child_side(pos, *file);
+                    self.node_exit_to_child_side(pos, *file, &mut search_info);
 
                 if let None = forward_cut_off {
                     // If you move forward, it's your opponent's turn.
@@ -99,6 +100,7 @@ impl Search {
                     info_backwarding,
                     &mut info_result,
                     &mut info_comment,
+                    &mut search_info,
                 );
                 best_file = *best_file_child;
                 best_result = *best_result_child;
@@ -128,13 +130,13 @@ impl Search {
 
         // Select one at random.
         // ランダムに１つ選びます。
-        if let (Some(file), search_info) = self.choose_file(pos, way) {
+        if let (Some(file), mut search_info) = self.choose_file(pos, way) {
             // I only look at the empty square.
             // 空きマスだけを見ます。
             if !pos.is_file_fill(file) {
                 let mut info_backwarding = None;
                 let (forward_cut_off, info_leaf_child, mut info_result, mut info_comment) =
-                    self.node_exit_to_child_side(pos, file);
+                    self.node_exit_to_child_side(pos, file, &mut search_info);
 
                 if let None = forward_cut_off {
                     // If you move forward, it's your opponent's turn.
@@ -154,6 +156,7 @@ impl Search {
                     info_backwarding,
                     &mut info_result,
                     &mut info_comment,
+                    &mut search_info,
                 );
                 best_win_file = *best_file_child;
                 best_win_result = *best_result_child;
@@ -169,6 +172,7 @@ impl Search {
         &mut self,
         pos: &mut Position,
         file: char,
+        search_info: &mut SearchInfo,
     ) -> (
         Option<ForwardCutOff>,
         bool,
@@ -225,6 +229,7 @@ impl Search {
                 info_result,
                 pos.turn,
                 &info_comment,
+                &search_info,
             ));
         }
 
@@ -242,6 +247,7 @@ impl Search {
         info_backwarding: Option<GameResult>,
         info_result: &mut Option<GameResult>,
         info_comment: &mut Option<String>,
+        search_info: &mut SearchInfo,
     ) -> (Option<char>, GameResult) {
         let mut backward_cut_off = None;
         // (2) Remove the placed stone.
@@ -320,6 +326,7 @@ impl Search {
                 *info_result,
                 pos.turn,
                 &info_comment,
+                search_info,
             ));
         }
 
