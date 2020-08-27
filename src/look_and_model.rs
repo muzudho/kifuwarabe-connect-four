@@ -247,46 +247,6 @@ impl Search {
             evaluation: Evaluation::default(),
         }
     }
-
-    /// Information during a forward/backward search.
-    /// 前向き/後ろ向き 探索中の情報。
-    pub fn info_str(search_info: &SearchInfo) -> String {
-        format!(
-            "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"pv\":[{}] }}",
-            search_info.nps,
-            search_info.nodes,
-            if let Some(file) = search_info.chosen_file {
-                match search_info.search_direction {
-                    SearchDirection::Forward => format!(", \"push\":\"{}\"", file),
-                    SearchDirection::Backward => format!(", \"pop\" :\"{}\"", file),
-                }
-            } else {
-                "".to_string()
-            },
-            if let Some(pieces_num) = search_info.pieces_num {
-                format!(", \"pieces\":{}", pieces_num)
-            } else {
-                "            ".to_string()
-            },
-            if search_info.leaf {
-                ", \"leaf\": true"
-            } else {
-                "              "
-            },
-            if let Some(result) = search_info.result {
-                format!(", \"result\":{:6}", format!("\"{}\"", result.to_string()))
-            } else {
-                "                 ".to_string()
-            },
-            if let Some(comment) = &search_info.comment {
-                format!(", \"{}\":\"{}\"", search_info.turn, comment).to_string()
-            } else {
-                format!(", \"{}\":\"\"", search_info.turn).to_string()
-            },
-            search_info.pv,
-        )
-        .to_string()
-    }
 }
 
 /// Win evaluation and draw evaluation.  
@@ -391,6 +351,46 @@ impl SearchInfo {
             self.ways_weight[4],
             self.ways_weight[5],
             self.ways_weight[6],
+        )
+        .to_string()
+    }
+
+    /// Information during a forward/backward search.
+    /// 前向き/後ろ向き 探索中の情報。
+    pub fn info_str(&self) -> String {
+        format!(
+            "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"pv\":[{}] }}",
+            self.nps,
+            self.nodes,
+            if let Some(file) = self.chosen_file {
+                match self.search_direction {
+                    SearchDirection::Forward => format!(", \"push\":\"{}\"", file),
+                    SearchDirection::Backward => format!(", \"pop\" :\"{}\"", file),
+                }
+            } else {
+                "".to_string()
+            },
+            if let Some(pieces_num) = self.pieces_num {
+                format!(", \"pieces\":{}", pieces_num)
+            } else {
+                "            ".to_string()
+            },
+            if self.leaf {
+                ", \"leaf\": true"
+            } else {
+                "              "
+            },
+            if let Some(result) = self.result {
+                format!(", \"result\":{:6}", format!("\"{}\"", result.to_string()))
+            } else {
+                "                 ".to_string()
+            },
+            if let Some(comment) = &self.comment {
+                format!(", \"{}\":\"{}\"", self.turn, comment).to_string()
+            } else {
+                format!(", \"{}\":\"\"", self.turn).to_string()
+            },
+            self.pv,
         )
         .to_string()
     }
