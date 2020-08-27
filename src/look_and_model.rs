@@ -248,19 +248,23 @@ impl Search {
         }
     }
 
-    pub fn info_choose_str(way: &EvaluationWay, ways: &[u8; 7], total: u16, file: char) -> String {
+    pub fn info_choose_str(info: &SearchInfo) -> String {
         format!(
             "info json {{ \"way\":{:?}, \"choose\":\"{}\", \"total\":{}, \"a\":{}, \"b\":{}, \"c\":{}, \"d\":{}, \"e\":{}, \"f\":{}, \"g\":{} }}",
-            way,
-            file,
-            total,
-            ways[0],
-            ways[1],
-            ways[2],
-            ways[3],
-            ways[4],
-            ways[5],
-            ways[6],
+            info.way,
+            if let Some(file) = info.chosen_file {
+                file
+            }else{
+                ' '
+            },
+            info.get_total_weight(),
+            info.ways_weight[0],
+            info.ways_weight[1],
+            info.ways_weight[2],
+            info.ways_weight[3],
+            info.ways_weight[4],
+            info.ways_weight[5],
+            info.ways_weight[6],
         )
         .to_string()
     }
@@ -323,4 +327,38 @@ impl Search {
 pub enum EvaluationWay {
     Win,
     Draw,
+}
+
+/// It is for displaying the thinking process.
+/// 思考過程の表示用です。
+pub struct SearchInfo {
+    /// Win evaluation or Draw evaluation.
+    /// 勝ち評価または、引き分け評価。
+    pub way: EvaluationWay,
+
+    /// Weight of move probability.
+    /// 指し手確率の重み。
+    ///
+    /// [a, b, c, d, e, f, g]
+    pub ways_weight: [u8; FILE_LEN],
+
+    /// Chosen file.
+    /// 選んだ列。
+    pub chosen_file: Option<char>,
+}
+impl SearchInfo {
+    pub fn new(way: &EvaluationWay, ways_weight: &[u8; FILE_LEN]) -> Self {
+        SearchInfo {
+            way: *way,
+            ways_weight: *ways_weight,
+            chosen_file: None,
+        }
+    }
+    pub fn get_total_weight(&self) -> u16 {
+        let mut sum: u16 = 0;
+        for i in 0..FILE_LEN {
+            sum += self.ways_weight[i] as u16;
+        }
+        sum
+    }
 }

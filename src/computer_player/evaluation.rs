@@ -1,5 +1,6 @@
 use crate::log::LogExt;
 use crate::look_and_model::EvaluationWay;
+use crate::look_and_model::FILE_LEN;
 use crate::look_and_model::{Piece, Position};
 use casual_logger::Log;
 
@@ -49,7 +50,7 @@ impl Default for Evaluation {
 }
 impl Evaluation {
     /// [a, b, c, d, e, f, g]
-    pub fn ways_weight(&self, pos: &Position, way: &EvaluationWay) -> [u8; 7] {
+    pub fn ways_weight(&self, pos: &Position, way: &EvaluationWay) -> [u8; FILE_LEN] {
         // マスの特徴量を求めます。
         // 7つの指し手のマスを調べます。
         let win_way_values = [

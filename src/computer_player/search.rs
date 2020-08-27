@@ -4,7 +4,7 @@
 //! 詳しくは 'look_and_model' の 'Search' 構造体 を見てください。  
 use crate::log::LogExt;
 use crate::look_and_model::{
-    EvaluationWay, GameResult, Position, Search, SearchDirection, SQUARES_NUM,
+    EvaluationWay, GameResult, Position, Search, SearchDirection, SearchInfo, SQUARES_NUM,
 };
 use casual_logger::{Level, Log};
 use rand::Rng;
@@ -349,6 +349,7 @@ impl Search {
     /// TODO 重みを付けて、ランダムに列を１つ選びます。
     fn choose_file(&mut self, pos: &Position, way: &EvaluationWay) -> Option<char> {
         let w = self.evaluation.ways_weight(pos, way);
+        let mut search_info = SearchInfo::new(way, &w);
         // Upper bound.
         let a_up: u16 = w[0] as u16;
         let b_up = a_up + w[1] as u16;
@@ -358,6 +359,9 @@ impl Search {
         let f_up = e_up + w[5] as u16;
         let total = f_up + w[6] as u16;
         if total == 0 {
+            if pos.info_enabled {
+                search_info.chosen_file = None;
+            }
             return None;
         }
 
@@ -379,7 +383,8 @@ impl Search {
         };
 
         if pos.info_enabled {
-            Log::print_info(&Search::info_choose_str(way, &w, total, file));
+            search_info.chosen_file = Some(file);
+            Log::print_info(&Search::info_choose_str(&search_info));
         }
 
         Some(file)
