@@ -214,7 +214,7 @@ impl Search {
             search_info.leaf = info_leaf;
             search_info.pieces_num = None;
             search_info.turn = pos.turn;
-            Log::print_info(&search_info.info_str());
+            Log::print_info(&search_info.to_string());
         }
 
         return (forward_cut_off, info_leaf);
@@ -304,7 +304,7 @@ impl Search {
             search_info.leaf = info_leaf;
             search_info.pieces_num = Some(pos.pieces_num);
             search_info.turn = pos.turn;
-            Log::print_info(&search_info.info_str());
+            Log::print_info(&search_info.to_string());
         }
 
         // (4) Depending on the condition, the sibling node search is skipped.

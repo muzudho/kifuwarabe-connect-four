@@ -337,7 +337,7 @@ impl SearchInfo {
 
     /// Information during a forward/backward search.
     /// 前向き/後ろ向き 探索中の情報。
-    pub fn info_str(&self) -> String {
+    pub fn to_string(&self) -> String {
         format!(
             "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"way\":{:?}, \"choose\":\"{}\", \"total\":{}, \"a\":{}, \"b\":{}, \"c\":{}, \"d\":{}, \"e\":{}, \"f\":{}, \"g\":{}, \"pv\":[{}] }}",
             self.nps,
