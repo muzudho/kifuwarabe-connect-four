@@ -128,7 +128,7 @@ impl Search {
 
         // Select one at random.
         // ランダムに１つ選びます。
-        if let Some(file) = self.choose_file(pos, way) {
+        if let (Some(file), search_info) = self.choose_file(pos, way) {
             // I only look at the empty square.
             // 空きマスだけを見ます。
             if !pos.is_file_fill(file) {
@@ -347,7 +347,7 @@ impl Search {
 
     /// Select one file at random.
     /// TODO 重みを付けて、ランダムに列を１つ選びます。
-    fn choose_file(&mut self, pos: &Position, way: &EvaluationWay) -> Option<char> {
+    fn choose_file(&mut self, pos: &Position, way: &EvaluationWay) -> (Option<char>, SearchInfo) {
         let w = self.evaluation.ways_weight(pos, way);
         let mut search_info = SearchInfo::new(way, &w);
         // Upper bound.
@@ -362,7 +362,7 @@ impl Search {
             if pos.info_enabled {
                 search_info.chosen_file = None;
             }
-            return None;
+            return (None, search_info);
         }
 
         let number = rand::thread_rng().gen_range(0, total);
@@ -384,10 +384,10 @@ impl Search {
 
         if pos.info_enabled {
             search_info.chosen_file = Some(file);
-            Log::print_info(&Search::info_choose_str(&search_info));
+            Log::print_info(&search_info.info_choose_str());
         }
 
-        Some(file)
+        (Some(file), search_info)
     }
 }
 

@@ -248,27 +248,6 @@ impl Search {
         }
     }
 
-    pub fn info_choose_str(info: &SearchInfo) -> String {
-        format!(
-            "info json {{ \"way\":{:?}, \"choose\":\"{}\", \"total\":{}, \"a\":{}, \"b\":{}, \"c\":{}, \"d\":{}, \"e\":{}, \"f\":{}, \"g\":{} }}",
-            info.way,
-            if let Some(file) = info.chosen_file {
-                file
-            }else{
-                ' '
-            },
-            info.get_total_weight(),
-            info.ways_weight[0],
-            info.ways_weight[1],
-            info.ways_weight[2],
-            info.ways_weight[3],
-            info.ways_weight[4],
-            info.ways_weight[5],
-            info.ways_weight[6],
-        )
-        .to_string()
-    }
-
     /// Information during a forward/backward search.
     /// 前向き/後ろ向き 探索中の情報。
     pub fn info_str(
@@ -360,5 +339,25 @@ impl SearchInfo {
             sum += self.ways_weight[i] as u16;
         }
         sum
+    }
+    pub fn info_choose_str(&self) -> String {
+        format!(
+            "info json {{ \"way\":{:?}, \"choose\":\"{}\", \"total\":{}, \"a\":{}, \"b\":{}, \"c\":{}, \"d\":{}, \"e\":{}, \"f\":{}, \"g\":{} }}",
+            self.way,
+            if let Some(file) = self.chosen_file {
+                file
+            }else{
+                ' '
+            },
+            self.get_total_weight(),
+            self.ways_weight[0],
+            self.ways_weight[1],
+            self.ways_weight[2],
+            self.ways_weight[3],
+            self.ways_weight[4],
+            self.ways_weight[5],
+            self.ways_weight[6],
+        )
+        .to_string()
     }
 }
