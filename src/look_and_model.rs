@@ -250,7 +250,7 @@ impl Search {
 
     /// Information during a forward/backward search.
     /// 前向き/後ろ向き 探索中の情報。
-    pub fn info_str(nps: u64, nodes: u32, pv: &str, search_info: &SearchInfo) -> String {
+    pub fn info_str(nps: u64, nodes: u32, search_info: &SearchInfo) -> String {
         format!(
             "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"pv\":[{}] }}",
             nps,
@@ -283,7 +283,7 @@ impl Search {
             } else {
                 format!(", \"{}\":\"\"", search_info.turn).to_string()
             },
-            pv,
+            search_info.pv,
         )
         .to_string()
     }
@@ -309,6 +309,10 @@ pub struct SearchInfo {
     ///
     /// [a, b, c, d, e, f, g]  
     pub ways_weight: [u8; FILE_LEN],
+
+    /// Principal variation.  
+    /// 読みの本筋。  
+    pub pv: String,
 
     /// Search direction.  
     /// 探索方向。  
@@ -343,6 +347,7 @@ impl SearchInfo {
         SearchInfo {
             way: *way,
             ways_weight: *ways_weight,
+            pv: "".to_string(),
             search_direction: SearchDirection::Forward,
             chosen_file: None,
             leaf: false,
