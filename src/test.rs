@@ -74,11 +74,11 @@ pub fn test() {
     'd',
     false,
     None,
-    None,
     &search_info,
   ));
   // info json { "nps":   123, "nodes":     0, "push":"d"                                           , "O":"Hello!", "pv":[] }
   search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  search_info.result = Some(GameResult::Win);
   search_info.turn = Piece::Cross;
   search_info.comment = Some("Hello!".to_string());
   Log::print_debug(&Search::info_str(
@@ -89,11 +89,11 @@ pub fn test() {
     'd',
     true,
     None,
-    Some(GameResult::Win),
     &search_info,
   ));
   // info json { "nps":   456, "nodes":     0, "push":"d"            , "leaf": true, "result":"win" , "X":"Hello!", "pv":[] }
   search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  search_info.result = Some(GameResult::Win);
   search_info.turn = Piece::Nought;
   search_info.comment = Some("Hello!".to_string());
   Log::print_debug(&Search::info_str(
@@ -104,7 +104,6 @@ pub fn test() {
     'd',
     false,
     Some(pos.pieces_num),
-    Some(GameResult::Win),
     &search_info,
   ));
   // info json { "nps":   789, "nodes":     0, "pop" :"d", "pieces":0              , "result":"win" , "O":"Hello!", "pv":[] }

@@ -258,7 +258,6 @@ impl Search {
         file: char,
         leaf: bool,
         pieces_num: Option<usize>,
-        result: Option<GameResult>,
         search_info: &SearchInfo,
     ) -> String {
         format!(
@@ -283,7 +282,7 @@ impl Search {
             } else {
                 "              "
             },
-            if let Some(result) = result {
+            if let Some(result) = search_info.result {
                 format!(", \"result\":{:6}", format!("\"{}\"", result.to_string()))
             } else {
                 "                 ".to_string()
@@ -324,6 +323,10 @@ pub struct SearchInfo {
     /// 選んだ列。  
     pub chosen_file: Option<char>,
 
+    /// Result.  
+    /// 結果。  
+    pub result: Option<GameResult>,
+
     /// Turn.  
     /// 手番。  
     pub turn: Piece,
@@ -338,6 +341,7 @@ impl SearchInfo {
             way: *way,
             ways_weight: *ways_weight,
             chosen_file: None,
+            result: None,
             turn: Piece::Nought,
             comment: None,
         }
