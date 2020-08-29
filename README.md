@@ -111,11 +111,11 @@ Let's make a computer player.
 
 Let's larning a computer thinking.
 
-* [ ] Step 12. 'computer_player/evaluation.rs'
-  * [ ] Evaluation - None.
+* [x] Step 12. 'computer_player/evaluation.rs'
+  * [x] Evaluation - None.
     * [x] ways_weight.
-    * [ ] Save.
-    * [ ] Load.
+    * [x] Save.
+    * [x] Load.
 * [ ] Step 13. `computer_player/learn.rs`
 
 Finally.

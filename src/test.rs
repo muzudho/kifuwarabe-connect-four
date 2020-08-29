@@ -403,8 +403,9 @@ pub fn test() {
   */
 
   // Step.12
-  let evaluation = Evaluation::default();
+  let mut evaluation = Evaluation::default();
   evaluation.save("test-evaluation.csv");
+  evaluation.load("test-evaluation.csv");
 
   // Wait for logging to complete.
   // ロギングが完了するまで待ちます。

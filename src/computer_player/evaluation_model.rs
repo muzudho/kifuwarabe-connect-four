@@ -1,25 +1,12 @@
 use crate::computer_player::Evaluation;
+use crate::computer_player::{
+    N3POW4, N3POW5, N3POW6, N3POW7, NOUGHT_AND_CROSS_LEN, WIN_AND_DRAW_LEN,
+};
 use crate::log::LogExt;
 use crate::look_and_model::EvaluationWay;
 use crate::look_and_model::FILE_LEN;
 use crate::look_and_model::{Piece, Position};
 use casual_logger::Log;
-
-/// Win and draw.
-/// 勝ちと負け。
-pub const WIN_AND_DRAW_LEN: usize = 2;
-
-/// 3^4
-pub const N3POW4: usize = 81;
-
-/// 3^5
-pub const N3POW5: usize = 243;
-
-/// 3^6
-pub const N3POW6: usize = 729;
-
-/// 3^7
-pub const N3POW7: usize = 2187;
 
 /// Initial value of evaluation.
 /// 評価値の初期値。
@@ -30,11 +17,14 @@ pub const INIT_VAL: u8 = 25;
 impl Default for Evaluation {
     fn default() -> Self {
         Evaluation {
-            features_1_to_7: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW6]; 7],
-            features_8_to_13: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW7]; 6],
-            features_14_19_20_25: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW4]; 4],
-            features_15_18_21_24: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW5]; 4],
-            features_16_17_22_23: [[[INIT_VAL; WIN_AND_DRAW_LEN]; N3POW6]; 4],
+            features_1_to_7: [[[[INIT_VAL; NOUGHT_AND_CROSS_LEN]; WIN_AND_DRAW_LEN]; N3POW6]; 7],
+            features_8_to_13: [[[[INIT_VAL; NOUGHT_AND_CROSS_LEN]; WIN_AND_DRAW_LEN]; N3POW7]; 6],
+            features_14_19_20_25: [[[[INIT_VAL; NOUGHT_AND_CROSS_LEN]; WIN_AND_DRAW_LEN]; N3POW4];
+                4],
+            features_15_18_21_24: [[[[INIT_VAL; NOUGHT_AND_CROSS_LEN]; WIN_AND_DRAW_LEN]; N3POW5];
+                4],
+            features_16_17_22_23: [[[[INIT_VAL; NOUGHT_AND_CROSS_LEN]; WIN_AND_DRAW_LEN]; N3POW6];
+                4],
         }
     }
 }
@@ -77,31 +67,31 @@ impl Evaluation {
         if let Some(feature) = feature {
             let state = self.get_state_by_feature(pos, feature) as usize;
             match feature {
-                1 => self.features_1_to_7[0][state][*way as usize],
-                2 => self.features_1_to_7[1][state][*way as usize],
-                3 => self.features_1_to_7[2][state][*way as usize],
-                4 => self.features_1_to_7[3][state][*way as usize],
-                5 => self.features_1_to_7[4][state][*way as usize],
-                6 => self.features_1_to_7[5][state][*way as usize],
-                7 => self.features_1_to_7[6][state][*way as usize],
-                8 => self.features_8_to_13[0][state][*way as usize],
-                9 => self.features_8_to_13[1][state][*way as usize],
-                10 => self.features_8_to_13[2][state][*way as usize],
-                11 => self.features_8_to_13[3][state][*way as usize],
-                12 => self.features_8_to_13[4][state][*way as usize],
-                13 => self.features_8_to_13[5][state][*way as usize],
-                14 => self.features_14_19_20_25[0][state][*way as usize],
-                15 => self.features_15_18_21_24[0][state][*way as usize],
-                16 => self.features_16_17_22_23[0][state][*way as usize],
-                17 => self.features_16_17_22_23[1][state][*way as usize],
-                18 => self.features_15_18_21_24[1][state][*way as usize],
-                19 => self.features_14_19_20_25[1][state][*way as usize],
-                20 => self.features_14_19_20_25[2][state][*way as usize],
-                21 => self.features_15_18_21_24[2][state][*way as usize],
-                22 => self.features_16_17_22_23[2][state][*way as usize],
-                23 => self.features_16_17_22_23[3][state][*way as usize],
-                24 => self.features_15_18_21_24[3][state][*way as usize],
-                25 => self.features_14_19_20_25[3][state][*way as usize],
+                1 => self.features_1_to_7[0][state][*way as usize][pos.turn as usize],
+                2 => self.features_1_to_7[1][state][*way as usize][pos.turn as usize],
+                3 => self.features_1_to_7[2][state][*way as usize][pos.turn as usize],
+                4 => self.features_1_to_7[3][state][*way as usize][pos.turn as usize],
+                5 => self.features_1_to_7[4][state][*way as usize][pos.turn as usize],
+                6 => self.features_1_to_7[5][state][*way as usize][pos.turn as usize],
+                7 => self.features_1_to_7[6][state][*way as usize][pos.turn as usize],
+                8 => self.features_8_to_13[0][state][*way as usize][pos.turn as usize],
+                9 => self.features_8_to_13[1][state][*way as usize][pos.turn as usize],
+                10 => self.features_8_to_13[2][state][*way as usize][pos.turn as usize],
+                11 => self.features_8_to_13[3][state][*way as usize][pos.turn as usize],
+                12 => self.features_8_to_13[4][state][*way as usize][pos.turn as usize],
+                13 => self.features_8_to_13[5][state][*way as usize][pos.turn as usize],
+                14 => self.features_14_19_20_25[0][state][*way as usize][pos.turn as usize],
+                15 => self.features_15_18_21_24[0][state][*way as usize][pos.turn as usize],
+                16 => self.features_16_17_22_23[0][state][*way as usize][pos.turn as usize],
+                17 => self.features_16_17_22_23[1][state][*way as usize][pos.turn as usize],
+                18 => self.features_15_18_21_24[1][state][*way as usize][pos.turn as usize],
+                19 => self.features_14_19_20_25[1][state][*way as usize][pos.turn as usize],
+                20 => self.features_14_19_20_25[2][state][*way as usize][pos.turn as usize],
+                21 => self.features_15_18_21_24[2][state][*way as usize][pos.turn as usize],
+                22 => self.features_16_17_22_23[2][state][*way as usize][pos.turn as usize],
+                23 => self.features_16_17_22_23[3][state][*way as usize][pos.turn as usize],
+                24 => self.features_15_18_21_24[3][state][*way as usize][pos.turn as usize],
+                25 => self.features_14_19_20_25[3][state][*way as usize][pos.turn as usize],
                 _ => panic!(Log::print_fatal(&format!(
                     "(Err.123)  Invalid feature. / {}",
                     feature
