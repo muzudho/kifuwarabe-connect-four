@@ -3,9 +3,10 @@ use crate::FILE_LEN;
 use crate::{
     computer_player::{Bestmove, Learning, Search},
     log::LogExt,
-    Engine, ResultChannel, SearchInfo, EVALUATION_FILE_NAME,
+    Engine, GameResult, ResultChannel, SearchInfo, EVALUATION_FILE_NAME,
 };
 use casual_logger::Log;
+use rand::Rng;
 
 impl Default for Learning {
     fn default() -> Self {
@@ -22,6 +23,8 @@ impl Learning {
     /// uh...  
     /// うーん……。  
     pub fn uh(&mut self, engine: &mut Engine) {
+        let result_channel = ResultChannel::Win;
+
         let mut search = Search::default();
         search.start_pieces_num = engine.pos.pieces_num;
 
@@ -32,7 +35,7 @@ impl Learning {
                 search.node_exit(
                     &mut engine.pos,
                     &engine.evaluation,
-                    &ResultChannel::Win,
+                    &result_channel,
                     'a',
                     &mut search_info,
                     &mut bestmove,
@@ -44,7 +47,7 @@ impl Learning {
                 search.node_exit(
                     &mut engine.pos,
                     &engine.evaluation,
-                    &ResultChannel::Win,
+                    &result_channel,
                     'b',
                     &mut search_info,
                     &mut bestmove,
@@ -56,7 +59,7 @@ impl Learning {
                 search.node_exit(
                     &mut engine.pos,
                     &engine.evaluation,
-                    &ResultChannel::Win,
+                    &result_channel,
                     'c',
                     &mut search_info,
                     &mut bestmove,
@@ -68,7 +71,7 @@ impl Learning {
                 search.node_exit(
                     &mut engine.pos,
                     &engine.evaluation,
-                    &ResultChannel::Win,
+                    &result_channel,
                     'd',
                     &mut search_info,
                     &mut bestmove,
@@ -80,7 +83,7 @@ impl Learning {
                 search.node_exit(
                     &mut engine.pos,
                     &engine.evaluation,
-                    &ResultChannel::Win,
+                    &result_channel,
                     'e',
                     &mut search_info,
                     &mut bestmove,
@@ -92,7 +95,7 @@ impl Learning {
                 search.node_exit(
                     &mut engine.pos,
                     &engine.evaluation,
-                    &ResultChannel::Win,
+                    &result_channel,
                     'f',
                     &mut search_info,
                     &mut bestmove,
@@ -104,7 +107,7 @@ impl Learning {
                 search.node_exit(
                     &mut engine.pos,
                     &engine.evaluation,
-                    &ResultChannel::Win,
+                    &result_channel,
                     'g',
                     &mut search_info,
                     &mut bestmove,
@@ -113,20 +116,118 @@ impl Learning {
             },
         ];
 
-        let mut tensor = engine
-            .evaluation
-            .ways_weight(&engine.pos, &ResultChannel::Win);
+        let mut tensor = engine.evaluation.ways_weight(&engine.pos, &result_channel);
         let old_tensor = tensor.clone();
-        let give_values = [
-            Learning::give(&mut tensor, 0),
-            Learning::give(&mut tensor, 1),
-            Learning::give(&mut tensor, 2),
-            Learning::give(&mut tensor, 3),
-            Learning::give(&mut tensor, 4),
-            Learning::give(&mut tensor, 5),
-            Learning::give(&mut tensor, 6),
-        ];
-        let take_values = [0, 0, 0, 0, 0, 0, 0];
+        // The number of files for which points can be obtained.
+        // 点数を得られる列数。
+        let mut obtainer = [false; FILE_LEN];
+        let mut obtainer_count = 0;
+        for file in 0..FILE_LEN {
+            match result_channel {
+                ResultChannel::Win => match files_way[file].result {
+                    GameResult::Win => {
+                        obtainer[file] = true;
+                        obtainer_count += 1;
+                    }
+                    _ => {}
+                },
+                ResultChannel::Draw => match files_way[file].result {
+                    GameResult::Draw => {
+                        obtainer[file] = true;
+                        obtainer_count += 1;
+                    }
+                    _ => {}
+                },
+                _ => {}
+            }
+        }
+        // It can move the evaluation value.
+        // 評価値が移動できます。
+        let mut give_values = [0, 0, 0, 0, 0, 0, 0];
+        let mut take_values = [0, 0, 0, 0, 0, 0, 0];
+        if 0 < obtainer_count {
+            give_values = [
+                Learning::give(&mut tensor, 0),
+                Learning::give(&mut tensor, 1),
+                Learning::give(&mut tensor, 2),
+                Learning::give(&mut tensor, 3),
+                Learning::give(&mut tensor, 4),
+                Learning::give(&mut tensor, 5),
+                Learning::give(&mut tensor, 6),
+            ];
+            let gives_total = {
+                let mut sum = 0;
+                for file in 0..FILE_LEN {
+                    sum += give_values[file];
+                }
+                sum
+            };
+            let obtain_point = gives_total / obtainer_count;
+            let rest_point = gives_total % obtainer_count;
+            take_values = [
+                {
+                    if obtainer[0] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+                {
+                    if obtainer[1] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+                {
+                    if obtainer[2] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+                {
+                    if obtainer[3] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+                {
+                    if obtainer[4] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+                {
+                    if obtainer[5] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+                {
+                    if obtainer[6] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+            ];
+            {
+                let mut files = Vec::<usize>::new();
+                for file in 0..FILE_LEN {
+                    if obtainer[file] {
+                        files.push(file);
+                    }
+                }
+                for _i in 0..rest_point {
+                    take_values[files[rand::thread_rng().gen_range(0, obtainer_count) as usize]] +=
+                        1;
+                }
+            }
+        }
 
         let mut text = String::new();
         text.push_str(&format!(
