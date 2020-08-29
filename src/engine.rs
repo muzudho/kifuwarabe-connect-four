@@ -3,7 +3,7 @@
 
 use crate::{
     command_line_seek::CommandLineSeek,
-    computer_player::{Learning, Search},
+    computer_player::{Evaluation, Learning, Search},
     log::LogExt,
     Engine, Position,
 };
@@ -80,8 +80,9 @@ Let's input from `pos`.
             }
         } else if p.starts_with("go") {
             let mut search = Search::default();
+            let evaluation = Evaluation::default();
             search.start_pieces_num = self.pos.pieces_num;
-            let (sq, result) = search.go(&mut self.pos);
+            let (sq, result) = search.go(&mut self.pos, &evaluation);
             Log::print_info(&format!(
                 "info string result={:?} nps={}",
                 result,

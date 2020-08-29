@@ -19,7 +19,6 @@ impl Default for Search {
             start_pieces_num: 0,
             nodes: 0,
             stopwatch: Instant::now(),
-            evaluation: Evaluation::default(),
         }
     }
 }
@@ -41,8 +40,12 @@ impl Search {
     ///                     マスの番地。  
     /// * `GameResult` - Evaluation.  
     ///                     評価値。  
-    pub fn go(&mut self, pos: &mut Position) -> (Option<char>, GameResult) {
-        let (win_file, win_result) = self.first_node(pos, &EvaluationWay::Win);
+    pub fn go(
+        &mut self,
+        pos: &mut Position,
+        evaluation: &Evaluation,
+    ) -> (Option<char>, GameResult) {
+        let (win_file, win_result) = self.first_node(pos, &EvaluationWay::Win, evaluation);
         match win_result {
             GameResult::Win => {
                 return (win_file, win_result);
@@ -50,7 +53,7 @@ impl Search {
             _ => {}
         }
 
-        let (draw_file, draw_result) = self.first_node(pos, &EvaluationWay::Draw);
+        let (draw_file, draw_result) = self.first_node(pos, &EvaluationWay::Draw, evaluation);
         match draw_result {
             GameResult::Draw => {
                 return (draw_file, draw_result);
@@ -82,6 +85,7 @@ impl Search {
         &mut self,
         pos: &mut Position,
         way: &EvaluationWay,
+        evaluation: &Evaluation,
     ) -> (Option<char>, GameResult) {
         let mut best_file = None;
         let mut best_result = GameResult::Lose;
@@ -100,7 +104,7 @@ impl Search {
                 if let None = forward_cut_off {
                     // If you move forward, it's your opponent's turn.
                     // 前向きに探索したら、次は対戦相手の番です。
-                    let (_opponent_sq, opponent_game_result) = self.node(pos, way);
+                    let (_opponent_sq, opponent_game_result) = self.node(pos, way, evaluation);
                     // I'm back.
                     // 戻ってきました。
                     info_backwarding = Some(opponent_game_result);
@@ -137,13 +141,18 @@ impl Search {
     ///                     マスの番地。  
     /// * `GameResult` - Evaluation.  
     ///                     評価値。  
-    fn node(&mut self, pos: &mut Position, way: &EvaluationWay) -> (Option<char>, GameResult) {
+    fn node(
+        &mut self,
+        pos: &mut Position,
+        way: &EvaluationWay,
+        evaluation: &Evaluation,
+    ) -> (Option<char>, GameResult) {
         let mut best_win_file = None;
         let mut best_win_result = GameResult::Lose;
 
         // Select one at random.
         // ランダムに１つ選びます。
-        if let (Some(file), mut search_info) = self.choose_file(pos, way) {
+        if let (Some(file), mut search_info) = self.choose_file(pos, way, evaluation) {
             // I only look at the empty square.
             // 空きマスだけを見ます。
             if !pos.is_file_fill(file) {
@@ -154,7 +163,7 @@ impl Search {
                 if let None = forward_cut_off {
                     // If you move forward, it's your opponent's turn.
                     // 前向きに探索したら、次は対戦相手の番です。
-                    let (_opponent_sq, opponent_game_result) = self.node(pos, way);
+                    let (_opponent_sq, opponent_game_result) = self.node(pos, way, evaluation);
                     // I'm back.
                     // 戻ってきました。
                     info_backwarding = Some(opponent_game_result);
@@ -346,8 +355,13 @@ impl Search {
 
     /// Select one file at random.
     /// TODO 重みを付けて、ランダムに列を１つ選びます。
-    fn choose_file(&mut self, pos: &Position, way: &EvaluationWay) -> (Option<char>, SearchInfo) {
-        let w = self.evaluation.ways_weight(pos, way);
+    fn choose_file(
+        &mut self,
+        pos: &Position,
+        way: &EvaluationWay,
+        evaluation: &Evaluation,
+    ) -> (Option<char>, SearchInfo) {
+        let w = evaluation.ways_weight(pos, way);
         let mut search_info = SearchInfo::new(way, &w);
         // Upper bound.
         let a_up: u16 = w[0] as u16;

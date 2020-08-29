@@ -27,9 +27,7 @@ pub const N3POW7: usize = 2187;
 
 /// Learning.  
 /// 学習部。  
-pub struct Learning {
-    search: Search,
-}
+pub struct Learning {}
 
 /// Search.  
 /// 探索部。  
@@ -43,9 +41,6 @@ pub struct Search {
     /// Start the stopwatch when this structure is created.  
     /// この構造体を生成した時点からストップ・ウォッチを開始します。  
     pub stopwatch: Instant,
-    /// Evaluation.
-    /// 評価値。
-    pub evaluation: Evaluation,
 }
 
 /// Evaluation.
