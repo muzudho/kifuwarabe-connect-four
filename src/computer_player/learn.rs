@@ -23,6 +23,9 @@ impl Learning {
     /// uh...  
     /// うーん……。  
     pub fn uh(&mut self, engine: &mut Engine) {
+        let old_info_enabled = engine.pos.info_enabled;
+        engine.pos.info_enabled = false;
+
         let result_channel = ResultChannel::Win;
 
         let mut search = Search::default();
@@ -231,6 +234,11 @@ impl Learning {
 
         let mut text = String::new();
         text.push_str(&format!(
+            "Result channel: {:?}
+",
+            result_channel
+        ));
+        text.push_str(&format!(
             "\
 File Vert Hori Baro Sini Total Best File   Result Learn Give Take
 ---- ---- ---- ---- ---- -----      ------ ------       ---- ----
@@ -363,6 +371,8 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             take_values[file]
         ));
         Log::print_info(&text);
+
+        engine.pos.info_enabled = old_info_enabled;
     }
 
     fn give(tensor: &mut [[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN], file: usize) -> u16 {
