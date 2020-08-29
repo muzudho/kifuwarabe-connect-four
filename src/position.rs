@@ -1,10 +1,10 @@
 //! Position. A record of the game used to suspend or resume it.  
 //! 局面。 ゲームを中断したり、再開したりするときに使うゲームの記録です。  
-use crate::file_to_num;
 use crate::log::LogExt;
+use crate::look_and_model::Position;
 use crate::look_and_model::BOARD_LEN;
 use crate::look_and_model::FILE_LEN;
-use crate::look_and_model::{Piece, Position};
+use crate::{file_to_num, Piece};
 use casual_logger::{Log, Table};
 
 /// Position. A record of the game used to suspend or resume it.  

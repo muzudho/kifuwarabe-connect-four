@@ -69,6 +69,24 @@ fn main() {
     Log::flush();
 }
 
+/// Circle and cross mark. It corresponds to the stone in Go.  
+/// 丸と十字の印です。囲碁で言うところの石に当たります。  
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum Piece {
+    /// 〇
+    Nought,
+    /// ×
+    Cross,
+}
+
+/// ThinkingEngine.  
+/// 思考エンジン。  
+pub struct Engine {
+    /// Starting position.  
+    /// 初期局面。  
+    pos: Position,
+}
+
 /// # Return
 ///
 /// square on top row.
@@ -87,12 +105,4 @@ fn file_to_num(file: char) -> u8 {
             Table::default().char("file", file)
         )),
     }
-}
-
-/// ThinkingEngine.  
-/// 思考エンジン。  
-pub struct Engine {
-    /// Starting position.  
-    /// 初期局面。  
-    pos: Position,
 }

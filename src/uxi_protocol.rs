@@ -3,7 +3,8 @@
 use crate::log::LogExt;
 use crate::look_and_model::BOARD_LEN;
 use crate::look_and_model::FILE_LEN;
-use crate::look_and_model::{GameResult, Piece, Position};
+use crate::look_and_model::{GameResult, Position};
+use crate::Piece;
 use casual_logger::Log;
 
 /// A record of the game used to suspend or resume it.  
