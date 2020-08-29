@@ -12,10 +12,10 @@ impl Position {
     pub fn do_move(&mut self, file: char) {
         // Write on the pv.
         // 読み筋に書きます。
-        if self.pv.is_empty() {
-            self.pv.push_str(&format!("\"{}\"", file).to_string());
+        if self.pv_json.is_empty() {
+            self.pv_json.push_str(&format!("\"{}\"", file).to_string());
         } else {
-            self.pv.push_str(&format!(",\"{}\"", file).to_string());
+            self.pv_json.push_str(&format!(",\"{}\"", file).to_string());
         }
         self.redo_move(file);
     }
@@ -47,7 +47,7 @@ impl Position {
     /// Undone.
     /// アンドゥした。
     pub fn undo_move(&mut self) -> bool {
-        if self.pv.len() < 1 {
+        if self.pv_json.len() < 1 {
             return false;
         }
 
@@ -60,22 +60,22 @@ impl Position {
         self.pieces_num -= 1;
         // Remove from the pv.
         // 読み筋から消します。
-        if 1 < self.pv.len() {
+        if 3 < self.pv_json.len() {
             // ,
-            self.pv.pop();
+            self.pv_json.pop();
             // "
-            self.pv.pop();
+            self.pv_json.pop();
             // alphabet
-            self.pv.pop();
+            self.pv_json.pop();
             // "
-            self.pv.pop();
-        } else if 0 < self.pv.len() {
+            self.pv_json.pop();
+        } else if 3 == self.pv_json.len() {
             // "
-            self.pv.pop();
+            self.pv_json.pop();
             // alphabet
-            self.pv.pop();
+            self.pv_json.pop();
             // "
-            self.pv.pop();
+            self.pv_json.pop();
         }
         // Turn off the stone.
         // 石を消します。

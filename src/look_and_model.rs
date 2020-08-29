@@ -37,7 +37,7 @@ impl Default for Position {
             board: [None; BOARD_LEN],
             history: [' '; SQUARES_NUM],
             pieces_num: 0,
-            pv: String::new(),
+            pv_json: String::new(),
             info_enabled: true,
         }
     }
@@ -151,7 +151,7 @@ impl Default for SearchInfo {
             ],
             nps: 0,
             nodes: 0,
-            pv: "".to_string(),
+            pv_json: "".to_string(),
             search_direction: SearchDirection::Forward,
             chosen_file: None,
             leaf: false,
@@ -224,7 +224,7 @@ impl SearchInfo {
             self.weight_tensor[4][0] as u16 + self.weight_tensor[4][1] as u16 + self.weight_tensor[4][2] as u16 + self.weight_tensor[4][3] as u16,
             self.weight_tensor[5][0] as u16 + self.weight_tensor[5][1] as u16 + self.weight_tensor[5][2] as u16 + self.weight_tensor[5][3] as u16,
             self.weight_tensor[6][0] as u16 + self.weight_tensor[6][1] as u16 + self.weight_tensor[6][2] as u16 + self.weight_tensor[6][3] as u16,
-            self.pv,
+            self.pv_json,
         )
         .to_string()
     }

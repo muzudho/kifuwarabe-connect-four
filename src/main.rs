@@ -172,7 +172,7 @@ pub struct Position {
 
     /// Principal variation.
     /// 今読んでる読み筋。
-    pub pv: String,
+    pub pv_json: String,
 
     /// Display info during search. It is not info level in the log.  
     /// 探索中の info 表示を行います。 ログの情報レベルのことではありません。  
@@ -223,7 +223,7 @@ pub struct SearchInfo {
 
     /// Principal variation.  
     /// 読みの本筋。  
-    pub pv: String,
+    pub pv_json: String,
 
     /// Search direction.  
     /// 探索方向。  

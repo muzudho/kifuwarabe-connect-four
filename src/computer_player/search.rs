@@ -194,7 +194,7 @@ impl Search {
         if pos.info_enabled {
             search_info.nps = self.nps();
             search_info.nodes = self.nodes;
-            search_info.pv = pos.pv.to_string();
+            search_info.pv_json = pos.pv_json.to_string();
             search_info.search_direction = SearchDirection::Forward;
             search_info.leaf = info_leaf;
             search_info.pieces_num = None;
@@ -283,7 +283,7 @@ impl Search {
             }
             search_info.nps = self.nps();
             search_info.nodes = self.nodes;
-            search_info.pv = pos.pv.to_string();
+            search_info.pv_json = pos.pv_json.to_string();
             search_info.search_direction = SearchDirection::Backward;
             search_info.leaf = info_leaf;
             search_info.pieces_num = Some(pos.pieces_num);
