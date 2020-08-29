@@ -154,7 +154,7 @@ impl Learning {
         // It can move the evaluation value.
         // 評価値が移動できます。
         let mut give_values = [0, 0, 0, 0, 0, 0, 0];
-        let mut take_values = [0, 0, 0, 0, 0, 0, 0];
+        let mut take1_values = [0, 0, 0, 0, 0, 0, 0];
         if 0 < obtainer_count {
             give_values = [
                 Learning::give(&mut tensor, 0),
@@ -174,7 +174,7 @@ impl Learning {
             };
             let obtain_point = gives_total / obtainer_count;
             let rest_point = gives_total % obtainer_count;
-            take_values = [
+            take1_values = [
                 {
                     if obtainer[0] {
                         obtain_point
@@ -233,8 +233,8 @@ impl Learning {
                     }
                 }
                 for _i in 0..rest_point {
-                    take_values[files[rand::thread_rng().gen_range(0, obtainer_count) as usize]] +=
-                        1;
+                    take1_values
+                        [files[rand::thread_rng().gen_range(0, obtainer_count) as usize]] += 1;
                 }
             }
         }
@@ -245,7 +245,7 @@ impl Learning {
                     &engine.pos,
                     'a',
                     &result_channel,
-                    take_values[0],
+                    take1_values[0],
                 )
             },
             {
@@ -253,7 +253,7 @@ impl Learning {
                     &engine.pos,
                     'b',
                     &result_channel,
-                    take_values[1],
+                    take1_values[1],
                 )
             },
             {
@@ -261,7 +261,7 @@ impl Learning {
                     &engine.pos,
                     'c',
                     &result_channel,
-                    take_values[2],
+                    take1_values[2],
                 )
             },
             {
@@ -269,7 +269,7 @@ impl Learning {
                     &engine.pos,
                     'd',
                     &result_channel,
-                    take_values[3],
+                    take1_values[3],
                 )
             },
             {
@@ -277,7 +277,7 @@ impl Learning {
                     &engine.pos,
                     'e',
                     &result_channel,
-                    take_values[4],
+                    take1_values[4],
                 )
             },
             {
@@ -285,7 +285,7 @@ impl Learning {
                     &engine.pos,
                     'f',
                     &result_channel,
-                    take_values[5],
+                    take1_values[5],
                 )
             },
             {
@@ -293,84 +293,69 @@ impl Learning {
                     &engine.pos,
                     'g',
                     &result_channel,
-                    take_values[6],
+                    take1_values[6],
                 )
             },
         ];
         // Refund.
         // 還付。
-        let rest_value = {
+        let refund_total = {
             let mut sum = 0;
             for val in &rest_values {
                 sum += val;
             }
             sum
         };
+        let mut refund_values = [0, 0, 0, 0, 0, 0, 0];
         {
-            give_values = [
-                Learning::give(&mut tensor, 0),
-                Learning::give(&mut tensor, 1),
-                Learning::give(&mut tensor, 2),
-                Learning::give(&mut tensor, 3),
-                Learning::give(&mut tensor, 4),
-                Learning::give(&mut tensor, 5),
-                Learning::give(&mut tensor, 6),
-            ];
-            let gives_total = {
-                let mut sum = 0;
-                for file in 0..FILE_LEN {
-                    sum += give_values[file];
-                }
-                sum
-            };
-            let obtain_point = gives_total / co_obtainer_count;
-            let rest_point = gives_total % co_obtainer_count;
-            take_values = [
+            let refund_point = refund_total / co_obtainer_count;
+            let refund_rest_point = refund_total % co_obtainer_count;
+            refund_values = [
                 {
                     if !obtainer[0] {
-                        obtain_point
+                        refund_point
                     } else {
                         0
                     }
                 },
                 {
                     if !obtainer[1] {
-                        obtain_point
+                        refund_point
                     } else {
                         0
                     }
                 },
                 {
                     if !obtainer[2] {
-                        obtain_point
+                        refund_point
                     } else {
                         0
                     }
                 },
                 {
                     if !obtainer[3] {
-                        obtain_point
+                        refund_point
                     } else {
                         0
                     }
                 },
                 {
                     if !obtainer[4] {
-                        obtain_point
+                        refund_point
                     } else {
                         0
                     }
                 },
                 {
                     if !obtainer[5] {
-                        obtain_point
+                        refund_point
                     } else {
                         0
                     }
                 },
                 {
                     if !obtainer[6] {
-                        obtain_point
+                        refund_point
                     } else {
                         0
                     }
@@ -383,8 +368,8 @@ impl Learning {
                         files.push(file);
                     }
                 }
-                for _i in 0..rest_point {
-                    take_values
+                for _i in 0..refund_rest_point {
+                    refund_values
                         [files[rand::thread_rng().gen_range(0, co_obtainer_count) as usize]] += 1;
                 }
             }
@@ -395,7 +380,7 @@ impl Learning {
                     &engine.pos,
                     'a',
                     &result_channel,
-                    take_values[0],
+                    refund_values[0],
                 )
             },
             {
@@ -403,7 +388,7 @@ impl Learning {
                     &engine.pos,
                     'b',
                     &result_channel,
-                    take_values[1],
+                    refund_values[1],
                 )
             },
             {
@@ -411,7 +396,7 @@ impl Learning {
                     &engine.pos,
                     'c',
                     &result_channel,
-                    take_values[2],
+                    refund_values[2],
                 )
             },
             {
@@ -419,7 +404,7 @@ impl Learning {
                     &engine.pos,
                     'd',
                     &result_channel,
-                    take_values[3],
+                    refund_values[3],
                 )
             },
             {
@@ -427,7 +412,7 @@ impl Learning {
                     &engine.pos,
                     'e',
                     &result_channel,
-                    take_values[4],
+                    refund_values[4],
                 )
             },
             {
@@ -435,7 +420,7 @@ impl Learning {
                     &engine.pos,
                     'f',
                     &result_channel,
-                    take_values[5],
+                    refund_values[5],
                 )
             },
             {
@@ -443,7 +428,7 @@ impl Learning {
                     &engine.pos,
                     'g',
                     &result_channel,
-                    take_values[6],
+                    refund_values[6],
                 )
             },
         ];
@@ -469,13 +454,13 @@ impl Learning {
         ));
         text.push_str(&format!(
             "\
-File Vert Hori Baro Sini Total Best File   Result Learn Give Take Next
----- ---- ---- ---- ---- -----      ------ ------       ---- ---- -----
+File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
+---- ---- ---- ---- ---- -----      ------ ------       ---- ---- ---- -----
 "
         ));
         let file = 0;
         text.push_str(&format!(
-            "   a {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
+            "   a {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -489,12 +474,13 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Next
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file],
+            take1_values[file],
+            rest_values[file],
             tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         let file = 1;
         text.push_str(&format!(
-            "   b {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
+            "   b {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -508,12 +494,13 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Next
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file],
+            take1_values[file],
+            rest_values[file],
             tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         let file = 2;
         text.push_str(&format!(
-            "   c {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
+            "   c {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -527,12 +514,13 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Next
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file],
+            take1_values[file],
+            rest_values[file],
             tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         let file = 3;
         text.push_str(&format!(
-            "   d {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
+            "   d {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -546,12 +534,13 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Next
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file],
+            take1_values[file],
+            rest_values[file],
             tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         let file = 4;
         text.push_str(&format!(
-            "   e {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
+            "   e {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -565,12 +554,13 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Next
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file],
+            take1_values[file],
+            rest_values[file],
             tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         let file = 5;
         text.push_str(&format!(
-            "   f {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
+            "   f {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -584,12 +574,13 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Next
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file],
+            take1_values[file],
+            rest_values[file],
             tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         let file = 6;
         text.push_str(&format!(
-            "   g {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
+            "   g {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -603,7 +594,8 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Next
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file],
+            take1_values[file],
+            rest_values[file],
             tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         Log::print_info(&text);
@@ -611,21 +603,33 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Next
 
     fn give(tensor: &mut [[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN], file: usize) -> u16 {
         let mut give = 0;
-        if 0 < tensor[file][0] {
-            tensor[file][0] -= 1;
-            give += 1;
+        {
+            let feat = 0;
+            if 0 < tensor[file][feat] {
+                tensor[file][feat] -= 1;
+                give += 1;
+            }
         }
-        if 0 < tensor[file][1] {
-            tensor[file][0] -= 1;
-            give += 1;
+        {
+            let feat = 1;
+            if 0 < tensor[file][feat] {
+                tensor[file][feat] -= 1;
+                give += 1;
+            }
         }
-        if 0 < tensor[file][2] {
-            tensor[file][0] -= 1;
-            give += 1;
+        {
+            let feat = 2;
+            if 0 < tensor[file][feat] {
+                tensor[file][feat] -= 1;
+                give += 1;
+            }
         }
-        if 0 < tensor[file][3] {
-            tensor[file][0] -= 1;
-            give += 1;
+        {
+            let feat = 3;
+            if 0 < tensor[file][feat] {
+                tensor[file][feat] -= 1;
+                give += 1;
+            }
         }
         give
     }
