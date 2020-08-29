@@ -156,7 +156,7 @@ impl Learning {
         let co_obtainer_count = FILE_LEN as u16 - obtainer_count;
         // It can move the evaluation value.
         // 評価値が移動できます。
-        let old1_tensor = engine.evaluation.ways_weight(&engine.pos, &result_channel);
+        let tensor_before_give = engine.evaluation.ways_weight(&engine.pos, &result_channel);
         let give_values = [
             {
                 let file_ch = 'a';
@@ -489,77 +489,7 @@ File Vert Hori Baro Sini
         ));
         Log::print_info(&text);
 
-        let mut text = String::new();
-        text.push_str(&format!(
-            "Gives total={}
-",
-            gives_total
-        ));
-        text.push_str(&format!(
-            "\
-File Vert Hori Baro Sini Total Best File   Result Learn Give Next Vert Hori Baro Sini Total
----- ---- ---- ---- ---- -----      ------ ------       ----      ---- ---- ---- ---- -----
-"
-        ));
-        text.push_str(&self.file_give_line_str(
-            0,
-            'a',
-            &old1_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-        ));
-        text.push_str(&self.file_give_line_str(
-            1,
-            'b',
-            &old1_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-        ));
-        text.push_str(&self.file_give_line_str(
-            2,
-            'c',
-            &old1_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-        ));
-        text.push_str(&self.file_give_line_str(
-            3,
-            'd',
-            &old1_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-        ));
-        text.push_str(&self.file_give_line_str(
-            4,
-            'e',
-            &old1_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-        ));
-        text.push_str(&self.file_give_line_str(
-            5,
-            'f',
-            &old1_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-        ));
-        text.push_str(&self.file_give_line_str(
-            6,
-            'g',
-            &old1_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-        ));
-        Log::print_info(&text);
-
-        let old2_tensor = engine.evaluation.ways_weight(&engine.pos, &result_channel);
+        let tensor_before_take = engine.evaluation.ways_weight(&engine.pos, &result_channel);
         let rest_values = [
             {
                 engine.evaluation.set_values_by_file(
@@ -618,85 +548,6 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Next Vert Hori Baro
                 )
             },
         ];
-
-        let mut text = String::new();
-        text.push_str(&format!(
-            "\
-File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next Vert Hori Baro Sini Total
----- ---- ---- ---- ---- -----      ------ ------       ---- ---- ----      ---- ---- ---- ---- -----
-"
-        ));
-        text.push_str(&self.file_take_line_str(
-            0,
-            'a',
-            &old2_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-            &take1_values,
-            &rest_values,
-        ));
-        text.push_str(&self.file_take_line_str(
-            1,
-            'b',
-            &old2_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-            &take1_values,
-            &rest_values,
-        ));
-        text.push_str(&self.file_take_line_str(
-            2,
-            'c',
-            &old2_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-            &take1_values,
-            &rest_values,
-        ));
-        text.push_str(&self.file_take_line_str(
-            3,
-            'd',
-            &old2_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-            &take1_values,
-            &rest_values,
-        ));
-        text.push_str(&self.file_take_line_str(
-            4,
-            'e',
-            &old2_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-            &take1_values,
-            &rest_values,
-        ));
-        text.push_str(&self.file_take_line_str(
-            5,
-            'f',
-            &old2_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-            &take1_values,
-            &rest_values,
-        ));
-        text.push_str(&self.file_take_line_str(
-            6,
-            'g',
-            &old2_tensor,
-            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
-            &files_way,
-            &give_values,
-            &take1_values,
-            &rest_values,
-        ));
-        Log::print_info(&text);
 
         // Refund.
         // 還付。
@@ -776,6 +627,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next Vert
                 }
             }
         }
+        let tensor_before_refund = engine.evaluation.ways_weight(&engine.pos, &result_channel);
         let lost_values = [
             {
                 engine.evaluation.set_values_by_file(
@@ -854,19 +706,19 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next Vert
 ",
             result_channel, gives_total
         ));
-        //             "   {} {: >4} {: >4} {: >4} {: >4} {: >5}        {: <6} {: <6}        {: >4} {: >4} {: >4} {: >4} {: >4} {: >5}        {: >4} {: >4} {: >6}        {: >4} {: >4} {: >4} {: >4} {: >5}
 
         text.push_str(&format!(
             "\
-File Vert Hori Baro Sini Total   Best File   Result  Learn Give Vert Hori Baro Sini Total  Learn Take Rest Refund   Next Vert Hori Baro Sini Total
----- ---- ---- ---- ---- -----        ------ ------        ---- ---- ---- ---- ---- -----        ---- ---- ------        ---- ---- ---- ---- -----
+File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro Sini Total   Take Val  Rest Vert Hori Baro Sini Total Refund Val  Vert Hori Baro Sini Total
+---- ---- ---- ---- ---- -----        ------ ------        ---- ---- ---- ---- ---- -----        ---- ---- ---- ---- ---- ---- -----        ---- ---- ---- ---- ---- -----
 "
         ));
-        text.push_str(&self.file_refund_line_str(
+        text.push_str(&self.score_line_by_file(
             0,
             'a',
-            &old1_tensor,
-            &old2_tensor,
+            &tensor_before_give,
+            &tensor_before_take,
+            &tensor_before_refund,
             &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
@@ -874,11 +726,12 @@ File Vert Hori Baro Sini Total   Best File   Result  Learn Give Vert Hori Baro S
             &rest_values,
             &refund1_values,
         ));
-        text.push_str(&self.file_refund_line_str(
+        text.push_str(&self.score_line_by_file(
             1,
             'b',
-            &old1_tensor,
-            &old2_tensor,
+            &tensor_before_give,
+            &tensor_before_take,
+            &tensor_before_refund,
             &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
@@ -886,11 +739,12 @@ File Vert Hori Baro Sini Total   Best File   Result  Learn Give Vert Hori Baro S
             &rest_values,
             &refund1_values,
         ));
-        text.push_str(&self.file_refund_line_str(
+        text.push_str(&self.score_line_by_file(
             2,
             'c',
-            &old1_tensor,
-            &old2_tensor,
+            &tensor_before_give,
+            &tensor_before_take,
+            &tensor_before_refund,
             &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
@@ -898,11 +752,12 @@ File Vert Hori Baro Sini Total   Best File   Result  Learn Give Vert Hori Baro S
             &rest_values,
             &refund1_values,
         ));
-        text.push_str(&self.file_refund_line_str(
+        text.push_str(&self.score_line_by_file(
             3,
             'd',
-            &old1_tensor,
-            &old2_tensor,
+            &tensor_before_give,
+            &tensor_before_take,
+            &tensor_before_refund,
             &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
@@ -910,11 +765,12 @@ File Vert Hori Baro Sini Total   Best File   Result  Learn Give Vert Hori Baro S
             &rest_values,
             &refund1_values,
         ));
-        text.push_str(&self.file_refund_line_str(
+        text.push_str(&self.score_line_by_file(
             4,
             'e',
-            &old1_tensor,
-            &old2_tensor,
+            &tensor_before_give,
+            &tensor_before_take,
+            &tensor_before_refund,
             &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
@@ -922,11 +778,12 @@ File Vert Hori Baro Sini Total   Best File   Result  Learn Give Vert Hori Baro S
             &rest_values,
             &refund1_values,
         ));
-        text.push_str(&self.file_refund_line_str(
+        text.push_str(&self.score_line_by_file(
             5,
             'f',
-            &old1_tensor,
-            &old2_tensor,
+            &tensor_before_give,
+            &tensor_before_take,
+            &tensor_before_refund,
             &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
@@ -934,11 +791,12 @@ File Vert Hori Baro Sini Total   Best File   Result  Learn Give Vert Hori Baro S
             &rest_values,
             &refund1_values,
         ));
-        text.push_str(&self.file_refund_line_str(
+        text.push_str(&self.score_line_by_file(
             6,
             'g',
-            &old1_tensor,
-            &old2_tensor,
+            &tensor_before_give,
+            &tensor_before_take,
+            &tensor_before_refund,
             &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
@@ -982,82 +840,13 @@ File Vert Hori Baro Sini Total   Best File   Result  Learn Give Vert Hori Baro S
         )
     }
 
-    fn file_give_line_str(
+    fn score_line_by_file(
         &self,
         file: usize,
         file_ch: char,
-        old_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
-        new_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
-        files_way: &[Bestmove; FILE_LEN],
-        give_values: &[u16],
-    ) -> String {
-        format!(
-            "   {0} {1: >4} {2: >4} {3: >4} {4: >4} {5: >5}      {6: <6} {7: <6}       {8: >4}      {9: >4} {10: >4} {11: >4} {12: >4} {13: >5}
-",
-            file_ch,
-            old_tensor[file][0],
-            old_tensor[file][1],
-            old_tensor[file][2],
-            old_tensor[file][3],
-            old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = files_way[file].file {
-                file.to_string()
-            } else {
-                "resign".to_string()
-            },
-            &format!("{:?}", files_way[file].result),
-            give_values[file],
-            new_tensor[file][0],
-            new_tensor[file][1],
-            new_tensor[file][2],
-            new_tensor[file][3],
-            new_tensor[file][0] + new_tensor[file][1] + new_tensor[file][2] + new_tensor[file][3],
-        )
-    }
-
-    fn file_take_line_str(
-        &self,
-        file: usize,
-        file_ch: char,
-        old_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
-        new_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
-        files_way: &[Bestmove; FILE_LEN],
-        give_values: &[u16],
-        take1_values: &[u16],
-        rest_values: &[u16],
-    ) -> String {
-        format!(
-            "   {0} {1: >4} {2: >4} {3: >4} {4: >4} {5: >5}      {6: <6} {7: <6}       {8: >4} {9: >4} {10: >4}      {11: >4} {12: >4} {13: >4} {14: >4} {15: >5}
-",
-            file_ch,
-            old_tensor[file][0],
-            old_tensor[file][1],
-            old_tensor[file][2],
-            old_tensor[file][3],
-            old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = files_way[file].file {
-                file.to_string()
-            } else {
-                "resign".to_string()
-            },
-            &format!("{:?}", files_way[file].result),
-            give_values[file],
-            take1_values[file],
-            rest_values[file],
-            new_tensor[file][0],
-            new_tensor[file][1],
-            new_tensor[file][2],
-            new_tensor[file][3],
-            new_tensor[file][0] + new_tensor[file][1] + new_tensor[file][2] + new_tensor[file][3],
-        )
-    }
-
-    fn file_refund_line_str(
-        &self,
-        file: usize,
-        file_ch: char,
-        old1_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
-        old2_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
+        tensor_before_give: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
+        tensor_before_take: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
+        tensor_before_refund: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
         new_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
         files_way: &[Bestmove; FILE_LEN],
         give_values: &[u16],
@@ -1066,14 +855,14 @@ File Vert Hori Baro Sini Total   Best File   Result  Learn Give Vert Hori Baro S
         refund_values: &[u16],
     ) -> String {
         format!(
-            "   {} {: >4} {: >4} {: >4} {: >4} {: >5}        {: <6} {: <6}        {: >4} {: >4} {: >4} {: >4} {: >4} {: >5}        {: >4} {: >4} {: >6}        {: >4} {: >4} {: >4} {: >4} {: >5}
+            "   {} {: >4} {: >4} {: >4} {: >4} {: >5}        {: <6} {: <6}        {: >4} {: >4} {: >4} {: >4} {: >4} {: >5}        {: >4} {: >4} {: >4} {: >4} {: >4} {: >4} {: >5}        {: >4} {: >4} {: >4} {: >4} {: >4} {: >5}
 ",
             file_ch,
-            old1_tensor[file][0],
-            old1_tensor[file][1],
-            old1_tensor[file][2],
-            old1_tensor[file][3],
-            old1_tensor[file][0] + old1_tensor[file][1] + old1_tensor[file][2] + old1_tensor[file][3],
+            tensor_before_give[file][0],
+            tensor_before_give[file][1],
+            tensor_before_give[file][2],
+            tensor_before_give[file][3],
+            tensor_before_give[file][0] + tensor_before_give[file][1] + tensor_before_give[file][2] + tensor_before_give[file][3],
             //
             if let Some(file) = files_way[file].file {
                 file.to_string()
@@ -1083,16 +872,21 @@ File Vert Hori Baro Sini Total   Best File   Result  Learn Give Vert Hori Baro S
             &format!("{:?}", files_way[file].result),
             //
             give_values[file],
-            old2_tensor[file][0],
-            old2_tensor[file][1],
-            old2_tensor[file][2],
-            old2_tensor[file][3],
-            old2_tensor[file][0] + old2_tensor[file][1] + old2_tensor[file][2] + old2_tensor[file][3],
+            tensor_before_take[file][0],
+            tensor_before_take[file][1],
+            tensor_before_take[file][2],
+            tensor_before_take[file][3],
+            tensor_before_take[file][0] + tensor_before_take[file][1] + tensor_before_take[file][2] + tensor_before_take[file][3],
             //
             take1_values[file],
             rest_values[file],
-            refund_values[file],
+            tensor_before_refund[file][0],
+            tensor_before_refund[file][1],
+            tensor_before_refund[file][2],
+            tensor_before_refund[file][3],
+            tensor_before_refund[file][0] + tensor_before_refund[file][1] + tensor_before_refund[file][2] + tensor_before_refund[file][3],
             //
+            refund_values[file],
             new_tensor[file][0],
             new_tensor[file][1],
             new_tensor[file][2],
