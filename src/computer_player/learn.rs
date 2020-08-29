@@ -436,15 +436,16 @@ impl Learning {
                 },
             ];
             {
-                let mut files = Vec::<usize>::new();
+                let mut obtainer_files = Vec::<usize>::new();
                 for file in 0..FILE_LEN {
                     if obtainer[file] {
-                        files.push(file);
+                        obtainer_files.push(file);
                     }
                 }
+                Log::print_info(&format!("obtainer_files={:?}", obtainer_files));
                 for _i in 0..rest_point {
-                    take1_values
-                        [files[rand::thread_rng().gen_range(0, obtainer_count) as usize]] += 1;
+                    take1_values[obtainer_files
+                        [rand::thread_rng().gen_range(0, obtainer_count) as usize]] += 1;
                 }
             }
         } else {
@@ -511,6 +512,91 @@ impl Learning {
                 )
             },
         ];
+
+        let mut text = String::new();
+        text.push_str(&format!(
+            "Result channel={:?} Gives total={}
+",
+            result_channel, gives_total
+        ));
+        text.push_str(&format!(
+            "\
+File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next Vert Hori Baro Sini Total
+---- ---- ---- ---- ---- -----      ------ ------       ---- ---- ----      ---- ---- ---- ---- -----
+"
+        ));
+        text.push_str(&self.file_give_line_str(
+            0,
+            'a',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
+        ));
+        text.push_str(&self.file_give_line_str(
+            1,
+            'b',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
+        ));
+        text.push_str(&self.file_give_line_str(
+            2,
+            'c',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
+        ));
+        text.push_str(&self.file_give_line_str(
+            3,
+            'd',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
+        ));
+        text.push_str(&self.file_give_line_str(
+            4,
+            'e',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
+        ));
+        text.push_str(&self.file_give_line_str(
+            5,
+            'f',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
+        ));
+        text.push_str(&self.file_give_line_str(
+            6,
+            'g',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
+        ));
+        Log::print_info(&text);
+
         // Refund.
         // 還付。
         let refund_total = {
@@ -582,6 +668,7 @@ impl Learning {
                         refunder_files.push(file);
                     }
                 }
+                Log::print_info(&format!("refunder_files={:?}", refunder_files));
                 for _i in 0..refund_rest_point {
                     refund1_values[refunder_files
                         [rand::thread_rng().gen_range(0, co_obtainer_count) as usize]] += 1;
@@ -672,7 +759,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
 ---- ---- ---- ---- ---- -----      ------ ------       ---- ---- ---- ------      ---- ---- ---- ---- -----
 "
         ));
-        text.push_str(&self.file_line_str(
+        text.push_str(&self.file_refund_line_str(
             0,
             'a',
             &old_tensor,
@@ -683,7 +770,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &rest_values,
             &refund1_values,
         ));
-        text.push_str(&self.file_line_str(
+        text.push_str(&self.file_refund_line_str(
             1,
             'b',
             &old_tensor,
@@ -694,7 +781,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &rest_values,
             &refund1_values,
         ));
-        text.push_str(&self.file_line_str(
+        text.push_str(&self.file_refund_line_str(
             2,
             'c',
             &old_tensor,
@@ -705,7 +792,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &rest_values,
             &refund1_values,
         ));
-        text.push_str(&self.file_line_str(
+        text.push_str(&self.file_refund_line_str(
             3,
             'd',
             &old_tensor,
@@ -716,7 +803,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &rest_values,
             &refund1_values,
         ));
-        text.push_str(&self.file_line_str(
+        text.push_str(&self.file_refund_line_str(
             4,
             'e',
             &old_tensor,
@@ -727,7 +814,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &rest_values,
             &refund1_values,
         ));
-        text.push_str(&self.file_line_str(
+        text.push_str(&self.file_refund_line_str(
             5,
             'f',
             &old_tensor,
@@ -738,7 +825,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &rest_values,
             &refund1_values,
         ));
-        text.push_str(&self.file_line_str(
+        text.push_str(&self.file_refund_line_str(
             6,
             'g',
             &old_tensor,
@@ -752,7 +839,44 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
         Log::print_info(&text);
     }
 
-    fn file_line_str(
+    fn file_give_line_str(
+        &self,
+        file: usize,
+        file_ch: char,
+        old_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
+        new_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
+        files_way: &[Bestmove; FILE_LEN],
+        give_values: &[u16],
+        take1_values: &[u16],
+        rest_values: &[u16],
+    ) -> String {
+        format!(
+            "   {0} {1: >4} {2: >4} {3: >4} {4: >4} {5: >5}      {6: <6} {7: <6}       {8: >4} {9: >4} {10: >4}      {11: >4} {12: >4} {13: >4} {14: >4} {15: >5}
+",
+            file_ch,
+            old_tensor[file][0],
+            old_tensor[file][1],
+            old_tensor[file][2],
+            old_tensor[file][3],
+            old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
+            if let Some(file) = files_way[file].file {
+                file.to_string()
+            } else {
+                "resign".to_string()
+            },
+            &format!("{:?}", files_way[file].result),
+            give_values[file],
+            take1_values[file],
+            rest_values[file],
+            new_tensor[file][0],
+            new_tensor[file][1],
+            new_tensor[file][2],
+            new_tensor[file][3],
+            new_tensor[file][0] + new_tensor[file][1] + new_tensor[file][2] + new_tensor[file][3],
+        )
+    }
+
+    fn file_refund_line_str(
         &self,
         file: usize,
         file_ch: char,
