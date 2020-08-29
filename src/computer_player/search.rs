@@ -45,7 +45,7 @@ impl Search {
         pos: &mut Position,
         evaluation: &Evaluation,
     ) -> (Option<char>, GameResult) {
-        let (win_file, win_result) = self.node(pos, &ResultChannel::Win, evaluation);
+        let (win_file, win_result) = self.node(pos, evaluation, &ResultChannel::Win);
         match win_result {
             GameResult::Win => {
                 return (win_file, win_result);
@@ -53,7 +53,7 @@ impl Search {
             _ => {}
         }
 
-        let (draw_file, draw_result) = self.node(pos, &ResultChannel::Draw, evaluation);
+        let (draw_file, draw_result) = self.node(pos, evaluation, &ResultChannel::Draw);
         match draw_result {
             GameResult::Draw => {
                 return (draw_file, draw_result);
@@ -84,8 +84,8 @@ impl Search {
     fn node(
         &mut self,
         pos: &mut Position,
-        result_channel: &ResultChannel,
         evaluation: &Evaluation,
+        result_channel: &ResultChannel,
     ) -> (Option<char>, GameResult) {
         let mut best_win_file = None;
         let mut best_win_result = GameResult::Lose;
@@ -130,7 +130,7 @@ impl Search {
                 // If you move forward, it's your opponent's turn.
                 // 前向きに探索したら、次は対戦相手の番です。
                 let (_opponent_sq, opponent_game_result) =
-                    self.node(pos, result_channel, evaluation);
+                    self.node(pos, evaluation, result_channel);
                 // I'm back.
                 // 戻ってきました。
                 info_backwarding = Some(opponent_game_result);
