@@ -152,33 +152,230 @@ impl Learning {
         let co_obtainer_count = FILE_LEN as u16 - obtainer_count;
         // It can move the evaluation value.
         // 評価値が移動できます。
-        let mut give_values = [0, 0, 0, 0, 0, 0, 0];
-        let mut take1_values = [0, 0, 0, 0, 0, 0, 0];
+        let give_values;
+        let mut take1_values;
+        let gives_total;
         if 0 < obtainer_count {
             give_values = [
-                engine
-                    .evaluation
-                    .give_value_by_file(&engine.pos, 'a', &result_channel, 4),
-                engine
-                    .evaluation
-                    .give_value_by_file(&engine.pos, 'b', &result_channel, 4),
-                engine
-                    .evaluation
-                    .give_value_by_file(&engine.pos, 'c', &result_channel, 4),
-                engine
-                    .evaluation
-                    .give_value_by_file(&engine.pos, 'd', &result_channel, 4),
-                engine
-                    .evaluation
-                    .give_value_by_file(&engine.pos, 'e', &result_channel, 4),
-                engine
-                    .evaluation
-                    .give_value_by_file(&engine.pos, 'f', &result_channel, 4),
-                engine
-                    .evaluation
-                    .give_value_by_file(&engine.pos, 'g', &result_channel, 4),
+                {
+                    let file_ch = 'a';
+                    let old =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    let gives = engine.evaluation.give_value_by_file(
+                        &engine.pos,
+                        file_ch,
+                        &result_channel,
+                        4,
+                    );
+                    let new_ =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    Log::print_info(&format!(
+                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                        file_ch,
+                        old[0],
+                        old[1],
+                        old[2],
+                        old[3],
+                        gives,
+                        new_[0],
+                        new_[1],
+                        new_[2],
+                        new_[3],
+                    ));
+                    gives
+                },
+                {
+                    let file_ch = 'b';
+                    let old =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    let gives = engine.evaluation.give_value_by_file(
+                        &engine.pos,
+                        file_ch,
+                        &result_channel,
+                        4,
+                    );
+                    let new_ =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    Log::print_info(&format!(
+                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                        file_ch,
+                        old[0],
+                        old[1],
+                        old[2],
+                        old[3],
+                        gives,
+                        new_[0],
+                        new_[1],
+                        new_[2],
+                        new_[3],
+                    ));
+                    gives
+                },
+                {
+                    let file_ch = 'c';
+                    let old =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    let gives = engine.evaluation.give_value_by_file(
+                        &engine.pos,
+                        file_ch,
+                        &result_channel,
+                        4,
+                    );
+                    let new_ =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    Log::print_info(&format!(
+                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                        file_ch,
+                        old[0],
+                        old[1],
+                        old[2],
+                        old[3],
+                        gives,
+                        new_[0],
+                        new_[1],
+                        new_[2],
+                        new_[3],
+                    ));
+                    gives
+                },
+                {
+                    let file_ch = 'd';
+                    let old =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    let gives = engine.evaluation.give_value_by_file(
+                        &engine.pos,
+                        file_ch,
+                        &result_channel,
+                        4,
+                    );
+                    let new_ =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    Log::print_info(&format!(
+                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                        file_ch,
+                        old[0],
+                        old[1],
+                        old[2],
+                        old[3],
+                        gives,
+                        new_[0],
+                        new_[1],
+                        new_[2],
+                        new_[3],
+                    ));
+                    gives
+                },
+                {
+                    let file_ch = 'e';
+                    let old =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    let gives = engine.evaluation.give_value_by_file(
+                        &engine.pos,
+                        file_ch,
+                        &result_channel,
+                        4,
+                    );
+                    let new_ =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    Log::print_info(&format!(
+                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                        file_ch,
+                        old[0],
+                        old[1],
+                        old[2],
+                        old[3],
+                        gives,
+                        new_[0],
+                        new_[1],
+                        new_[2],
+                        new_[3],
+                    ));
+                    gives
+                },
+                {
+                    let file_ch = 'f';
+                    let old =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    let gives = engine.evaluation.give_value_by_file(
+                        &engine.pos,
+                        file_ch,
+                        &result_channel,
+                        4,
+                    );
+                    let new_ =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    Log::print_info(&format!(
+                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                        file_ch,
+                        old[0],
+                        old[1],
+                        old[2],
+                        old[3],
+                        gives,
+                        new_[0],
+                        new_[1],
+                        new_[2],
+                        new_[3],
+                    ));
+                    gives
+                },
+                {
+                    let file_ch = 'g';
+                    let old =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    let gives = engine.evaluation.give_value_by_file(
+                        &engine.pos,
+                        file_ch,
+                        &result_channel,
+                        4,
+                    );
+                    let new_ =
+                        engine
+                            .evaluation
+                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                    Log::print_info(&format!(
+                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                        file_ch,
+                        old[0],
+                        old[1],
+                        old[2],
+                        old[3],
+                        gives,
+                        new_[0],
+                        new_[1],
+                        new_[2],
+                        new_[3],
+                    ));
+                    gives
+                },
             ];
-            let gives_total = {
+            gives_total = {
                 let mut sum = 0;
                 for file in 0..FILE_LEN {
                     sum += give_values[file];
@@ -250,6 +447,10 @@ impl Learning {
                         [files[rand::thread_rng().gen_range(0, obtainer_count) as usize]] += 1;
                 }
             }
+        } else {
+            give_values = [0, 0, 0, 0, 0, 0, 0];
+            take1_values = [0, 0, 0, 0, 0, 0, 0];
+            gives_total = 0;
         }
 
         let rest_values = [
@@ -319,11 +520,11 @@ impl Learning {
             }
             sum
         };
-        let mut refund_values = [0, 0, 0, 0, 0, 0, 0];
+        let mut refund1_values;
         {
             let refund_point = refund_total / co_obtainer_count;
             let refund_rest_point = refund_total % co_obtainer_count;
-            refund_values = [
+            refund1_values = [
                 {
                     if !obtainer[0] {
                         refund_point
@@ -375,15 +576,15 @@ impl Learning {
                 },
             ];
             {
-                let mut files = Vec::<usize>::new();
+                let mut refunder_files = Vec::<usize>::new();
                 for file in 0..FILE_LEN {
                     if !obtainer[file] {
-                        files.push(file);
+                        refunder_files.push(file);
                     }
                 }
                 for _i in 0..refund_rest_point {
-                    refund_values
-                        [files[rand::thread_rng().gen_range(0, co_obtainer_count) as usize]] += 1;
+                    refund1_values[refunder_files
+                        [rand::thread_rng().gen_range(0, co_obtainer_count) as usize]] += 1;
                 }
             }
         }
@@ -393,7 +594,7 @@ impl Learning {
                     &engine.pos,
                     'a',
                     &result_channel,
-                    refund_values[0],
+                    refund1_values[0],
                 )
             },
             {
@@ -401,7 +602,7 @@ impl Learning {
                     &engine.pos,
                     'b',
                     &result_channel,
-                    refund_values[1],
+                    refund1_values[1],
                 )
             },
             {
@@ -409,7 +610,7 @@ impl Learning {
                     &engine.pos,
                     'c',
                     &result_channel,
-                    refund_values[2],
+                    refund1_values[2],
                 )
             },
             {
@@ -417,7 +618,7 @@ impl Learning {
                     &engine.pos,
                     'd',
                     &result_channel,
-                    refund_values[3],
+                    refund1_values[3],
                 )
             },
             {
@@ -425,7 +626,7 @@ impl Learning {
                     &engine.pos,
                     'e',
                     &result_channel,
-                    refund_values[4],
+                    refund1_values[4],
                 )
             },
             {
@@ -433,7 +634,7 @@ impl Learning {
                     &engine.pos,
                     'f',
                     &result_channel,
-                    refund_values[5],
+                    refund1_values[5],
                 )
             },
             {
@@ -441,7 +642,7 @@ impl Learning {
                     &engine.pos,
                     'g',
                     &result_channel,
-                    refund_values[6],
+                    refund1_values[6],
                 )
             },
         ];
@@ -461,14 +662,14 @@ impl Learning {
 
         let mut text = String::new();
         text.push_str(&format!(
-            "Result channel: {:?}
+            "Result channel={:?} Gives total={}
 ",
-            result_channel
+            result_channel, gives_total
         ));
         text.push_str(&format!(
             "\
-File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Next
----- ---- ---- ---- ---- -----      ------ ------       ---- ---- ---- ------ -----
+File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Next Vert Hori Baro Sini Total
+---- ---- ---- ---- ---- -----      ------ ------       ---- ---- ---- ------      ---- ---- ---- ---- -----
 "
         ));
         text.push_str(&self.file_line_str(
@@ -480,7 +681,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &give_values,
             &take1_values,
             &rest_values,
-            &refund_values,
+            &refund1_values,
         ));
         text.push_str(&self.file_line_str(
             1,
@@ -491,7 +692,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &give_values,
             &take1_values,
             &rest_values,
-            &refund_values,
+            &refund1_values,
         ));
         text.push_str(&self.file_line_str(
             2,
@@ -502,7 +703,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &give_values,
             &take1_values,
             &rest_values,
-            &refund_values,
+            &refund1_values,
         ));
         text.push_str(&self.file_line_str(
             3,
@@ -513,7 +714,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &give_values,
             &take1_values,
             &rest_values,
-            &refund_values,
+            &refund1_values,
         ));
         text.push_str(&self.file_line_str(
             4,
@@ -524,7 +725,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &give_values,
             &take1_values,
             &rest_values,
-            &refund_values,
+            &refund1_values,
         ));
         text.push_str(&self.file_line_str(
             5,
@@ -535,7 +736,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &give_values,
             &take1_values,
             &rest_values,
-            &refund_values,
+            &refund1_values,
         ));
         text.push_str(&self.file_line_str(
             6,
@@ -546,7 +747,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &give_values,
             &take1_values,
             &rest_values,
-            &refund_values,
+            &refund1_values,
         ));
         Log::print_info(&text);
     }
@@ -564,7 +765,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
         refund_values: &[u16],
     ) -> String {
         format!(
-            "   {0} {1: >4} {2: >4} {3: >4} {4: >4} {5: >5}      {6: <6} {7: <6}       {8: >4} {9: >4} {10: >4} {11: >6} {12: >5}
+            "   {0} {1: >4} {2: >4} {3: >4} {4: >4} {5: >5}      {6: <6} {7: <6}       {8: >4} {9: >4} {10: >4} {11: >6}      {12: >4} {13: >4} {14: >4} {15: >4} {16: >5}
 ",
             file_ch,
             old_tensor[file][0],
@@ -582,6 +783,10 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             take1_values[file],
             rest_values[file],
             refund_values[file],
+            new_tensor[file][0],
+            new_tensor[file][1],
+            new_tensor[file][2],
+            new_tensor[file][3],
             new_tensor[file][0] + new_tensor[file][1] + new_tensor[file][2] + new_tensor[file][3],
         )
     }

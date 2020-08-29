@@ -57,7 +57,7 @@ impl Evaluation {
 
     /// Specify the file and get the evaluation values ​​of up to 4 features in one square.  
     /// ファイルを指定して、１マスで最大４つの特徴の評価値を取得します。  
-    fn get_values_by_file(
+    pub fn get_values_by_file(
         &self,
         pos: &Position,
         file: char,
@@ -187,7 +187,7 @@ impl Evaluation {
                     }
                     let state = self.get_state_by_feature(pos, *feature) as usize;
                     let curr = self.get_value(*feature, state, result_channel, pos.turn);
-                    if curr < 255 {
+                    if 0 < curr {
                         self.set_value(*feature, state, result_channel, pos.turn, curr - 1);
                         enter_value -= 1;
                         exit_value += 1;
