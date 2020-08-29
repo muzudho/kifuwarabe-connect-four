@@ -438,6 +438,55 @@ impl Learning {
 
         let mut text = String::new();
         text.push_str(&format!(
+            "Result channel={:?}
+",
+            result_channel
+        ));
+        text.push_str(&format!(
+            "\
+File Vert Hori Baro Sini
+---- ---- ---- ---- ----
+"
+        ));
+        text.push_str(&self.feat_numbers_by_file(
+            0,
+            'a',
+            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+        ));
+        text.push_str(&self.feat_numbers_by_file(
+            1,
+            'b',
+            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+        ));
+        text.push_str(&self.feat_numbers_by_file(
+            2,
+            'c',
+            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+        ));
+        text.push_str(&self.feat_numbers_by_file(
+            3,
+            'd',
+            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+        ));
+        text.push_str(&self.feat_numbers_by_file(
+            4,
+            'e',
+            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+        ));
+        text.push_str(&self.feat_numbers_by_file(
+            5,
+            'f',
+            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+        ));
+        text.push_str(&self.feat_numbers_by_file(
+            6,
+            'g',
+            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+        ));
+        Log::print_info(&text);
+
+        let mut text = String::new();
+        text.push_str(&format!(
             "Result channel={:?} Gives total={}
 ",
             result_channel, gives_total
@@ -891,6 +940,39 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
             &refund1_values,
         ));
         Log::print_info(&text);
+    }
+
+    fn feat_numbers_by_file(
+        &self,
+        file: usize,
+        file_ch: char,
+        feat_number_tensor: &[[Option<u8>; FEATURE_V_H_B_S_LEN]; FILE_LEN],
+    ) -> String {
+        format!(
+            "   {0} {1: >4} {2: >4} {3: >4} {4: >4}
+",
+            file_ch,
+            if let Some(num) = feat_number_tensor[file][0] {
+                num.to_string()
+            } else {
+                "    ".to_string()
+            },
+            if let Some(num) = feat_number_tensor[file][1] {
+                num.to_string()
+            } else {
+                "    ".to_string()
+            },
+            if let Some(num) = feat_number_tensor[file][2] {
+                num.to_string()
+            } else {
+                "    ".to_string()
+            },
+            if let Some(num) = feat_number_tensor[file][3] {
+                num.to_string()
+            } else {
+                "    ".to_string()
+            },
+        )
     }
 
     fn file_give_line_str(

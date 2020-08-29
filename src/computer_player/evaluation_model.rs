@@ -55,6 +55,33 @@ impl Evaluation {
         ]
     }
 
+    /// [
+    ///     [a1,a2,a3,a4],
+    ///     [b1,b2,b3,b4],
+    ///     [c1,c2,c3,c4],
+    ///     [d1,d2,d3,d4],
+    ///     [e1,e2,e3,e4],
+    ///     [f1,f2,f3,f4],
+    ///     [g1,g2,g3,g4],
+    /// ]
+    pub fn ways_feat(
+        &self,
+        pos: &Position,
+        result_channel: &ResultChannel,
+    ) -> [[Option<u8>; FEATURE_V_H_B_S_LEN]; FILE_LEN] {
+        // マスの特徴量を求めます。
+        // 7つの指し手のマスを調べます。
+        [
+            self.get_elemental_features_by_sq(pos.fallen_sq_or_none('a')),
+            self.get_elemental_features_by_sq(pos.fallen_sq_or_none('b')),
+            self.get_elemental_features_by_sq(pos.fallen_sq_or_none('c')),
+            self.get_elemental_features_by_sq(pos.fallen_sq_or_none('d')),
+            self.get_elemental_features_by_sq(pos.fallen_sq_or_none('e')),
+            self.get_elemental_features_by_sq(pos.fallen_sq_or_none('f')),
+            self.get_elemental_features_by_sq(pos.fallen_sq_or_none('g')),
+        ]
+    }
+
     /// Specify the file and get the evaluation values ​​of up to 4 features in one square.  
     /// ファイルを指定して、１マスで最大４つの特徴の評価値を取得します。  
     pub fn get_values_by_file(
