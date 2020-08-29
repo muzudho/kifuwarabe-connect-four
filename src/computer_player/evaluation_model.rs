@@ -3,7 +3,7 @@ use crate::computer_player::{
     N3POW4, N3POW5, N3POW6, N3POW7, NOUGHT_AND_CROSS_LEN, WIN_AND_DRAW_LEN,
 };
 use crate::log::LogExt;
-use crate::{EvaluationWay, Piece, Position, FILE_LEN};
+use crate::{Piece, Position, ResultChannel, FILE_LEN};
 use casual_logger::Log;
 
 /// Initial value of evaluation.
@@ -28,17 +28,17 @@ impl Default for Evaluation {
 }
 impl Evaluation {
     /// [a, b, c, d, e, f, g]
-    pub fn ways_weight(&self, pos: &Position, way: &EvaluationWay) -> [u8; FILE_LEN] {
+    pub fn ways_weight(&self, pos: &Position, result_channel: &ResultChannel) -> [u8; FILE_LEN] {
         // マスの特徴量を求めます。
         // 7つの指し手のマスを調べます。
         let win_way_values = [
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('a'), way),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('b'), way),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('c'), way),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('d'), way),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('e'), way),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('f'), way),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('g'), way),
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('a'), result_channel),
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('b'), result_channel),
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('c'), result_channel),
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('d'), result_channel),
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('e'), result_channel),
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('f'), result_channel),
+            self.get_value_by_sq(pos, pos.fallen_sq_or_none('g'), result_channel),
         ];
 
         [
@@ -52,44 +52,78 @@ impl Evaluation {
         ]
     }
 
-    fn get_value_by_sq(&self, pos: &Position, sq: Option<usize>, way: &EvaluationWay) -> u8 {
+    fn get_value_by_sq(
+        &self,
+        pos: &Position,
+        sq: Option<usize>,
+        result_channel: &ResultChannel,
+    ) -> u8 {
         let mut sum = 0;
         for feature in &self.get_elemental_features_by_sq(sq) {
-            sum += self.get_value_by_feature(pos, *feature, way);
+            sum += self.get_value_by_feature(pos, *feature, result_channel);
         }
 
         sum
     }
 
-    fn get_value_by_feature(&self, pos: &Position, feature: Option<u8>, way: &EvaluationWay) -> u8 {
+    fn get_value_by_feature(
+        &self,
+        pos: &Position,
+        feature: Option<u8>,
+        result_channel: &ResultChannel,
+    ) -> u8 {
         if let Some(feature) = feature {
             let state = self.get_state_by_feature(pos, feature) as usize;
             match feature {
-                1 => self.features_1_to_7[0][state][*way as usize][pos.turn as usize],
-                2 => self.features_1_to_7[1][state][*way as usize][pos.turn as usize],
-                3 => self.features_1_to_7[2][state][*way as usize][pos.turn as usize],
-                4 => self.features_1_to_7[3][state][*way as usize][pos.turn as usize],
-                5 => self.features_1_to_7[4][state][*way as usize][pos.turn as usize],
-                6 => self.features_1_to_7[5][state][*way as usize][pos.turn as usize],
-                7 => self.features_1_to_7[6][state][*way as usize][pos.turn as usize],
-                8 => self.features_8_to_13[0][state][*way as usize][pos.turn as usize],
-                9 => self.features_8_to_13[1][state][*way as usize][pos.turn as usize],
-                10 => self.features_8_to_13[2][state][*way as usize][pos.turn as usize],
-                11 => self.features_8_to_13[3][state][*way as usize][pos.turn as usize],
-                12 => self.features_8_to_13[4][state][*way as usize][pos.turn as usize],
-                13 => self.features_8_to_13[5][state][*way as usize][pos.turn as usize],
-                14 => self.features_14_19_20_25[0][state][*way as usize][pos.turn as usize],
-                15 => self.features_15_18_21_24[0][state][*way as usize][pos.turn as usize],
-                16 => self.features_16_17_22_23[0][state][*way as usize][pos.turn as usize],
-                17 => self.features_16_17_22_23[1][state][*way as usize][pos.turn as usize],
-                18 => self.features_15_18_21_24[1][state][*way as usize][pos.turn as usize],
-                19 => self.features_14_19_20_25[1][state][*way as usize][pos.turn as usize],
-                20 => self.features_14_19_20_25[2][state][*way as usize][pos.turn as usize],
-                21 => self.features_15_18_21_24[2][state][*way as usize][pos.turn as usize],
-                22 => self.features_16_17_22_23[2][state][*way as usize][pos.turn as usize],
-                23 => self.features_16_17_22_23[3][state][*way as usize][pos.turn as usize],
-                24 => self.features_15_18_21_24[3][state][*way as usize][pos.turn as usize],
-                25 => self.features_14_19_20_25[3][state][*way as usize][pos.turn as usize],
+                1 => self.features_1_to_7[0][state][*result_channel as usize][pos.turn as usize],
+                2 => self.features_1_to_7[1][state][*result_channel as usize][pos.turn as usize],
+                3 => self.features_1_to_7[2][state][*result_channel as usize][pos.turn as usize],
+                4 => self.features_1_to_7[3][state][*result_channel as usize][pos.turn as usize],
+                5 => self.features_1_to_7[4][state][*result_channel as usize][pos.turn as usize],
+                6 => self.features_1_to_7[5][state][*result_channel as usize][pos.turn as usize],
+                7 => self.features_1_to_7[6][state][*result_channel as usize][pos.turn as usize],
+                8 => self.features_8_to_13[0][state][*result_channel as usize][pos.turn as usize],
+                9 => self.features_8_to_13[1][state][*result_channel as usize][pos.turn as usize],
+                10 => self.features_8_to_13[2][state][*result_channel as usize][pos.turn as usize],
+                11 => self.features_8_to_13[3][state][*result_channel as usize][pos.turn as usize],
+                12 => self.features_8_to_13[4][state][*result_channel as usize][pos.turn as usize],
+                13 => self.features_8_to_13[5][state][*result_channel as usize][pos.turn as usize],
+                14 => {
+                    self.features_14_19_20_25[0][state][*result_channel as usize][pos.turn as usize]
+                }
+                15 => {
+                    self.features_15_18_21_24[0][state][*result_channel as usize][pos.turn as usize]
+                }
+                16 => {
+                    self.features_16_17_22_23[0][state][*result_channel as usize][pos.turn as usize]
+                }
+                17 => {
+                    self.features_16_17_22_23[1][state][*result_channel as usize][pos.turn as usize]
+                }
+                18 => {
+                    self.features_15_18_21_24[1][state][*result_channel as usize][pos.turn as usize]
+                }
+                19 => {
+                    self.features_14_19_20_25[1][state][*result_channel as usize][pos.turn as usize]
+                }
+                20 => {
+                    self.features_14_19_20_25[2][state][*result_channel as usize][pos.turn as usize]
+                }
+                21 => {
+                    self.features_15_18_21_24[2][state][*result_channel as usize][pos.turn as usize]
+                }
+                22 => {
+                    self.features_16_17_22_23[2][state][*result_channel as usize][pos.turn as usize]
+                }
+                23 => {
+                    self.features_16_17_22_23[3][state][*result_channel as usize][pos.turn as usize]
+                }
+                24 => {
+                    self.features_15_18_21_24[3][state][*result_channel as usize][pos.turn as usize]
+                }
+                25 => {
+                    self.features_14_19_20_25[3][state][*result_channel as usize][pos.turn as usize]
+                }
                 _ => panic!(Log::print_fatal(&format!(
                     "(Err.123)  Invalid feature. / {}",
                     feature

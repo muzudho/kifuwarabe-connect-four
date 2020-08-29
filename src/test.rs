@@ -5,7 +5,7 @@ use crate::command_line_seek::CommandLineSeek;
 use crate::computer_player::Evaluation;
 use crate::log::LogExt;
 use crate::{
-  computer_player::Search, EvaluationWay, GameResult, Piece, Position, SearchDirection, SearchInfo,
+  computer_player::Search, GameResult, Piece, Position, ResultChannel, SearchDirection, SearchInfo,
 };
 use casual_logger::Log;
 use std::{thread, time};
@@ -65,7 +65,7 @@ pub fn test() {
   Log::print_debug(&format!("pv=|{}|", pos.pv));
   // pv=||
   // 適当な内容を入れて、入れ物として、入れた中身を見せてくれるか、チェックしろだぜ☆（＾～＾）
-  let mut search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  let mut search_info = SearchInfo::new(&ResultChannel::Win, &[1, 1, 1, 1, 1, 1, 1]);
   search_info.nps = 123;
   search_info.nodes = search.nodes;
   search_info.pv = pos.pv.to_string();
@@ -77,7 +77,7 @@ pub fn test() {
   search_info.comment = Some("Hello!".to_string());
   Log::print_debug(&search_info.to_string());
   // info json { "nps":   123, "nodes":     0, "push":"d"                                           , "O":"Hello!", "pv":[] }
-  search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  search_info = SearchInfo::new(&ResultChannel::Win, &[1, 1, 1, 1, 1, 1, 1]);
   search_info.nps = 456;
   search_info.nodes = search.nodes;
   search_info.pv = pos.pv.to_string();
@@ -90,7 +90,7 @@ pub fn test() {
   search_info.comment = Some("Hello!".to_string());
   Log::print_debug(&search_info.to_string());
   // info json { "nps":   456, "nodes":     0, "push":"d"            , "leaf": true, "result":"win" , "X":"Hello!", "pv":[] }
-  search_info = SearchInfo::new(&EvaluationWay::Win, &[1, 1, 1, 1, 1, 1, 1]);
+  search_info = SearchInfo::new(&ResultChannel::Win, &[1, 1, 1, 1, 1, 1, 1]);
   search_info.nps = 789;
   search_info.nodes = search.nodes;
   search_info.pv = pos.pv.to_string();

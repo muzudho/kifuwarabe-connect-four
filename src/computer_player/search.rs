@@ -5,7 +5,7 @@
 use crate::log::LogExt;
 use crate::{
     computer_player::{Evaluation, Search},
-    EvaluationWay, GameResult, Position, SearchDirection, SearchInfo, SQUARES_NUM,
+    GameResult, Position, ResultChannel, SearchDirection, SearchInfo, SQUARES_NUM,
 };
 use casual_logger::{Level, Log};
 use rand::Rng;
@@ -45,7 +45,7 @@ impl Search {
         pos: &mut Position,
         evaluation: &Evaluation,
     ) -> (Option<char>, GameResult) {
-        let (win_file, win_result) = self.first_node(pos, &EvaluationWay::Win, evaluation);
+        let (win_file, win_result) = self.node(pos, &ResultChannel::Win, evaluation);
         match win_result {
             GameResult::Win => {
                 return (win_file, win_result);
@@ -53,7 +53,7 @@ impl Search {
             _ => {}
         }
 
-        let (draw_file, draw_result) = self.first_node(pos, &EvaluationWay::Draw, evaluation);
+        let (draw_file, draw_result) = self.node(pos, &ResultChannel::Draw, evaluation);
         match draw_result {
             GameResult::Draw => {
                 return (draw_file, draw_result);
@@ -81,70 +81,10 @@ impl Search {
     ///                     マスの番地。  
     /// * `GameResult` - Evaluation.  
     ///                     評価値。  
-    fn first_node(
-        &mut self,
-        pos: &mut Position,
-        way: &EvaluationWay,
-        evaluation: &Evaluation,
-    ) -> (Option<char>, GameResult) {
-        let mut best_file = None;
-        let mut best_result = GameResult::Lose;
-
-        // Full width search.
-        // 全幅探索。
-        for file in &['a', 'b', 'c', 'd', 'e', 'f', 'g'] {
-            let mut search_info = SearchInfo::new(&way, &[1, 1, 1, 1, 1, 1, 1]);
-            // I only look at the empty square.
-            // 空きマスだけを見ます。
-            if !pos.is_file_fill(*file) {
-                let mut info_backwarding = None;
-                let (forward_cut_off, info_leaf_child) =
-                    self.node_exit_to_child_side(pos, *file, &mut search_info);
-
-                if let None = forward_cut_off {
-                    // If you move forward, it's your opponent's turn.
-                    // 前向きに探索したら、次は対戦相手の番です。
-                    let (_opponent_sq, opponent_game_result) = self.node(pos, way, evaluation);
-                    // I'm back.
-                    // 戻ってきました。
-                    info_backwarding = Some(opponent_game_result);
-                }
-                let (best_file_child, best_result_child) = &self.node_enter_from_child_side(
-                    pos,
-                    *file,
-                    &mut best_file,
-                    &mut best_result,
-                    forward_cut_off,
-                    info_leaf_child,
-                    info_backwarding,
-                    &mut search_info,
-                );
-                best_file = *best_file_child;
-                best_result = *best_result_child;
-            }
-        }
-
-        // End of turn.
-        // 手番の終わり。
-        (best_file, best_result)
-    }
-
-    /// The state node of the search tree. Commonly called search.  
-    /// 検索ツリーの状態ノード。一般に 'search' と呼ばれます。  
-    ///
-    /// * `pos` - Position.  
-    ///             局面。  
-    ///
-    /// # Returns
-    ///
-    /// * `Option<u8>` - Address of square.  
-    ///                     マスの番地。  
-    /// * `GameResult` - Evaluation.  
-    ///                     評価値。  
     fn node(
         &mut self,
         pos: &mut Position,
-        way: &EvaluationWay,
+        result_channel: &ResultChannel,
         evaluation: &Evaluation,
     ) -> (Option<char>, GameResult) {
         let mut best_win_file = None;
@@ -152,7 +92,7 @@ impl Search {
 
         // Select one at random.
         // ランダムに１つ選びます。
-        if let (Some(file), mut search_info) = self.choose_file(pos, way, evaluation) {
+        if let (Some(file), mut search_info) = self.choose_file(pos, result_channel, evaluation) {
             // I only look at the empty square.
             // 空きマスだけを見ます。
             if !pos.is_file_fill(file) {
@@ -163,7 +103,8 @@ impl Search {
                 if let None = forward_cut_off {
                     // If you move forward, it's your opponent's turn.
                     // 前向きに探索したら、次は対戦相手の番です。
-                    let (_opponent_sq, opponent_game_result) = self.node(pos, way, evaluation);
+                    let (_opponent_sq, opponent_game_result) =
+                        self.node(pos, result_channel, evaluation);
                     // I'm back.
                     // 戻ってきました。
                     info_backwarding = Some(opponent_game_result);
@@ -358,11 +299,11 @@ impl Search {
     fn choose_file(
         &mut self,
         pos: &Position,
-        way: &EvaluationWay,
+        result_channel: &ResultChannel,
         evaluation: &Evaluation,
     ) -> (Option<char>, SearchInfo) {
-        let w = evaluation.ways_weight(pos, way);
-        let mut search_info = SearchInfo::new(way, &w);
+        let w = evaluation.ways_weight(pos, result_channel);
+        let mut search_info = SearchInfo::new(result_channel, &w);
         // Upper bound.
         let a_up: u16 = w[0] as u16;
         let b_up = a_up + w[1] as u16;

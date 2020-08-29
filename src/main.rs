@@ -181,7 +181,7 @@ pub enum SearchDirection {
 /// Win evaluation and draw evaluation.  
 /// 勝ち評価値と、引き分け評価値。  
 #[derive(Clone, Copy, Debug)]
-pub enum EvaluationWay {
+pub enum ResultChannel {
     Win,
     Draw,
 }
@@ -191,7 +191,7 @@ pub enum EvaluationWay {
 pub struct SearchInfo {
     /// Win evaluation or Draw evaluation.  
     /// 勝ち評価または、引き分け評価。  
-    pub way: EvaluationWay,
+    pub result_channel: ResultChannel,
 
     /// Weight of move probability.  
     /// 指し手確率の重み。  

@@ -1,7 +1,7 @@
 //! Display and data structure.  
 //! 表示と、データ構造です。  
 use crate::{
-    EvaluationWay, GameResult, Piece, Position, SearchDirection, SearchInfo, BOARD_LEN, FILE_LEN,
+    GameResult, Piece, Position, ResultChannel, SearchDirection, SearchInfo, BOARD_LEN, FILE_LEN,
     SQUARES_NUM,
 };
 use std::fmt;
@@ -137,9 +137,9 @@ impl Position {
 }
 
 impl SearchInfo {
-    pub fn new(way: &EvaluationWay, ways_weight: &[u8; FILE_LEN]) -> Self {
+    pub fn new(result_channel: &ResultChannel, ways_weight: &[u8; FILE_LEN]) -> Self {
         SearchInfo {
-            way: *way,
+            result_channel: *result_channel,
             ways_weight: *ways_weight,
             nps: 0,
             nodes: 0,
@@ -165,7 +165,7 @@ impl SearchInfo {
     /// 前向き/後ろ向き 探索中の情報。  
     pub fn to_string(&self) -> String {
         format!(
-            "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"way\":{:?}, \"choose\":\"{}\", \"total\":{}, \"a\":{}, \"b\":{}, \"c\":{}, \"d\":{}, \"e\":{}, \"f\":{}, \"g\":{}, \"pv\":[{}] }}",
+            "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"result_channel\":{:?}, \"choose\":\"{}\", \"total\":{}, \"a\":{}, \"b\":{}, \"c\":{}, \"d\":{}, \"e\":{}, \"f\":{}, \"g\":{}, \"pv\":[{}] }}",
             self.nps,
             self.nodes,
             if let Some(file) = self.chosen_file {
@@ -197,7 +197,7 @@ impl SearchInfo {
             } else {
                 format!(", \"{}\":\"\"", self.turn).to_string()
             },
-            self.way,
+            self.result_channel,
             if let Some(file) = self.chosen_file {
                 file
             }else{
