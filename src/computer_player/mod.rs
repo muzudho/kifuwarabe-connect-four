@@ -1,5 +1,6 @@
 pub mod evaluation_file;
 pub mod evaluation_model;
+mod learn;
 pub mod search;
 
 /// Nought and cross.
@@ -32,4 +33,8 @@ pub struct Evaluation {
     pub features_14_19_20_25: [[[[u8; NOUGHT_AND_CROSS_LEN]; WIN_AND_DRAW_LEN]; N3POW4]; 4],
     pub features_15_18_21_24: [[[[u8; NOUGHT_AND_CROSS_LEN]; WIN_AND_DRAW_LEN]; N3POW5]; 4],
     pub features_16_17_22_23: [[[[u8; NOUGHT_AND_CROSS_LEN]; WIN_AND_DRAW_LEN]; N3POW6]; 4],
+}
+
+pub struct Learning {
+    evaluation: Evaluation,
 }

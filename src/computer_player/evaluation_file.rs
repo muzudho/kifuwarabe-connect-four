@@ -1,4 +1,5 @@
 use crate::computer_player::{Evaluation, NOUGHT_AND_CROSS_LEN, WIN_AND_DRAW_LEN};
+use casual_logger::Log;
 use std::fs::OpenOptions;
 use std::io::{BufRead, BufReader, BufWriter, Write};
 use std::path::Path;
@@ -10,6 +11,7 @@ impl Evaluation {
         let mut text = String::new();
         // Open the file.
         let file = OpenOptions::new()
+            .create(true)
             .write(true)
             .truncate(true)
             .open(Path::new(file_name))
@@ -166,11 +168,14 @@ impl Evaluation {
     /// TODO ファイルから読み込みます。  
     pub fn load(&mut self, file_name: &str) {
         // Open the file.
-        let file = OpenOptions::new()
-            .read(true)
-            .open(Path::new(file_name))
-            // TODO error handling.
-            .unwrap();
+        let file = match OpenOptions::new().read(true).open(Path::new(file_name)) {
+            Ok(file) => file,
+            Err(why) => {
+                // Ignored.
+                Log::warn(&format!("{}", why));
+                return;
+            }
+        };
 
         // Read.
         let reader = BufReader::new(file);

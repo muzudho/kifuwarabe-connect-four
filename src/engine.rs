@@ -3,18 +3,13 @@
 
 use crate::{
     command_line_seek::CommandLineSeek,
+    computer_player::Learning,
     log::LogExt,
     look_and_model::{Position, Search},
+    Engine,
 };
 use casual_logger::Log;
 
-/// ThinkingEngine.  
-/// 思考エンジン。  
-pub struct Engine {
-    /// Starting position.  
-    /// 初期局面。  
-    pos: Position,
-}
 impl Default for Engine {
     fn default() -> Self {
         Engine {
@@ -106,7 +101,8 @@ Let's input from `pos`.
         } else if p.starts_with("info-on") {
             self.pos.info_enabled = true;
         } else if p.starts_with("learn") {
-            // TODO
+            let mut learning = Learning::default();
+            learning.learn(self);
         } else if p.starts_with("position") {
             p.go_next_to("position ");
             if let Some(rest) = p.rest() {

@@ -1,7 +1,6 @@
 mod command_line_seek;
 mod computer_player;
 mod engine;
-mod learn;
 mod log;
 mod look_and_model;
 mod performance_measurement;
@@ -14,6 +13,7 @@ use crate::engine::*;
 use crate::log::LogExt;
 use crate::test::test;
 use casual_logger::{Level, Log, Table};
+use look_and_model::Position;
 
 fn main() {
     // Log file name.
@@ -87,4 +87,12 @@ fn file_to_num(file: char) -> u8 {
             Table::default().char("file", file)
         )),
     }
+}
+
+/// ThinkingEngine.  
+/// 思考エンジン。  
+pub struct Engine {
+    /// Starting position.  
+    /// 初期局面。  
+    pos: Position,
 }
