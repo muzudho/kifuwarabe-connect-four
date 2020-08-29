@@ -16,7 +16,6 @@ impl Default for Learning {
 impl Learning {
     pub fn learn(&mut self, engine: &mut Engine) {
         engine.enter("go");
-
         engine.evaluation.save(EVALUATION_FILE_NAME);
     }
 
@@ -30,6 +29,7 @@ impl Learning {
         self.uh_by_result_channel(engine, ResultChannel::Draw);
 
         engine.pos.info_enabled = old_info_enabled;
+        engine.evaluation.save(EVALUATION_FILE_NAME);
     }
 
     /// uh...  
@@ -148,9 +148,9 @@ impl Learning {
                     }
                     _ => {}
                 },
-                _ => {}
             }
         }
+        let co_obtainer_count = FILE_LEN as u16 - obtainer_count;
         // It can move the evaluation value.
         // 評価値が移動できます。
         let mut give_values = [0, 0, 0, 0, 0, 0, 0];
@@ -239,6 +239,228 @@ impl Learning {
             }
         }
 
+        let rest_values = [
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'a',
+                    &result_channel,
+                    take_values[0],
+                )
+            },
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'b',
+                    &result_channel,
+                    take_values[1],
+                )
+            },
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'c',
+                    &result_channel,
+                    take_values[2],
+                )
+            },
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'd',
+                    &result_channel,
+                    take_values[3],
+                )
+            },
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'e',
+                    &result_channel,
+                    take_values[4],
+                )
+            },
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'f',
+                    &result_channel,
+                    take_values[5],
+                )
+            },
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'g',
+                    &result_channel,
+                    take_values[6],
+                )
+            },
+        ];
+        // Refund.
+        // 還付。
+        let rest_value = {
+            let mut sum = 0;
+            for val in &rest_values {
+                sum += val;
+            }
+            sum
+        };
+        {
+            give_values = [
+                Learning::give(&mut tensor, 0),
+                Learning::give(&mut tensor, 1),
+                Learning::give(&mut tensor, 2),
+                Learning::give(&mut tensor, 3),
+                Learning::give(&mut tensor, 4),
+                Learning::give(&mut tensor, 5),
+                Learning::give(&mut tensor, 6),
+            ];
+            let gives_total = {
+                let mut sum = 0;
+                for file in 0..FILE_LEN {
+                    sum += give_values[file];
+                }
+                sum
+            };
+            let obtain_point = gives_total / co_obtainer_count;
+            let rest_point = gives_total % co_obtainer_count;
+            take_values = [
+                {
+                    if !obtainer[0] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+                {
+                    if !obtainer[1] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+                {
+                    if !obtainer[2] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+                {
+                    if !obtainer[3] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+                {
+                    if !obtainer[4] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+                {
+                    if !obtainer[5] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+                {
+                    if !obtainer[6] {
+                        obtain_point
+                    } else {
+                        0
+                    }
+                },
+            ];
+            {
+                let mut files = Vec::<usize>::new();
+                for file in 0..FILE_LEN {
+                    if !obtainer[file] {
+                        files.push(file);
+                    }
+                }
+                for _i in 0..rest_point {
+                    take_values
+                        [files[rand::thread_rng().gen_range(0, co_obtainer_count) as usize]] += 1;
+                }
+            }
+        }
+        let lost_values = [
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'a',
+                    &result_channel,
+                    take_values[0],
+                )
+            },
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'b',
+                    &result_channel,
+                    take_values[1],
+                )
+            },
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'c',
+                    &result_channel,
+                    take_values[2],
+                )
+            },
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'd',
+                    &result_channel,
+                    take_values[3],
+                )
+            },
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'e',
+                    &result_channel,
+                    take_values[4],
+                )
+            },
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'f',
+                    &result_channel,
+                    take_values[5],
+                )
+            },
+            {
+                engine.evaluation.set_values_by_file(
+                    &engine.pos,
+                    'g',
+                    &result_channel,
+                    take_values[6],
+                )
+            },
+        ];
+        let lost_value = {
+            let mut sum = 0;
+            for val in &lost_values {
+                sum += val;
+            }
+            sum
+        };
+        if 0 < lost_value {
+            panic!(Log::print_fatal(&format!(
+                "(Err.459) Learn fail. lost_value={}",
+                lost_value
+            )))
+        }
+
         let mut text = String::new();
         text.push_str(&format!(
             "Result channel: {:?}
@@ -247,13 +469,13 @@ impl Learning {
         ));
         text.push_str(&format!(
             "\
-File Vert Hori Baro Sini Total Best File   Result Learn Give Take
----- ---- ---- ---- ---- -----      ------ ------       ---- ----
+File Vert Hori Baro Sini Total Best File   Result Learn Give Take Next
+---- ---- ---- ---- ---- -----      ------ ------       ---- ---- -----
 "
         ));
         let file = 0;
         text.push_str(&format!(
-            "   a {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4}
+            "   a {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -267,11 +489,12 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file]
+            take_values[file],
+            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         let file = 1;
         text.push_str(&format!(
-            "   b {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4}
+            "   b {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -285,11 +508,12 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file]
+            take_values[file],
+            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         let file = 2;
         text.push_str(&format!(
-            "   c {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4}
+            "   c {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -303,11 +527,12 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file]
+            take_values[file],
+            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         let file = 3;
         text.push_str(&format!(
-            "   d {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4}
+            "   d {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -321,11 +546,12 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file]
+            take_values[file],
+            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         let file = 4;
         text.push_str(&format!(
-            "   e {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4}
+            "   e {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -339,11 +565,12 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file]
+            take_values[file],
+            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         let file = 5;
         text.push_str(&format!(
-            "   f {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4}
+            "   f {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -357,11 +584,12 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file]
+            take_values[file],
+            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         let file = 6;
         text.push_str(&format!(
-            "   g {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4}
+            "   g {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >5}
 ",
             old_tensor[file][0],
             old_tensor[file][1],
@@ -375,7 +603,8 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             },
             &format!("{:?}", files_way[file].result),
             give_values[file],
-            take_values[file]
+            take_values[file],
+            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
         ));
         Log::print_info(&text);
     }

@@ -64,7 +64,6 @@ impl Evaluation {
         result_channel: &ResultChannel,
     ) -> [u8; FEATURE_V_H_B_S_LEN] {
         let sq = pos.fallen_sq_or_none(file);
-
         let features: [Option<u8>; FEATURE_V_H_B_S_LEN] = self.get_elemental_features_by_sq(sq);
         [
             if let Some(feature) = features[0] {
@@ -151,9 +150,65 @@ impl Evaluation {
             ))),
         }
     }
+    /// The evaluation value is assigned to each feature.  
+    /// 各特徴に評価値を振り分けます。  
+    ///
+    /// # Returns
+    ///
+    /// * Rest.  
+    ///     余り。  
+    pub fn set_values_by_file(
+        &mut self,
+        pos: &Position,
+        file: char,
+        result_channel: &ResultChannel,
+        mut value: u16,
+    ) -> u16 {
+        let sq = pos.fallen_sq_or_none(file);
+        for _retry in 0..FEATURE_V_H_B_S_LEN {
+            let features = {
+                let features: [Option<u8>; FEATURE_V_H_B_S_LEN] =
+                    self.get_elemental_features_by_sq(sq);
+                let mut vec = Vec::new();
+                for feature in features.iter() {
+                    if let Some(feature) = feature {
+                        let state = self.get_state_by_feature(pos, *feature) as usize;
+                        let curr = self.get_value(*feature, state, result_channel, pos.turn);
+                        if curr < 255 {
+                            vec.push(feature.clone());
+                        }
+                    }
+                }
+                vec
+            };
+            if features.is_empty() {
+                break;
+            }
+            let mut trial = value;
+            while 0 < trial {
+                for feature in &features {
+                    if trial < 1 {
+                        break;
+                    }
+                    let state = self.get_state_by_feature(pos, *feature) as usize;
+                    let curr = self.get_value(*feature, state, result_channel, pos.turn);
+                    if curr < 255 {
+                        self.set_value(*feature, state, result_channel, pos.turn, 1);
+                        value -= 1;
+                    }
+                    trial -= 1;
+                }
+            }
+            if value < 1 {
+                break;
+            }
+        }
+
+        value
+    }
     /// Set.  
     /// 設定。  
-    pub fn set_value(
+    fn set_value(
         &mut self,
         feature: u8,
         state: usize,
