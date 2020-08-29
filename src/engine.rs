@@ -82,95 +82,212 @@ Let's input from `pos`.
             search.start_pieces_num = self.pos.pieces_num;
 
             let mut search_info = SearchInfo::default();
-            let mut bestmove = Bestmove::default();
-            search.node_exit(
-                &mut self.pos,
-                &self.evaluation,
-                &ResultChannel::Win,
-                'a',
-                &mut search_info,
-                &mut bestmove,
-            );
+            let a_way = {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut self.pos,
+                    &self.evaluation,
+                    &ResultChannel::Win,
+                    'a',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            };
+            let b_way = {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut self.pos,
+                    &self.evaluation,
+                    &ResultChannel::Win,
+                    'b',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            };
+            let c_way = {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut self.pos,
+                    &self.evaluation,
+                    &ResultChannel::Win,
+                    'c',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            };
+            let d_way = {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut self.pos,
+                    &self.evaluation,
+                    &ResultChannel::Win,
+                    'd',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            };
+            let e_way = {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut self.pos,
+                    &self.evaluation,
+                    &ResultChannel::Win,
+                    'e',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            };
+            let f_way = {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut self.pos,
+                    &self.evaluation,
+                    &ResultChannel::Win,
+                    'f',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            };
+            let g_way = {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut self.pos,
+                    &self.evaluation,
+                    &ResultChannel::Win,
+                    'g',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            };
 
             let tensor = self.evaluation.ways_weight(&self.pos, &ResultChannel::Win);
             let mut text = String::new();
             text.push_str(&format!(
-                "File Vert Hori Baro Sini Total
+                "File Vert Hori Baro Sini Total Best File   Result
 "
             ));
             text.push_str(&format!(
-                "---- ---- ---- ---- ---- -----
+                "---- ---- ---- ---- ---- -----      ------ ------
 "
             ));
             let file = 0;
             text.push_str(&format!(
-                "   a {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
+                "   a {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: >6} {6: >6}
 ",
                 tensor[file][0],
                 tensor[file][1],
                 tensor[file][2],
                 tensor[file][3],
-                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+                if let Some(file) = a_way.file {
+                    file.to_string()
+                } else {
+                    "resign".to_string()
+                },
+                a_way.result
             ));
             let file = 1;
             text.push_str(&format!(
-                "   b {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
+                "   b {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: >6} {6: >6}
 ",
                 tensor[file][0],
                 tensor[file][1],
                 tensor[file][2],
                 tensor[file][3],
-                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+                if let Some(file) = b_way.file {
+                    file.to_string()
+                } else {
+                    "resign".to_string()
+                },
+                a_way.result
             ));
             let file = 2;
             text.push_str(&format!(
-                "   c {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
+                "   c {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: >6} {6: >6}
 ",
                 tensor[file][0],
                 tensor[file][1],
                 tensor[file][2],
                 tensor[file][3],
-                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+                if let Some(file) = c_way.file {
+                    file.to_string()
+                } else {
+                    "resign".to_string()
+                },
+                a_way.result
             ));
             let file = 3;
             text.push_str(&format!(
-                "   d {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
+                "   d {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: >6} {6: >6}
 ",
                 tensor[file][0],
                 tensor[file][1],
                 tensor[file][2],
                 tensor[file][3],
-                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+                if let Some(file) = d_way.file {
+                    file.to_string()
+                } else {
+                    "resign".to_string()
+                },
+                a_way.result
             ));
             let file = 4;
             text.push_str(&format!(
-                "   e {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
+                "   e {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: >6} {6: >6}
 ",
                 tensor[file][0],
                 tensor[file][1],
                 tensor[file][2],
                 tensor[file][3],
-                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+                if let Some(file) = e_way.file {
+                    file.to_string()
+                } else {
+                    "resign".to_string()
+                },
+                a_way.result
             ));
             let file = 5;
             text.push_str(&format!(
-                "   f {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
+                "   f {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: >6} {6: >6}
 ",
                 tensor[file][0],
                 tensor[file][1],
                 tensor[file][2],
                 tensor[file][3],
-                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+                if let Some(file) = f_way.file {
+                    file.to_string()
+                } else {
+                    "resign".to_string()
+                },
+                a_way.result
             ));
             let file = 6;
             text.push_str(&format!(
-                "   g {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
+                "   g {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: >6} {6: >6}
 ",
                 tensor[file][0],
                 tensor[file][1],
                 tensor[file][2],
                 tensor[file][3],
-                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+                if let Some(file) = g_way.file {
+                    file.to_string()
+                } else {
+                    "resign".to_string()
+                },
+                a_way.result
             ));
             Log::print_info(&text);
         } else if p.starts_with("go") {
