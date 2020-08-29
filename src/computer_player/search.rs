@@ -2,6 +2,7 @@
 //! See 'Search' struct in 'look_and_model' for details.  
 //! コンピューターの思考部です。  
 //! 詳しくは 'look_and_model' の 'Search' 構造体 を見てください。  
+use crate::computer_player::Bestmove;
 use crate::log::LogExt;
 use crate::{
     computer_player::{Evaluation, Search},
@@ -10,6 +11,15 @@ use crate::{
 use casual_logger::{Level, Log};
 use rand::Rng;
 use std::time::Instant;
+
+impl Default for Bestmove {
+    fn default() -> Self {
+        Bestmove {
+            file: None,
+            result: GameResult::Lose,
+        }
+    }
+}
 
 /// Search.  
 /// 探索部。  
@@ -40,32 +50,28 @@ impl Search {
     ///                     マスの番地。  
     /// * `GameResult` - Evaluation.  
     ///                     評価値。  
-    pub fn go(
-        &mut self,
-        pos: &mut Position,
-        evaluation: &Evaluation,
-    ) -> (Option<char>, GameResult) {
-        let (win_file, win_result) = self.node(pos, evaluation, &ResultChannel::Win);
-        match win_result {
+    pub fn go(&mut self, pos: &mut Position, evaluation: &Evaluation) -> Bestmove {
+        let bestmove_to_win = self.node(pos, evaluation, &ResultChannel::Win);
+        match bestmove_to_win.result {
             GameResult::Win => {
-                return (win_file, win_result);
+                return bestmove_to_win;
             }
             _ => {}
         }
 
-        let (draw_file, draw_result) = self.node(pos, evaluation, &ResultChannel::Draw);
-        match draw_result {
+        let bestmove_to_draw = self.node(pos, evaluation, &ResultChannel::Draw);
+        match bestmove_to_draw.result {
             GameResult::Draw => {
-                return (draw_file, draw_result);
+                return bestmove_to_draw;
             }
             _ => {}
         }
 
         let number = rand::thread_rng().gen_range(0, 2);
         if number == 0 {
-            (win_file, win_result)
+            bestmove_to_win
         } else {
-            (draw_file, draw_result)
+            bestmove_to_draw
         }
     }
 
@@ -86,9 +92,8 @@ impl Search {
         pos: &mut Position,
         evaluation: &Evaluation,
         result_channel: &ResultChannel,
-    ) -> (Option<char>, GameResult) {
-        let mut best_win_file = None;
-        let mut best_win_result = GameResult::Lose;
+    ) -> Bestmove {
+        let mut bestmove = Bestmove::default();
 
         // Select one at random.
         // ランダムに１つ選びます。
@@ -99,14 +104,13 @@ impl Search {
                 result_channel,
                 file,
                 &mut search_info,
-                &mut best_win_file,
-                &mut best_win_result,
+                &mut bestmove,
             );
         }
 
         // End of turn.
         // 手番の終わり。
-        (best_win_file, best_win_result)
+        bestmove
     }
 
     fn node_exit(
@@ -116,8 +120,7 @@ impl Search {
         result_channel: &ResultChannel,
         file: char,
         search_info: &mut SearchInfo,
-        best_win_file: &mut Option<char>,
-        best_win_result: &mut GameResult,
+        bestmove: &mut Bestmove,
     ) {
         // I only look at the empty square.
         // 空きマスだけを見ます。
@@ -129,17 +132,15 @@ impl Search {
             if let None = forward_cut_off {
                 // If you move forward, it's your opponent's turn.
                 // 前向きに探索したら、次は対戦相手の番です。
-                let (_opponent_sq, opponent_game_result) =
-                    self.node(pos, evaluation, result_channel);
+                let opponent_bestmove = self.node(pos, evaluation, result_channel);
                 // I'm back.
                 // 戻ってきました。
-                info_backwarding = Some(opponent_game_result);
+                info_backwarding = Some(opponent_bestmove.result);
             }
             self.node_enter_from_child_side(
                 pos,
                 file,
-                best_win_file,
-                best_win_result,
+                bestmove,
                 forward_cut_off,
                 info_leaf_child,
                 info_backwarding,
@@ -208,8 +209,7 @@ impl Search {
         &mut self,
         pos: &mut Position,
         file: char,
-        best_file: &mut Option<char>,
-        best_result: &mut GameResult,
+        bestmove: &mut Bestmove,
         forward_cut_off: Option<ForwardCutOff>,
         info_leaf: bool,
         info_backwarding: Option<GameResult>,
@@ -234,12 +234,12 @@ impl Search {
                     // If neither is wrong, draw.
                     // お互いがミスしなければ引き分け。
 
-                    match best_result {
+                    match bestmove.result {
                         GameResult::Lose => {
                             // If it gets better, change it to this. Generally called 'Update alpha evaluation'.
                             // 良くなるならこの手に変えます。一般的には 'α評価値の更新' と呼びます。
-                            *best_file = Some(file);
-                            *best_result = GameResult::Draw;
+                            bestmove.file = Some(file);
+                            bestmove.result = GameResult::Draw;
                         }
                         _ => {}
                     }
@@ -296,21 +296,21 @@ impl Search {
         if let Some(forward_cut_off) = forward_cut_off {
             match forward_cut_off {
                 ForwardCutOff::OpponentWin => {
-                    *best_file = Some(file);
-                    *best_result = GameResult::Win;
+                    bestmove.file = Some(file);
+                    bestmove.result = GameResult::Win;
                     return;
                 }
                 ForwardCutOff::Draw => {
-                    *best_file = Some(file);
-                    *best_result = GameResult::Draw;
+                    bestmove.file = Some(file);
+                    bestmove.result = GameResult::Draw;
                     return;
                 }
             }
         } else if let Some(backward_cut_off) = backward_cut_off {
             match backward_cut_off {
                 BackwardCutOff::YouWin => {
-                    *best_file = Some(file);
-                    *best_result = GameResult::Win;
+                    bestmove.file = Some(file);
+                    bestmove.result = GameResult::Win;
                     return;
                 }
             }

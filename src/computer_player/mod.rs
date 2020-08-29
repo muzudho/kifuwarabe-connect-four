@@ -3,6 +3,7 @@ pub mod evaluation_model;
 mod learn;
 pub mod search;
 
+use crate::GameResult;
 use std::time::Instant;
 
 /// Nought and cross.
@@ -28,6 +29,13 @@ pub const N3POW7: usize = 2187;
 /// Learning.  
 /// 学習部。  
 pub struct Learning {}
+
+/// Next put.  
+/// 次の一手。  
+pub struct Bestmove {
+    pub file: Option<char>,
+    pub result: GameResult,
+}
 
 /// Search.  
 /// 探索部。  

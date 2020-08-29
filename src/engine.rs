@@ -80,17 +80,17 @@ Let's input from `pos`.
         } else if p.starts_with("go") {
             let mut search = Search::default();
             search.start_pieces_num = self.pos.pieces_num;
-            let (sq, result) = search.go(&mut self.pos, &self.evaluation);
+            let bestmove = search.go(&mut self.pos, &self.evaluation);
             Log::print_info(&format!(
                 "info string result={:?} nps={}",
-                result,
+                bestmove.result,
                 search.nps()
             ));
 
             Log::print_notice(&format!(
                 "bestmove {}",
-                if let Some(sq) = sq {
-                    sq.to_string()
+                if let Some(file) = bestmove.file {
+                    file.to_string()
                 } else {
                     "resign".to_string()
                 }
