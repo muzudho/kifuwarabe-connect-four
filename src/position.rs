@@ -41,7 +41,16 @@ impl Position {
 
     /// 1 back.  
     /// 1手戻します。  
-    pub fn undo_move(&mut self) {
+    ///
+    /// # Return
+    ///
+    /// Undone.
+    /// アンドゥした。
+    pub fn undo_move(&mut self) -> bool {
+        if self.pv.len() < 1 {
+            return false;
+        }
+
         // Change of turn.
         // 手番交代。
         self.turn = self.opponent();
@@ -74,6 +83,8 @@ impl Position {
         if let Some(sq) = self.peak_sq_in_file(file) {
             self.board[sq] = None;
         }
+
+        true
     }
     /// Opponent.
     /// 相手番。

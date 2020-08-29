@@ -9,6 +9,7 @@ mod test;
 mod uxi_protocol;
 mod win_lose_judgment;
 
+use crate::computer_player::Bestmove;
 use crate::computer_player::Evaluation;
 use crate::computer_player::FEATURE_V_H_B_S_LEN;
 use crate::engine::Response;
@@ -115,6 +116,14 @@ pub struct Engine {
     /// Evaluation.  
     /// 評価値。  
     evaluation: Evaluation,
+
+    /// Bestmove.  
+    /// 最善手。  
+    bestmove: Option<Bestmove>,
+
+    /// Undone.  
+    /// アンドゥした。  
+    undone: bool,
 }
 
 /// It is a game that can be playout, so please use the result instead of the evaluation value.  

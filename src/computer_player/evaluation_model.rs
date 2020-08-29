@@ -64,11 +64,7 @@ impl Evaluation {
     ///     [f1,f2,f3,f4],
     ///     [g1,g2,g3,g4],
     /// ]
-    pub fn ways_feat(
-        &self,
-        pos: &Position,
-        result_channel: &ResultChannel,
-    ) -> [[Option<u8>; FEATURE_V_H_B_S_LEN]; FILE_LEN] {
+    pub fn ways_feat(&self, pos: &Position) -> [[Option<u8>; FEATURE_V_H_B_S_LEN]; FILE_LEN] {
         // マスの特徴量を求めます。
         // 7つの指し手のマスを調べます。
         [

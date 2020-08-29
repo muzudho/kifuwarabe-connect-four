@@ -15,8 +15,43 @@ impl Default for Learning {
 }
 impl Learning {
     pub fn learn(&mut self, engine: &mut Engine) {
-        engine.enter("go");
-        engine.evaluation.save(EVALUATION_FILE_NAME);
+        let old_info_enabled = engine.pos.info_enabled;
+        engine.pos.info_enabled = false;
+
+        for trial in 0..60 {
+            Log::print_info(&format!("Trial={}", trial));
+            engine.enter("pos");
+            engine.enter("xfen");
+            loop {
+                engine.enter("uh");
+                engine.enter("go");
+                let bestmove = &engine.bestmove;
+                if let Some(bestmove) = bestmove {
+                    if let Some(chosen_file) = bestmove.file {
+                        engine.enter(&format!("do {}", chosen_file));
+                        engine.enter("pos");
+                        engine.enter("xfen");
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+            engine.enter("undo");
+            Log::print_info(&format!("Undo={}", engine.undone));
+            engine.enter("pos");
+            engine.enter("xfen");
+            while engine.undone {
+                engine.enter("undo");
+                Log::print_info(&format!("Undo={}", engine.undone));
+                engine.enter("pos");
+                engine.enter("xfen");
+            }
+            Log::print_info("Save.");
+            engine.evaluation.save(EVALUATION_FILE_NAME);
+        }
+        engine.pos.info_enabled = old_info_enabled;
     }
 
     /// uh...  
@@ -148,12 +183,22 @@ impl Learning {
                 },
             }
         }
+        let co_obtainer_count = FILE_LEN as u16 - obtainer_count;
 
         if obtainer_count < 1 {
+            Log::print_info(&format!(
+                "Result channel={:?} Obtainer nothing.",
+                result_channel
+            ));
+            return;
+        } else if co_obtainer_count < 1 {
+            Log::print_info(&format!(
+                "Result channel={:?} Co-obtainer nothing.",
+                result_channel
+            ));
             return;
         }
 
-        let co_obtainer_count = FILE_LEN as u16 - obtainer_count;
         // It can move the evaluation value.
         // 評価値が移動できます。
         let tensor_before_give = engine.evaluation.ways_weight(&engine.pos, &result_channel);
@@ -459,37 +504,37 @@ File Vert Hori Baro Sini
         text.push_str(&self.feat_numbers_by_file(
             0,
             'a',
-            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+            &engine.evaluation.ways_feat(&engine.pos),
         ));
         text.push_str(&self.feat_numbers_by_file(
             1,
             'b',
-            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+            &engine.evaluation.ways_feat(&engine.pos),
         ));
         text.push_str(&self.feat_numbers_by_file(
             2,
             'c',
-            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+            &engine.evaluation.ways_feat(&engine.pos),
         ));
         text.push_str(&self.feat_numbers_by_file(
             3,
             'd',
-            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+            &engine.evaluation.ways_feat(&engine.pos),
         ));
         text.push_str(&self.feat_numbers_by_file(
             4,
             'e',
-            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+            &engine.evaluation.ways_feat(&engine.pos),
         ));
         text.push_str(&self.feat_numbers_by_file(
             5,
             'f',
-            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+            &engine.evaluation.ways_feat(&engine.pos),
         ));
         text.push_str(&self.feat_numbers_by_file(
             6,
             'g',
-            &engine.evaluation.ways_feat(&engine.pos, &result_channel),
+            &engine.evaluation.ways_feat(&engine.pos),
         ));
         Log::print_info(&text);
 
@@ -867,7 +912,7 @@ File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro S
             tensor_before_give[file][1],
             tensor_before_give[file][2],
             tensor_before_give[file][3],
-            tensor_before_give[file][0] + tensor_before_give[file][1] + tensor_before_give[file][2] + tensor_before_give[file][3],
+            tensor_before_give[file][0] as u16 + tensor_before_give[file][1] as u16 + tensor_before_give[file][2] as u16 + tensor_before_give[file][3] as u16,
             //
             if let Some(file) = files_way[file].file {
                 file.to_string()
@@ -881,7 +926,7 @@ File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro S
             tensor_before_take[file][1],
             tensor_before_take[file][2],
             tensor_before_take[file][3],
-            tensor_before_take[file][0] + tensor_before_take[file][1] + tensor_before_take[file][2] + tensor_before_take[file][3],
+            tensor_before_take[file][0] as u16 + tensor_before_take[file][1] as u16 + tensor_before_take[file][2] as u16 + tensor_before_take[file][3] as u16,
             //
             take1_values[file],
             rest_values[file],
@@ -889,14 +934,14 @@ File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro S
             tensor_before_refund[file][1],
             tensor_before_refund[file][2],
             tensor_before_refund[file][3],
-            tensor_before_refund[file][0] + tensor_before_refund[file][1] + tensor_before_refund[file][2] + tensor_before_refund[file][3],
+            tensor_before_refund[file][0] as u16 + tensor_before_refund[file][1] as u16 + tensor_before_refund[file][2] as u16 + tensor_before_refund[file][3] as u16,
             //
             refund_values[file],
             new_tensor[file][0],
             new_tensor[file][1],
             new_tensor[file][2],
             new_tensor[file][3],
-            new_tensor[file][0] + new_tensor[file][1] + new_tensor[file][2] + new_tensor[file][3],
+            new_tensor[file][0] as u16 + new_tensor[file][1] as u16 + new_tensor[file][2] as u16 + new_tensor[file][3] as u16,
         )
     }
 }

@@ -226,7 +226,12 @@ impl Position {
 
     /// 1 back.  
     /// １手戻します。  
-    pub fn undo(&mut self) {
-        self.undo_move();
+    ///
+    /// # Return
+    ///
+    /// Undone.
+    /// アンドゥした。
+    pub fn undo(&mut self) -> bool {
+        self.undo_move()
     }
 }

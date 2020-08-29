@@ -14,6 +14,8 @@ impl Default for Engine {
         Engine {
             pos: Position::default(),
             evaluation: Evaluation::default(),
+            bestmove: None,
+            undone: false,
         }
     }
 }
@@ -100,6 +102,8 @@ Let's input from `pos`.
                     "resign".to_string()
                 }
             ));
+
+            self.bestmove = Some(bestmove);
         } else if p.starts_with("info-off") {
             self.pos.info_enabled = false;
         } else if p.starts_with("info-on") {
@@ -119,7 +123,7 @@ Let's input from `pos`.
         } else if p.starts_with("quit") {
             return Some(Response::Quit);
         } else if p.starts_with("undo") {
-            self.pos.undo();
+            self.undone = self.pos.undo();
         } else if p.starts_with("uxi") {
             Log::print_notice("uxiok connect-four v20200824.0.0");
         } else if p.starts_with("xfen") {
