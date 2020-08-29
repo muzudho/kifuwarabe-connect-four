@@ -8,7 +8,7 @@ use std::fmt;
 
 impl fmt::Display for Piece {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        use crate::look_and_model::Piece::*;
+        use crate::Piece::*;
         match self {
             Nought => write!(f, "O"),
             Cross => write!(f, "X"),
@@ -18,7 +18,7 @@ impl fmt::Display for Piece {
 
 impl fmt::Display for GameResult {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        use crate::look_and_model::GameResult::*;
+        use crate::GameResult::*;
         match self {
             Win => write!(f, "win"),
             Draw => write!(f, "draw"),
@@ -126,11 +126,12 @@ impl Position {
     /// Display results.  
     /// 結果の表示。  
     pub fn result(result: GameResult, winner: Option<Piece>) -> Option<String> {
+        use crate::GameResult::*;
         match result {
             // ぜったい None が返ってこない仕様のときは .unwrap() でヌル・チェックを飛ばせだぜ☆（＾～＾）
-            GameResult::Win => Some(format!("win {}", winner.unwrap()).to_string()),
-            GameResult::Draw => Some(format!("draw").to_string()),
-            GameResult::Lose => None,
+            Win => Some(format!("win {}", winner.unwrap()).to_string()),
+            Draw => Some(format!("draw").to_string()),
+            Lose => None,
         }
     }
 }
@@ -168,9 +169,10 @@ impl SearchInfo {
             self.nps,
             self.nodes,
             if let Some(file) = self.chosen_file {
+                use crate::SearchDirection::*;
                 match self.search_direction {
-                    SearchDirection::Forward => format!(", \"push\":\"{}\"", file),
-                    SearchDirection::Backward => format!(", \"pop\" :\"{}\"", file),
+                    Forward => format!(", \"push\":\"{}\"", file),
+                    Backward => format!(", \"pop\" :\"{}\"", file),
                 }
             } else {
                 "            ".to_string()
