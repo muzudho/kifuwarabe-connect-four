@@ -26,109 +26,107 @@ impl Learning {
         search.start_pieces_num = engine.pos.pieces_num;
 
         let mut search_info = SearchInfo::default();
-        let a_way = {
-            let mut bestmove = Bestmove::default();
-            search.node_exit(
-                &mut engine.pos,
-                &engine.evaluation,
-                &ResultChannel::Win,
-                'a',
-                &mut search_info,
-                &mut bestmove,
-            );
-            bestmove
-        };
-        let b_way = {
-            let mut bestmove = Bestmove::default();
-            search.node_exit(
-                &mut engine.pos,
-                &engine.evaluation,
-                &ResultChannel::Win,
-                'b',
-                &mut search_info,
-                &mut bestmove,
-            );
-            bestmove
-        };
-        let c_way = {
-            let mut bestmove = Bestmove::default();
-            search.node_exit(
-                &mut engine.pos,
-                &engine.evaluation,
-                &ResultChannel::Win,
-                'c',
-                &mut search_info,
-                &mut bestmove,
-            );
-            bestmove
-        };
-        let d_way = {
-            let mut bestmove = Bestmove::default();
-            search.node_exit(
-                &mut engine.pos,
-                &engine.evaluation,
-                &ResultChannel::Win,
-                'd',
-                &mut search_info,
-                &mut bestmove,
-            );
-            bestmove
-        };
-        let e_way = {
-            let mut bestmove = Bestmove::default();
-            search.node_exit(
-                &mut engine.pos,
-                &engine.evaluation,
-                &ResultChannel::Win,
-                'e',
-                &mut search_info,
-                &mut bestmove,
-            );
-            bestmove
-        };
-        let f_way = {
-            let mut bestmove = Bestmove::default();
-            search.node_exit(
-                &mut engine.pos,
-                &engine.evaluation,
-                &ResultChannel::Win,
-                'f',
-                &mut search_info,
-                &mut bestmove,
-            );
-            bestmove
-        };
-        let g_way = {
-            let mut bestmove = Bestmove::default();
-            search.node_exit(
-                &mut engine.pos,
-                &engine.evaluation,
-                &ResultChannel::Win,
-                'g',
-                &mut search_info,
-                &mut bestmove,
-            );
-            bestmove
-        };
+        let files_way = [
+            {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut engine.pos,
+                    &engine.evaluation,
+                    &ResultChannel::Win,
+                    'a',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            },
+            {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut engine.pos,
+                    &engine.evaluation,
+                    &ResultChannel::Win,
+                    'b',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            },
+            {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut engine.pos,
+                    &engine.evaluation,
+                    &ResultChannel::Win,
+                    'c',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            },
+            {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut engine.pos,
+                    &engine.evaluation,
+                    &ResultChannel::Win,
+                    'd',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            },
+            {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut engine.pos,
+                    &engine.evaluation,
+                    &ResultChannel::Win,
+                    'e',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            },
+            {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut engine.pos,
+                    &engine.evaluation,
+                    &ResultChannel::Win,
+                    'f',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            },
+            {
+                let mut bestmove = Bestmove::default();
+                search.node_exit(
+                    &mut engine.pos,
+                    &engine.evaluation,
+                    &ResultChannel::Win,
+                    'g',
+                    &mut search_info,
+                    &mut bestmove,
+                );
+                bestmove
+            },
+        ];
 
         let mut tensor = engine
             .evaluation
             .ways_weight(&engine.pos, &ResultChannel::Win);
         let old_tensor = tensor.clone();
-        let a_pay = Learning::give(&mut tensor, 0);
-        let b_pay = Learning::give(&mut tensor, 1);
-        let c_pay = Learning::give(&mut tensor, 2);
-        let d_pay = Learning::give(&mut tensor, 3);
-        let e_pay = Learning::give(&mut tensor, 4);
-        let f_pay = Learning::give(&mut tensor, 5);
-        let g_pay = Learning::give(&mut tensor, 6);
-        let a_take = 0;
-        let b_take = 0;
-        let c_take = 0;
-        let d_take = 0;
-        let e_take = 0;
-        let f_take = 0;
-        let g_take = 0;
+        let give_values = [
+            Learning::give(&mut tensor, 0),
+            Learning::give(&mut tensor, 1),
+            Learning::give(&mut tensor, 2),
+            Learning::give(&mut tensor, 3),
+            Learning::give(&mut tensor, 4),
+            Learning::give(&mut tensor, 5),
+            Learning::give(&mut tensor, 6),
+        ];
+        let take_values = [0, 0, 0, 0, 0, 0, 0];
 
         let mut text = String::new();
         text.push_str(&format!(
@@ -146,14 +144,14 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             old_tensor[file][2],
             old_tensor[file][3],
             old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = a_way.file {
+            if let Some(file) = files_way[file].file {
                 file.to_string()
             } else {
                 "resign".to_string()
             },
-            &format!("{:?}", a_way.result),
-            a_pay,
-            a_take
+            &format!("{:?}", files_way[file].result),
+            give_values[file],
+            take_values[file]
         ));
         let file = 1;
         text.push_str(&format!(
@@ -164,14 +162,14 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             old_tensor[file][2],
             old_tensor[file][3],
             old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = b_way.file {
+            if let Some(file) = files_way[file].file {
                 file.to_string()
             } else {
                 "resign".to_string()
             },
-            &format!("{:?}", a_way.result),
-            b_pay,
-            b_take
+            &format!("{:?}", files_way[file].result),
+            give_values[file],
+            take_values[file]
         ));
         let file = 2;
         text.push_str(&format!(
@@ -182,14 +180,14 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             old_tensor[file][2],
             old_tensor[file][3],
             old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = c_way.file {
+            if let Some(file) = files_way[file].file {
                 file.to_string()
             } else {
                 "resign".to_string()
             },
-            &format!("{:?}", a_way.result),
-            c_pay,
-            c_take
+            &format!("{:?}", files_way[file].result),
+            give_values[file],
+            take_values[file]
         ));
         let file = 3;
         text.push_str(&format!(
@@ -200,14 +198,14 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             old_tensor[file][2],
             old_tensor[file][3],
             old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = d_way.file {
+            if let Some(file) = files_way[file].file {
                 file.to_string()
             } else {
                 "resign".to_string()
             },
-            &format!("{:?}", a_way.result),
-            d_pay,
-            d_take
+            &format!("{:?}", files_way[file].result),
+            give_values[file],
+            take_values[file]
         ));
         let file = 4;
         text.push_str(&format!(
@@ -218,14 +216,14 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             old_tensor[file][2],
             old_tensor[file][3],
             old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = e_way.file {
+            if let Some(file) = files_way[file].file {
                 file.to_string()
             } else {
                 "resign".to_string()
             },
-            &format!("{:?}", a_way.result),
-            e_pay,
-            e_take
+            &format!("{:?}", files_way[file].result),
+            give_values[file],
+            take_values[file]
         ));
         let file = 5;
         text.push_str(&format!(
@@ -236,14 +234,14 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             old_tensor[file][2],
             old_tensor[file][3],
             old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = f_way.file {
+            if let Some(file) = files_way[file].file {
                 file.to_string()
             } else {
                 "resign".to_string()
             },
-            &format!("{:?}", a_way.result),
-            f_pay,
-            f_take
+            &format!("{:?}", files_way[file].result),
+            give_values[file],
+            take_values[file]
         ));
         let file = 6;
         text.push_str(&format!(
@@ -254,14 +252,14 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             old_tensor[file][2],
             old_tensor[file][3],
             old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = g_way.file {
+            if let Some(file) = files_way[file].file {
                 file.to_string()
             } else {
                 "resign".to_string()
             },
-            &format!("{:?}", a_way.result),
-            g_pay,
-            g_take
+            &format!("{:?}", files_way[file].result),
+            give_values[file],
+            take_values[file]
         ));
         Log::print_info(&text);
     }
