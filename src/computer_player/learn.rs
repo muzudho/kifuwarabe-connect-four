@@ -435,6 +435,13 @@ impl Learning {
                     [obtainer_files[rand::thread_rng().gen_range(0, obtainer_count) as usize]] += 1;
             }
         }
+        let takes_total = {
+            let mut sum = 0;
+            for file in 0..FILE_LEN {
+                sum += take1_values[file];
+            }
+            sum
+        };
 
         let mut text = String::new();
         text.push_str(&format!(
@@ -442,12 +449,9 @@ impl Learning {
 ",
             result_channel
         ));
-        text.push_str(
-            "[Feature number]
-",
-        );
         text.push_str(&format!(
             "\
+[Feature number]
 File Vert Hori Baro Sini
 ---- ---- ---- ---- ----
 "
@@ -702,13 +706,14 @@ File Vert Hori Baro Sini
 
         let mut text = String::new();
         text.push_str(&format!(
-            "Result channel={:?} Gives total={}
+            "Gives total={} Takes total={} Refund total={}
 ",
-            result_channel, gives_total
+            gives_total, takes_total, refund_total
         ));
 
         text.push_str(&format!(
             "\
+[Learn]
 File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro Sini Total   Take Val  Rest Vert Hori Baro Sini Total Refund Val  Vert Hori Baro Sini Total
 ---- ---- ---- ---- ---- -----        ------ ------        ---- ---- ---- ---- ---- -----        ---- ---- ---- ---- ---- ---- -----        ---- ---- ---- ---- ---- -----
 "
