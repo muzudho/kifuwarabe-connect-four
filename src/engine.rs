@@ -2,8 +2,8 @@
 //! 思考エンジン。  
 
 use crate::{
-    command_line_seek::CommandLineSeek, computer_player::Learning, log::LogExt,
-    look_and_model::Search, Engine, Position,
+    command_line_seek::CommandLineSeek, computer_player::Learning, log::LogExt, Engine, Position,
+    Search,
 };
 use casual_logger::Log;
 

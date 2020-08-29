@@ -1,7 +1,9 @@
 //! Display and data structure.  
 //! 表示と、データ構造です。  
 use crate::computer_player::Evaluation;
-use crate::{GameResult, Piece, Position, SearchDirection, BOARD_LEN, FILE_LEN, SQUARES_NUM};
+use crate::{
+    GameResult, Piece, Position, Search, SearchDirection, BOARD_LEN, FILE_LEN, SQUARES_NUM,
+};
 use std::fmt;
 use std::time::Instant;
 
@@ -134,22 +136,6 @@ impl Position {
     }
 }
 
-/// Search.  
-/// 探索部。  
-pub struct Search {
-    /// The number of stones on the board at the start of this search.  
-    /// この探索の開始時に盤の上に有った石の数。  
-    pub start_pieces_num: usize,
-    /// Number of state nodes searched.  
-    /// 探索した状態ノード数。  
-    pub nodes: u32,
-    /// Start the stopwatch when this structure is created.  
-    /// この構造体を生成した時点からストップ・ウォッチを開始します。  
-    pub stopwatch: Instant,
-    /// Evaluation.
-    /// 評価値。
-    pub evaluation: Evaluation,
-}
 impl Search {
     pub fn new(start_pieces_num: usize) -> Self {
         Search {
