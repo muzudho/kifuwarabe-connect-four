@@ -92,41 +92,60 @@ impl Search {
 
         // Select one at random.
         // ランダムに１つ選びます。
-        if let (Some(file), mut search_info) = self.choose_file(pos, result_channel, evaluation) {
-            // I only look at the empty square.
-            // 空きマスだけを見ます。
-            if !pos.is_file_fill(file) {
-                let mut info_backwarding = None;
-                let (forward_cut_off, info_leaf_child) =
-                    self.node_exit_to_child_side(pos, file, &mut search_info);
-
-                if let None = forward_cut_off {
-                    // If you move forward, it's your opponent's turn.
-                    // 前向きに探索したら、次は対戦相手の番です。
-                    let (_opponent_sq, opponent_game_result) =
-                        self.node(pos, result_channel, evaluation);
-                    // I'm back.
-                    // 戻ってきました。
-                    info_backwarding = Some(opponent_game_result);
-                }
-                let (best_file_child, best_result_child) = &self.node_enter_from_child_side(
-                    pos,
-                    file,
-                    &mut best_win_file,
-                    &mut best_win_result,
-                    forward_cut_off,
-                    info_leaf_child,
-                    info_backwarding,
-                    &mut search_info,
-                );
-                best_win_file = *best_file_child;
-                best_win_result = *best_result_child;
-            }
+        if let (Some(file), mut search_info) = self.choose_file(pos, evaluation, result_channel) {
+            self.node_exit(
+                pos,
+                evaluation,
+                result_channel,
+                file,
+                &mut search_info,
+                &mut best_win_file,
+                &mut best_win_result,
+            );
         }
 
         // End of turn.
         // 手番の終わり。
         (best_win_file, best_win_result)
+    }
+
+    fn node_exit(
+        &mut self,
+        pos: &mut Position,
+        evaluation: &Evaluation,
+        result_channel: &ResultChannel,
+        file: char,
+        search_info: &mut SearchInfo,
+        best_win_file: &mut Option<char>,
+        best_win_result: &mut GameResult,
+    ) {
+        // I only look at the empty square.
+        // 空きマスだけを見ます。
+        if !pos.is_file_fill(file) {
+            let mut info_backwarding = None;
+            let (forward_cut_off, info_leaf_child) =
+                self.node_exit_to_child_side(pos, file, search_info);
+
+            if let None = forward_cut_off {
+                // If you move forward, it's your opponent's turn.
+                // 前向きに探索したら、次は対戦相手の番です。
+                let (_opponent_sq, opponent_game_result) =
+                    self.node(pos, result_channel, evaluation);
+                // I'm back.
+                // 戻ってきました。
+                info_backwarding = Some(opponent_game_result);
+            }
+            self.node_enter_from_child_side(
+                pos,
+                file,
+                best_win_file,
+                best_win_result,
+                forward_cut_off,
+                info_leaf_child,
+                info_backwarding,
+                search_info,
+            );
+        }
     }
 
     fn node_exit_to_child_side(
@@ -195,7 +214,7 @@ impl Search {
         info_leaf: bool,
         info_backwarding: Option<GameResult>,
         search_info: &mut SearchInfo,
-    ) -> (Option<char>, GameResult) {
+    ) {
         let mut backward_cut_off = None;
         // (2) Remove the placed stone.
         // (二) 置いた石は取り除きます。
@@ -277,21 +296,27 @@ impl Search {
         if let Some(forward_cut_off) = forward_cut_off {
             match forward_cut_off {
                 ForwardCutOff::OpponentWin => {
-                    return (Some(file), GameResult::Win);
+                    *best_file = Some(file);
+                    *best_result = GameResult::Win;
+                    return;
                 }
                 ForwardCutOff::Draw => {
-                    return (Some(file), GameResult::Draw);
+                    *best_file = Some(file);
+                    *best_result = GameResult::Draw;
+                    return;
                 }
             }
         } else if let Some(backward_cut_off) = backward_cut_off {
             match backward_cut_off {
                 BackwardCutOff::YouWin => {
-                    return (Some(file), GameResult::Win);
+                    *best_file = Some(file);
+                    *best_result = GameResult::Win;
+                    return;
                 }
             }
         }
 
-        return (*best_file, *best_result);
+        return;
     }
 
     /// Select one file at random.
@@ -299,8 +324,8 @@ impl Search {
     fn choose_file(
         &mut self,
         pos: &Position,
-        result_channel: &ResultChannel,
         evaluation: &Evaluation,
+        result_channel: &ResultChannel,
     ) -> (Option<char>, SearchInfo) {
         let w = evaluation.ways_weight(pos, result_channel);
         let mut search_info = SearchInfo::new(result_channel, &w);
