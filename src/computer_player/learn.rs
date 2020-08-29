@@ -467,8 +467,8 @@ impl Learning {
         ));
         text.push_str(&format!(
             "\
-File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
----- ---- ---- ---- ---- -----      ------ ------       ---- ---- ---- -----
+File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Next
+---- ---- ---- ---- ---- -----      ------ ------       ---- ---- ---- ------ -----
 "
         ));
         text.push_str(&self.file_line_str(
@@ -480,6 +480,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             &give_values,
             &take1_values,
             &rest_values,
+            &refund_values,
         ));
         text.push_str(&self.file_line_str(
             1,
@@ -490,6 +491,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             &give_values,
             &take1_values,
             &rest_values,
+            &refund_values,
         ));
         text.push_str(&self.file_line_str(
             2,
@@ -500,6 +502,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             &give_values,
             &take1_values,
             &rest_values,
+            &refund_values,
         ));
         text.push_str(&self.file_line_str(
             3,
@@ -510,6 +513,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             &give_values,
             &take1_values,
             &rest_values,
+            &refund_values,
         ));
         text.push_str(&self.file_line_str(
             4,
@@ -520,6 +524,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             &give_values,
             &take1_values,
             &rest_values,
+            &refund_values,
         ));
         text.push_str(&self.file_line_str(
             5,
@@ -530,6 +535,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             &give_values,
             &take1_values,
             &rest_values,
+            &refund_values,
         ));
         text.push_str(&self.file_line_str(
             6,
@@ -540,6 +546,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             &give_values,
             &take1_values,
             &rest_values,
+            &refund_values,
         ));
         Log::print_info(&text);
     }
@@ -554,9 +561,10 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
         give_values: &[u16],
         take1_values: &[u16],
         rest_values: &[u16],
+        refund_values: &[u16],
     ) -> String {
         format!(
-            "   {0} {1: >4} {2: >4} {3: >4} {4: >4} {5: >5}      {6: <6} {7: <6}       {8: >4} {9: >4} {10: >4} {11: >5}
+            "   {0} {1: >4} {2: >4} {3: >4} {4: >4} {5: >5}      {6: <6} {7: <6}       {8: >4} {9: >4} {10: >4} {11: >6} {12: >5}
 ",
             file_ch,
             old_tensor[file][0],
@@ -573,6 +581,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             give_values[file],
             take1_values[file],
             rest_values[file],
+            refund_values[file],
             new_tensor[file][0] + new_tensor[file][1] + new_tensor[file][2] + new_tensor[file][3],
         )
     }
