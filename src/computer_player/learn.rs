@@ -126,7 +126,6 @@ impl Learning {
             },
         ];
 
-        let old_tensor = engine.evaluation.ways_weight(&engine.pos, &result_channel);
         // The number of files for which points can be obtained.
         // 点数を得られる列数。
         let mut obtainer = [false; FILE_LEN];
@@ -149,310 +148,363 @@ impl Learning {
                 },
             }
         }
+
+        if obtainer_count < 1 {
+            return;
+        }
+
         let co_obtainer_count = FILE_LEN as u16 - obtainer_count;
         // It can move the evaluation value.
         // 評価値が移動できます。
-        let give_values;
-        let mut take1_values;
-        let gives_total;
-        if 0 < obtainer_count {
-            give_values = [
-                {
-                    let file_ch = 'a';
-                    let old =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    let gives = engine.evaluation.give_value_by_file(
-                        &engine.pos,
-                        file_ch,
-                        &result_channel,
-                        4,
-                    );
-                    let new_ =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    Log::print_info(&format!(
-                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
-                        file_ch,
-                        old[0],
-                        old[1],
-                        old[2],
-                        old[3],
-                        gives,
-                        new_[0],
-                        new_[1],
-                        new_[2],
-                        new_[3],
-                    ));
-                    gives
-                },
-                {
-                    let file_ch = 'b';
-                    let old =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    let gives = engine.evaluation.give_value_by_file(
-                        &engine.pos,
-                        file_ch,
-                        &result_channel,
-                        4,
-                    );
-                    let new_ =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    Log::print_info(&format!(
-                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
-                        file_ch,
-                        old[0],
-                        old[1],
-                        old[2],
-                        old[3],
-                        gives,
-                        new_[0],
-                        new_[1],
-                        new_[2],
-                        new_[3],
-                    ));
-                    gives
-                },
-                {
-                    let file_ch = 'c';
-                    let old =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    let gives = engine.evaluation.give_value_by_file(
-                        &engine.pos,
-                        file_ch,
-                        &result_channel,
-                        4,
-                    );
-                    let new_ =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    Log::print_info(&format!(
-                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
-                        file_ch,
-                        old[0],
-                        old[1],
-                        old[2],
-                        old[3],
-                        gives,
-                        new_[0],
-                        new_[1],
-                        new_[2],
-                        new_[3],
-                    ));
-                    gives
-                },
-                {
-                    let file_ch = 'd';
-                    let old =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    let gives = engine.evaluation.give_value_by_file(
-                        &engine.pos,
-                        file_ch,
-                        &result_channel,
-                        4,
-                    );
-                    let new_ =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    Log::print_info(&format!(
-                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
-                        file_ch,
-                        old[0],
-                        old[1],
-                        old[2],
-                        old[3],
-                        gives,
-                        new_[0],
-                        new_[1],
-                        new_[2],
-                        new_[3],
-                    ));
-                    gives
-                },
-                {
-                    let file_ch = 'e';
-                    let old =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    let gives = engine.evaluation.give_value_by_file(
-                        &engine.pos,
-                        file_ch,
-                        &result_channel,
-                        4,
-                    );
-                    let new_ =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    Log::print_info(&format!(
-                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
-                        file_ch,
-                        old[0],
-                        old[1],
-                        old[2],
-                        old[3],
-                        gives,
-                        new_[0],
-                        new_[1],
-                        new_[2],
-                        new_[3],
-                    ));
-                    gives
-                },
-                {
-                    let file_ch = 'f';
-                    let old =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    let gives = engine.evaluation.give_value_by_file(
-                        &engine.pos,
-                        file_ch,
-                        &result_channel,
-                        4,
-                    );
-                    let new_ =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    Log::print_info(&format!(
-                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
-                        file_ch,
-                        old[0],
-                        old[1],
-                        old[2],
-                        old[3],
-                        gives,
-                        new_[0],
-                        new_[1],
-                        new_[2],
-                        new_[3],
-                    ));
-                    gives
-                },
-                {
-                    let file_ch = 'g';
-                    let old =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    let gives = engine.evaluation.give_value_by_file(
-                        &engine.pos,
-                        file_ch,
-                        &result_channel,
-                        4,
-                    );
-                    let new_ =
-                        engine
-                            .evaluation
-                            .get_values_by_file(&engine.pos, file_ch, &result_channel);
-                    Log::print_info(&format!(
-                        "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
-                        file_ch,
-                        old[0],
-                        old[1],
-                        old[2],
-                        old[3],
-                        gives,
-                        new_[0],
-                        new_[1],
-                        new_[2],
-                        new_[3],
-                    ));
-                    gives
-                },
-            ];
-            gives_total = {
-                let mut sum = 0;
-                for file in 0..FILE_LEN {
-                    sum += give_values[file];
-                }
-                sum
-            };
-            let obtain_point = gives_total / obtainer_count;
-            let rest_point = gives_total % obtainer_count;
-            take1_values = [
-                {
-                    if obtainer[0] {
-                        obtain_point
-                    } else {
-                        0
-                    }
-                },
-                {
-                    if obtainer[1] {
-                        obtain_point
-                    } else {
-                        0
-                    }
-                },
-                {
-                    if obtainer[2] {
-                        obtain_point
-                    } else {
-                        0
-                    }
-                },
-                {
-                    if obtainer[3] {
-                        obtain_point
-                    } else {
-                        0
-                    }
-                },
-                {
-                    if obtainer[4] {
-                        obtain_point
-                    } else {
-                        0
-                    }
-                },
-                {
-                    if obtainer[5] {
-                        obtain_point
-                    } else {
-                        0
-                    }
-                },
-                {
-                    if obtainer[6] {
-                        obtain_point
-                    } else {
-                        0
-                    }
-                },
-            ];
+        let old_tensor = engine.evaluation.ways_weight(&engine.pos, &result_channel);
+        let give_values = [
             {
-                let mut obtainer_files = Vec::<usize>::new();
-                for file in 0..FILE_LEN {
-                    if obtainer[file] {
-                        obtainer_files.push(file);
-                    }
+                let file_ch = 'a';
+                let old =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                let gives =
+                    engine
+                        .evaluation
+                        .give_value_by_file(&engine.pos, file_ch, &result_channel, 4);
+                let new_ =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                Log::print_info(&format!(
+                    "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                    file_ch,
+                    old[0],
+                    old[1],
+                    old[2],
+                    old[3],
+                    gives,
+                    new_[0],
+                    new_[1],
+                    new_[2],
+                    new_[3],
+                ));
+                gives
+            },
+            {
+                let file_ch = 'b';
+                let old =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                let gives =
+                    engine
+                        .evaluation
+                        .give_value_by_file(&engine.pos, file_ch, &result_channel, 4);
+                let new_ =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                Log::print_info(&format!(
+                    "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                    file_ch,
+                    old[0],
+                    old[1],
+                    old[2],
+                    old[3],
+                    gives,
+                    new_[0],
+                    new_[1],
+                    new_[2],
+                    new_[3],
+                ));
+                gives
+            },
+            {
+                let file_ch = 'c';
+                let old =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                let gives =
+                    engine
+                        .evaluation
+                        .give_value_by_file(&engine.pos, file_ch, &result_channel, 4);
+                let new_ =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                Log::print_info(&format!(
+                    "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                    file_ch,
+                    old[0],
+                    old[1],
+                    old[2],
+                    old[3],
+                    gives,
+                    new_[0],
+                    new_[1],
+                    new_[2],
+                    new_[3],
+                ));
+                gives
+            },
+            {
+                let file_ch = 'd';
+                let old =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                let gives =
+                    engine
+                        .evaluation
+                        .give_value_by_file(&engine.pos, file_ch, &result_channel, 4);
+                let new_ =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                Log::print_info(&format!(
+                    "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                    file_ch,
+                    old[0],
+                    old[1],
+                    old[2],
+                    old[3],
+                    gives,
+                    new_[0],
+                    new_[1],
+                    new_[2],
+                    new_[3],
+                ));
+                gives
+            },
+            {
+                let file_ch = 'e';
+                let old =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                let gives =
+                    engine
+                        .evaluation
+                        .give_value_by_file(&engine.pos, file_ch, &result_channel, 4);
+                let new_ =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                Log::print_info(&format!(
+                    "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                    file_ch,
+                    old[0],
+                    old[1],
+                    old[2],
+                    old[3],
+                    gives,
+                    new_[0],
+                    new_[1],
+                    new_[2],
+                    new_[3],
+                ));
+                gives
+            },
+            {
+                let file_ch = 'f';
+                let old =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                let gives =
+                    engine
+                        .evaluation
+                        .give_value_by_file(&engine.pos, file_ch, &result_channel, 4);
+                let new_ =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                Log::print_info(&format!(
+                    "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                    file_ch,
+                    old[0],
+                    old[1],
+                    old[2],
+                    old[3],
+                    gives,
+                    new_[0],
+                    new_[1],
+                    new_[2],
+                    new_[3],
+                ));
+                gives
+            },
+            {
+                let file_ch = 'g';
+                let old =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                let gives =
+                    engine
+                        .evaluation
+                        .give_value_by_file(&engine.pos, file_ch, &result_channel, 4);
+                let new_ =
+                    engine
+                        .evaluation
+                        .get_values_by_file(&engine.pos, file_ch, &result_channel);
+                Log::print_info(&format!(
+                    "{} old=|{}|{}|{}|{}| gives={} new=|{}|{}|{}|{}|",
+                    file_ch,
+                    old[0],
+                    old[1],
+                    old[2],
+                    old[3],
+                    gives,
+                    new_[0],
+                    new_[1],
+                    new_[2],
+                    new_[3],
+                ));
+                gives
+            },
+        ];
+        let gives_total = {
+            let mut sum = 0;
+            for file in 0..FILE_LEN {
+                sum += give_values[file];
+            }
+            sum
+        };
+        let obtain_point = gives_total / obtainer_count;
+        let rest_point = gives_total % obtainer_count;
+        let mut take1_values = [
+            {
+                if obtainer[0] {
+                    obtain_point
+                } else {
+                    0
                 }
-                Log::print_info(&format!("obtainer_files={:?}", obtainer_files));
-                for _i in 0..rest_point {
-                    take1_values[obtainer_files
-                        [rand::thread_rng().gen_range(0, obtainer_count) as usize]] += 1;
+            },
+            {
+                if obtainer[1] {
+                    obtain_point
+                } else {
+                    0
+                }
+            },
+            {
+                if obtainer[2] {
+                    obtain_point
+                } else {
+                    0
+                }
+            },
+            {
+                if obtainer[3] {
+                    obtain_point
+                } else {
+                    0
+                }
+            },
+            {
+                if obtainer[4] {
+                    obtain_point
+                } else {
+                    0
+                }
+            },
+            {
+                if obtainer[5] {
+                    obtain_point
+                } else {
+                    0
+                }
+            },
+            {
+                if obtainer[6] {
+                    obtain_point
+                } else {
+                    0
+                }
+            },
+        ];
+        {
+            let mut obtainer_files = Vec::<usize>::new();
+            for file in 0..FILE_LEN {
+                if obtainer[file] {
+                    obtainer_files.push(file);
                 }
             }
-        } else {
-            give_values = [0, 0, 0, 0, 0, 0, 0];
-            take1_values = [0, 0, 0, 0, 0, 0, 0];
-            gives_total = 0;
+            Log::print_info(&format!("obtainer_files={:?}", obtainer_files));
+            for _i in 0..rest_point {
+                take1_values
+                    [obtainer_files[rand::thread_rng().gen_range(0, obtainer_count) as usize]] += 1;
+            }
         }
+
+        let mut text = String::new();
+        text.push_str(&format!(
+            "Result channel={:?} Gives total={}
+",
+            result_channel, gives_total
+        ));
+        text.push_str(&format!(
+            "\
+File Vert Hori Baro Sini Total Best File   Result Learn Give Next Vert Hori Baro Sini Total
+---- ---- ---- ---- ---- -----      ------ ------       ----      ---- ---- ---- ---- -----
+"
+        ));
+        text.push_str(&self.file_give_line_str(
+            0,
+            'a',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+        ));
+        text.push_str(&self.file_give_line_str(
+            1,
+            'b',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+        ));
+        text.push_str(&self.file_give_line_str(
+            2,
+            'c',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+        ));
+        text.push_str(&self.file_give_line_str(
+            3,
+            'd',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+        ));
+        text.push_str(&self.file_give_line_str(
+            4,
+            'e',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+        ));
+        text.push_str(&self.file_give_line_str(
+            5,
+            'f',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+        ));
+        text.push_str(&self.file_give_line_str(
+            6,
+            'g',
+            &old_tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
+            &files_way,
+            &give_values,
+        ));
+        Log::print_info(&text);
 
         let rest_values = [
             {
@@ -513,6 +565,7 @@ impl Learning {
             },
         ];
 
+        let old_tensor = engine.evaluation.ways_weight(&engine.pos, &result_channel);
         let mut text = String::new();
         text.push_str(&format!(
             "Result channel={:?} Gives total={}
@@ -525,7 +578,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next Vert
 ---- ---- ---- ---- ---- -----      ------ ------       ---- ---- ----      ---- ---- ---- ---- -----
 "
         ));
-        text.push_str(&self.file_give_line_str(
+        text.push_str(&self.file_take_line_str(
             0,
             'a',
             &old_tensor,
@@ -535,7 +588,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next Vert
             &take1_values,
             &rest_values,
         ));
-        text.push_str(&self.file_give_line_str(
+        text.push_str(&self.file_take_line_str(
             1,
             'b',
             &old_tensor,
@@ -545,7 +598,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next Vert
             &take1_values,
             &rest_values,
         ));
-        text.push_str(&self.file_give_line_str(
+        text.push_str(&self.file_take_line_str(
             2,
             'c',
             &old_tensor,
@@ -555,7 +608,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next Vert
             &take1_values,
             &rest_values,
         ));
-        text.push_str(&self.file_give_line_str(
+        text.push_str(&self.file_take_line_str(
             3,
             'd',
             &old_tensor,
@@ -565,7 +618,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next Vert
             &take1_values,
             &rest_values,
         ));
-        text.push_str(&self.file_give_line_str(
+        text.push_str(&self.file_take_line_str(
             4,
             'e',
             &old_tensor,
@@ -575,7 +628,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next Vert
             &take1_values,
             &rest_values,
         ));
-        text.push_str(&self.file_give_line_str(
+        text.push_str(&self.file_take_line_str(
             5,
             'f',
             &old_tensor,
@@ -585,7 +638,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next Vert
             &take1_values,
             &rest_values,
         ));
-        text.push_str(&self.file_give_line_str(
+        text.push_str(&self.file_take_line_str(
             6,
             'g',
             &old_tensor,
@@ -747,6 +800,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next Vert
             )))
         }
 
+        let old_tensor = engine.evaluation.ways_weight(&engine.pos, &result_channel);
         let mut text = String::new();
         text.push_str(&format!(
             "Result channel={:?} Gives total={}
@@ -840,6 +894,39 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Refund Ne
     }
 
     fn file_give_line_str(
+        &self,
+        file: usize,
+        file_ch: char,
+        old_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
+        new_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
+        files_way: &[Bestmove; FILE_LEN],
+        give_values: &[u16],
+    ) -> String {
+        format!(
+            "   {0} {1: >4} {2: >4} {3: >4} {4: >4} {5: >5}      {6: <6} {7: <6}       {8: >4}      {9: >4} {10: >4} {11: >4} {12: >4} {13: >5}
+",
+            file_ch,
+            old_tensor[file][0],
+            old_tensor[file][1],
+            old_tensor[file][2],
+            old_tensor[file][3],
+            old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
+            if let Some(file) = files_way[file].file {
+                file.to_string()
+            } else {
+                "resign".to_string()
+            },
+            &format!("{:?}", files_way[file].result),
+            give_values[file],
+            new_tensor[file][0],
+            new_tensor[file][1],
+            new_tensor[file][2],
+            new_tensor[file][3],
+            new_tensor[file][0] + new_tensor[file][1] + new_tensor[file][2] + new_tensor[file][3],
+        )
+    }
+
+    fn file_take_line_str(
         &self,
         file: usize,
         file_ch: char,
