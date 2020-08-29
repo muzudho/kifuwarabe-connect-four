@@ -150,6 +150,58 @@ impl Evaluation {
             ))),
         }
     }
+
+    pub fn give_value_by_file(
+        &mut self,
+        pos: &Position,
+        file: char,
+        result_channel: &ResultChannel,
+        mut enter_value: u16,
+    ) -> u16 {
+        let mut exit_value = 0;
+        let sq = pos.fallen_sq_or_none(file);
+        for _retry in 0..FEATURE_V_H_B_S_LEN {
+            let features = {
+                let features: [Option<u8>; FEATURE_V_H_B_S_LEN] =
+                    self.get_elemental_features_by_sq(sq);
+                let mut vec = Vec::new();
+                for feature in features.iter() {
+                    if let Some(feature) = feature {
+                        let state = self.get_state_by_feature(pos, *feature) as usize;
+                        let curr = self.get_value(*feature, state, result_channel, pos.turn);
+                        if 0 < curr {
+                            vec.push(feature.clone());
+                        }
+                    }
+                }
+                vec
+            };
+            if features.is_empty() {
+                break;
+            }
+            let mut trial = enter_value;
+            while 0 < trial {
+                for feature in &features {
+                    if trial < 1 {
+                        break;
+                    }
+                    let state = self.get_state_by_feature(pos, *feature) as usize;
+                    let curr = self.get_value(*feature, state, result_channel, pos.turn);
+                    if curr < 255 {
+                        self.set_value(*feature, state, result_channel, pos.turn, curr - 1);
+                        enter_value -= 1;
+                        exit_value += 1;
+                    }
+                    trial -= 1;
+                }
+            }
+            if enter_value < 1 {
+                break;
+            }
+        }
+
+        exit_value
+    }
     /// The evaluation value is assigned to each feature.  
     /// 各特徴に評価値を振り分けます。  
     ///
@@ -193,7 +245,7 @@ impl Evaluation {
                     let state = self.get_state_by_feature(pos, *feature) as usize;
                     let curr = self.get_value(*feature, state, result_channel, pos.turn);
                     if curr < 255 {
-                        self.set_value(*feature, state, result_channel, pos.turn, 1);
+                        self.set_value(*feature, state, result_channel, pos.turn, curr + 1);
                         value -= 1;
                     }
                     trial -= 1;

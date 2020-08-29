@@ -126,8 +126,7 @@ impl Learning {
             },
         ];
 
-        let mut tensor = engine.evaluation.ways_weight(&engine.pos, &result_channel);
-        let old_tensor = tensor.clone();
+        let old_tensor = engine.evaluation.ways_weight(&engine.pos, &result_channel);
         // The number of files for which points can be obtained.
         // 点数を得られる列数。
         let mut obtainer = [false; FILE_LEN];
@@ -157,13 +156,27 @@ impl Learning {
         let mut take1_values = [0, 0, 0, 0, 0, 0, 0];
         if 0 < obtainer_count {
             give_values = [
-                Learning::give(&mut tensor, 0),
-                Learning::give(&mut tensor, 1),
-                Learning::give(&mut tensor, 2),
-                Learning::give(&mut tensor, 3),
-                Learning::give(&mut tensor, 4),
-                Learning::give(&mut tensor, 5),
-                Learning::give(&mut tensor, 6),
+                engine
+                    .evaluation
+                    .give_value_by_file(&engine.pos, 'a', &result_channel, 4),
+                engine
+                    .evaluation
+                    .give_value_by_file(&engine.pos, 'b', &result_channel, 4),
+                engine
+                    .evaluation
+                    .give_value_by_file(&engine.pos, 'c', &result_channel, 4),
+                engine
+                    .evaluation
+                    .give_value_by_file(&engine.pos, 'd', &result_channel, 4),
+                engine
+                    .evaluation
+                    .give_value_by_file(&engine.pos, 'e', &result_channel, 4),
+                engine
+                    .evaluation
+                    .give_value_by_file(&engine.pos, 'f', &result_channel, 4),
+                engine
+                    .evaluation
+                    .give_value_by_file(&engine.pos, 'g', &result_channel, 4),
             ];
             let gives_total = {
                 let mut sum = 0;
@@ -462,7 +475,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             0,
             'a',
             &old_tensor,
-            &tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
             &take1_values,
@@ -472,7 +485,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             1,
             'b',
             &old_tensor,
-            &tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
             &take1_values,
@@ -482,7 +495,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             2,
             'c',
             &old_tensor,
-            &tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
             &take1_values,
@@ -492,7 +505,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             3,
             'd',
             &old_tensor,
-            &tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
             &take1_values,
@@ -502,7 +515,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             4,
             'e',
             &old_tensor,
-            &tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
             &take1_values,
@@ -512,7 +525,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             5,
             'f',
             &old_tensor,
-            &tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
             &take1_values,
@@ -522,7 +535,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             6,
             'g',
             &old_tensor,
-            &tensor,
+            &engine.evaluation.ways_weight(&engine.pos, &result_channel),
             &files_way,
             &give_values,
             &take1_values,
@@ -536,7 +549,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
         file: usize,
         file_ch: char,
         old_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
-        tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
+        new_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
         files_way: &[Bestmove; FILE_LEN],
         give_values: &[u16],
         take1_values: &[u16],
@@ -560,40 +573,7 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
             give_values[file],
             take1_values[file],
             rest_values[file],
-            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+            new_tensor[file][0] + new_tensor[file][1] + new_tensor[file][2] + new_tensor[file][3],
         )
-    }
-
-    fn give(tensor: &mut [[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN], file: usize) -> u16 {
-        let mut give = 0;
-        {
-            let feat = 0;
-            if 0 < tensor[file][feat] {
-                tensor[file][feat] -= 1;
-                give += 1;
-            }
-        }
-        {
-            let feat = 1;
-            if 0 < tensor[file][feat] {
-                tensor[file][feat] -= 1;
-                give += 1;
-            }
-        }
-        {
-            let feat = 2;
-            if 0 < tensor[file][feat] {
-                tensor[file][feat] -= 1;
-                give += 1;
-            }
-        }
-        {
-            let feat = 3;
-            if 0 < tensor[file][feat] {
-                tensor[file][feat] -= 1;
-                give += 1;
-            }
-        }
-        give
     }
 }
