@@ -16,6 +16,7 @@ impl Default for Engine {
             evaluation: Evaluation::default(),
             bestmove: None,
             undone: false,
+            game_result: None,
         }
     }
 }
@@ -77,7 +78,9 @@ Let's input from `pos`.
         if p.starts_with("do") {
             p.go_next_to("do ");
             if let Some(rest) = p.rest() {
-                self.pos.do_(rest);
+                self.game_result = self.pos.do_(rest);
+            } else {
+                self.game_result = None;
             }
         } else if p.starts_with("uh") {
             // uh...
@@ -89,8 +92,8 @@ Let's input from `pos`.
             search.start_pieces_num = self.pos.pieces_num;
             let bestmove = search.go(&mut self.pos, &self.evaluation);
             Log::print_info(&format!(
-                "info string result={:?} nps={}",
-                bestmove.result,
+                "info string pred_result={:?} nps={}",
+                bestmove.pred_result,
                 search.nps()
             ));
 

@@ -31,6 +31,9 @@ impl Learning {
                         engine.enter(&format!("do {}", chosen_file));
                         engine.enter("pos");
                         engine.enter("xfen");
+                        if let Some(_) = engine.game_result {
+                            break;
+                        }
                     } else {
                         break;
                     }
@@ -167,14 +170,14 @@ impl Learning {
         let mut obtainer_count = 0;
         for file in 0..FILE_LEN {
             match result_channel {
-                ResultChannel::Win => match files_way[file].result {
+                ResultChannel::Win => match files_way[file].pred_result {
                     GameResult::Win => {
                         obtainer[file] = true;
                         obtainer_count += 1;
                     }
                     _ => {}
                 },
-                ResultChannel::Draw => match files_way[file].result {
+                ResultChannel::Draw => match files_way[file].pred_result {
                     GameResult::Draw => {
                         obtainer[file] = true;
                         obtainer_count += 1;
@@ -919,7 +922,7 @@ File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro S
             } else {
                 "resign".to_string()
             },
-            &format!("{:?}", files_way[file].result),
+            &format!("{:?}", files_way[file].pred_result),
             //
             give_values[file],
             tensor_before_take[file][0],

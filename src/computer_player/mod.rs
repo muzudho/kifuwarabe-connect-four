@@ -38,7 +38,9 @@ pub struct Learning {}
 /// 次の一手。  
 pub struct Bestmove {
     pub file: Option<char>,
-    pub result: GameResult,
+    /// Prediction result.  
+    /// 結果予測。  
+    pub pred_result: GameResult,
 }
 
 /// Search.  

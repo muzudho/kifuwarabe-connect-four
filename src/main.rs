@@ -124,6 +124,10 @@ pub struct Engine {
     /// Undone.  
     /// アンドゥした。  
     undone: bool,
+
+    /// Game result.  
+    /// ゲームの結果。  
+    game_result: Option<GameResult>,
 }
 
 /// It is a game that can be playout, so please use the result instead of the evaluation value.  

@@ -16,7 +16,7 @@ impl Default for Bestmove {
     fn default() -> Self {
         Bestmove {
             file: None,
-            result: GameResult::Lose,
+            pred_result: GameResult::Lose,
         }
     }
 }
@@ -52,7 +52,7 @@ impl Search {
     ///                     評価値。  
     pub fn go(&mut self, pos: &mut Position, evaluation: &Evaluation) -> Bestmove {
         let bestmove_to_win = self.node(pos, evaluation, &ResultChannel::Win);
-        match bestmove_to_win.result {
+        match bestmove_to_win.pred_result {
             GameResult::Win => {
                 return bestmove_to_win;
             }
@@ -60,7 +60,7 @@ impl Search {
         }
 
         let bestmove_to_draw = self.node(pos, evaluation, &ResultChannel::Draw);
-        match bestmove_to_draw.result {
+        match bestmove_to_draw.pred_result {
             GameResult::Draw => {
                 return bestmove_to_draw;
             }
@@ -135,7 +135,7 @@ impl Search {
                 let opponent_bestmove = self.node(pos, evaluation, result_channel);
                 // I'm back.
                 // 戻ってきました。
-                info_backwarding = Some(opponent_bestmove.result);
+                info_backwarding = Some(opponent_bestmove.pred_result);
             }
             self.node_enter_from_child_side(
                 pos,
@@ -234,12 +234,12 @@ impl Search {
                     // If neither is wrong, draw.
                     // お互いがミスしなければ引き分け。
 
-                    match bestmove.result {
+                    match bestmove.pred_result {
                         GameResult::Lose => {
                             // If it gets better, change it to this. Generally called 'Update alpha evaluation'.
                             // 良くなるならこの手に変えます。一般的には 'α評価値の更新' と呼びます。
                             bestmove.file = Some(file);
-                            bestmove.result = GameResult::Draw;
+                            bestmove.pred_result = GameResult::Draw;
                         }
                         _ => {}
                     }
@@ -297,12 +297,12 @@ impl Search {
             match forward_cut_off {
                 ForwardCutOff::OpponentWin => {
                     bestmove.file = Some(file);
-                    bestmove.result = GameResult::Win;
+                    bestmove.pred_result = GameResult::Win;
                     return;
                 }
                 ForwardCutOff::Draw => {
                     bestmove.file = Some(file);
-                    bestmove.result = GameResult::Draw;
+                    bestmove.pred_result = GameResult::Draw;
                     return;
                 }
             }
@@ -310,7 +310,7 @@ impl Search {
             match backward_cut_off {
                 BackwardCutOff::YouWin => {
                     bestmove.file = Some(file);
-                    bestmove.result = GameResult::Win;
+                    bestmove.pred_result = GameResult::Win;
                     return;
                 }
             }

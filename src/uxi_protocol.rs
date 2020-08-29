@@ -180,7 +180,12 @@ impl Position {
     /// # Arguments
     ///
     /// * `arg_str` - The rest of the command line. Here is the place to put the pieces. For example, `1` or `7`. (コマンドラインの残り。ここでは駒を置く場所。 `1` とか `7` など)
-    pub fn do_(&mut self, arg_str: &str) {
+    ///
+    /// # Return
+    ///
+    /// Game result.  
+    /// ゲームの結果。  
+    pub fn do_(&mut self, arg_str: &str) -> Option<GameResult> {
         let file: char = match arg_str.parse() {
             Ok(x) => x,
             Err(_x) => {
@@ -188,7 +193,7 @@ impl Position {
                     "(Err.194) Please input 'do <file>'. args=|{}|",
                     arg_str
                 ));
-                return;
+                return None;
             }
         };
 
@@ -198,7 +203,7 @@ impl Position {
             'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' => {}
             _ => {
                 Log::error(&format!("(Err.204) Specify from a to g. File={}", file));
-                return;
+                return None;
             }
         }
         if self.is_file_fill(file) {
@@ -206,7 +211,7 @@ impl Position {
                 "(Err.211) Please put it in a place where there are no pieces. File={}",
                 file
             ));
-            return;
+            return None;
         }
 
         self.redo_move(file);
@@ -217,11 +222,15 @@ impl Position {
             if let Some(result) = Position::result(GameResult::Win, Some(self.opponent())) {
                 Log::print_notice(&result);
             }
+            return Some(GameResult::Win);
         } else if self.is_draw() {
             if let Some(result) = Position::result(GameResult::Draw, None) {
                 Log::print_notice(&result);
             }
+            return Some(GameResult::Draw);
         }
+
+        return None;
     }
 
     /// 1 back.  
