@@ -327,16 +327,65 @@ impl Search {
         evaluation: &Evaluation,
         result_channel: &ResultChannel,
     ) -> (Option<char>, SearchInfo) {
-        let w = evaluation.ways_weight(pos, result_channel);
-        let mut search_info = SearchInfo::new(result_channel, &w);
+        let tensor = evaluation.ways_weight(pos, result_channel);
+        let mut search_info = SearchInfo::new(result_channel, &tensor);
+        let w_a: u16 = {
+            let file = 0;
+            tensor[file][0] as u16
+                + tensor[file][1] as u16
+                + tensor[file][2] as u16
+                + tensor[file][3] as u16
+        };
+        let w_b: u16 = {
+            let file = 1;
+            tensor[file][0] as u16
+                + tensor[file][1] as u16
+                + tensor[file][2] as u16
+                + tensor[file][3] as u16
+        };
+        let w_c: u16 = {
+            let file = 2;
+            tensor[file][0] as u16
+                + tensor[file][1] as u16
+                + tensor[file][2] as u16
+                + tensor[file][3] as u16
+        };
+        let w_d: u16 = {
+            let file = 3;
+            tensor[file][0] as u16
+                + tensor[file][1] as u16
+                + tensor[file][2] as u16
+                + tensor[file][3] as u16
+        };
+        let w_e: u16 = {
+            let file = 4;
+            tensor[file][0] as u16
+                + tensor[file][1] as u16
+                + tensor[file][2] as u16
+                + tensor[file][3] as u16
+        };
+        let w_f: u16 = {
+            let file = 5;
+            tensor[file][0] as u16
+                + tensor[file][1] as u16
+                + tensor[file][2] as u16
+                + tensor[file][3] as u16
+        };
+        let w_g: u16 = {
+            let file = 6;
+            tensor[file][0] as u16
+                + tensor[file][1] as u16
+                + tensor[file][2] as u16
+                + tensor[file][3] as u16
+        };
         // Upper bound.
-        let a_up: u16 = w[0] as u16;
-        let b_up = a_up + w[1] as u16;
-        let c_up = b_up + w[2] as u16;
-        let d_up = c_up + w[3] as u16;
-        let e_up = d_up + w[4] as u16;
-        let f_up = e_up + w[5] as u16;
-        let total = f_up + w[6] as u16;
+        let a_up = w_a;
+        let b_up = a_up + w_b;
+        let c_up = b_up + w_c;
+        let d_up = c_up + w_d;
+        let e_up = d_up + w_e;
+        let f_up = e_up + w_f;
+        let total = f_up + w_g;
         if total == 0 {
             if pos.info_enabled {
                 search_info.chosen_file = None;

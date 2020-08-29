@@ -196,8 +196,8 @@ pub struct SearchInfo {
     /// Weight of move probability.  
     /// 指し手確率の重み。  
     ///
-    /// [a, b, c, d, e, f, g]  
-    pub ways_weight: [u8; FILE_LEN],
+    /// [[0-255; vertical, horizontal, baroque diagonal, sinister diagonal]; a, b, c, d, e, f ,g]  
+    pub weight_tensor: [[u8; 4]; FILE_LEN],
 
     /// Node per seconds.  
     /// 秒間状態ノード数。  

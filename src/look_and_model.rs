@@ -137,10 +137,13 @@ impl Position {
 }
 
 impl SearchInfo {
-    pub fn new(result_channel: &ResultChannel, ways_weight: &[u8; FILE_LEN]) -> Self {
+    /// # Arguments
+    ///
+    /// * `weight_tensor` - [[0-255; vertical, horizontal, baroque diagonal, sinister diagonal]; a, b, c, d, e, f ,g]
+    pub fn new(result_channel: &ResultChannel, weight_tensor: &[[u8; 4]; FILE_LEN]) -> Self {
         SearchInfo {
             result_channel: *result_channel,
-            ways_weight: *ways_weight,
+            weight_tensor: *weight_tensor,
             nps: 0,
             nodes: 0,
             pv: "".to_string(),
@@ -156,7 +159,10 @@ impl SearchInfo {
     pub fn get_total_weight(&self) -> u16 {
         let mut sum: u16 = 0;
         for i in 0..FILE_LEN {
-            sum += self.ways_weight[i] as u16;
+            sum += self.weight_tensor[i][0] as u16
+                + self.weight_tensor[i][1] as u16
+                + self.weight_tensor[i][2] as u16
+                + self.weight_tensor[i][3] as u16;
         }
         sum
     }
@@ -204,13 +210,13 @@ impl SearchInfo {
                 ' '
             },
             self.get_total_weight(),
-            self.ways_weight[0],
-            self.ways_weight[1],
-            self.ways_weight[2],
-            self.ways_weight[3],
-            self.ways_weight[4],
-            self.ways_weight[5],
-            self.ways_weight[6],
+            self.weight_tensor[0][0] as u16 + self.weight_tensor[0][1] as u16 + self.weight_tensor[0][2] as u16 + self.weight_tensor[0][3] as u16,
+            self.weight_tensor[1][0] as u16 + self.weight_tensor[1][1] as u16 + self.weight_tensor[1][2] as u16 + self.weight_tensor[1][3] as u16,
+            self.weight_tensor[2][0] as u16 + self.weight_tensor[2][1] as u16 + self.weight_tensor[2][2] as u16 + self.weight_tensor[2][3] as u16,
+            self.weight_tensor[3][0] as u16 + self.weight_tensor[3][1] as u16 + self.weight_tensor[3][2] as u16 + self.weight_tensor[3][3] as u16,
+            self.weight_tensor[4][0] as u16 + self.weight_tensor[4][1] as u16 + self.weight_tensor[4][2] as u16 + self.weight_tensor[4][3] as u16,
+            self.weight_tensor[5][0] as u16 + self.weight_tensor[5][1] as u16 + self.weight_tensor[5][2] as u16 + self.weight_tensor[5][3] as u16,
+            self.weight_tensor[6][0] as u16 + self.weight_tensor[6][1] as u16 + self.weight_tensor[6][2] as u16 + self.weight_tensor[6][3] as u16,
             self.pv,
         )
         .to_string()

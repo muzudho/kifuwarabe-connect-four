@@ -27,18 +27,30 @@ impl Default for Evaluation {
     }
 }
 impl Evaluation {
-    /// [a, b, c, d, e, f, g]
-    pub fn ways_weight(&self, pos: &Position, result_channel: &ResultChannel) -> [u8; FILE_LEN] {
+    /// [
+    ///     [a1,a2,a3,a4],
+    ///     [b1,b2,b3,b4],
+    ///     [c1,c2,c3,c4],
+    ///     [d1,d2,d3,d4],
+    ///     [e1,e2,e3,e4],
+    ///     [f1,f2,f3,f4],
+    ///     [g1,g2,g3,g4],
+    /// ]
+    pub fn ways_weight(
+        &self,
+        pos: &Position,
+        result_channel: &ResultChannel,
+    ) -> [[u8; 4]; FILE_LEN] {
         // マスの特徴量を求めます。
         // 7つの指し手のマスを調べます。
         let win_way_values = [
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('a'), result_channel),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('b'), result_channel),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('c'), result_channel),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('d'), result_channel),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('e'), result_channel),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('f'), result_channel),
-            self.get_value_by_sq(pos, pos.fallen_sq_or_none('g'), result_channel),
+            self.get_value_by_file(pos, 'a', result_channel),
+            self.get_value_by_file(pos, 'b', result_channel),
+            self.get_value_by_file(pos, 'c', result_channel),
+            self.get_value_by_file(pos, 'd', result_channel),
+            self.get_value_by_file(pos, 'e', result_channel),
+            self.get_value_by_file(pos, 'f', result_channel),
+            self.get_value_by_file(pos, 'g', result_channel),
         ];
 
         [
@@ -52,18 +64,21 @@ impl Evaluation {
         ]
     }
 
-    fn get_value_by_sq(
+    fn get_value_by_file(
         &self,
         pos: &Position,
-        sq: Option<usize>,
+        file: char,
         result_channel: &ResultChannel,
-    ) -> u8 {
-        let mut sum = 0;
-        for feature in &self.get_elemental_features_by_sq(sq) {
-            sum += self.get_value_by_feature(pos, *feature, result_channel);
-        }
+    ) -> [u8; 4] {
+        let sq = pos.fallen_sq_or_none(file);
 
-        sum
+        let features: [Option<u8>; 4] = self.get_elemental_features_by_sq(sq);
+        [
+            self.get_value_by_feature(pos, features[0], result_channel),
+            self.get_value_by_feature(pos, features[1], result_channel),
+            self.get_value_by_feature(pos, features[2], result_channel),
+            self.get_value_by_feature(pos, features[3], result_channel),
+        ]
     }
 
     fn get_value_by_feature(

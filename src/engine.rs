@@ -80,11 +80,59 @@ Let's input from `pos`.
         } else if p.starts_with("feat") {
             let mut search = Search::default();
             search.start_pieces_num = self.pos.pieces_num;
-            let w = self.evaluation.ways_weight(&self.pos, &ResultChannel::Win);
-            Log::print_info(&format!(
-                "feat: a={} b={} c={} d={} e={} f={} g={}",
-                w[0], w[1], w[2], w[3], w[4], w[5], w[6]
+            let tensor = self.evaluation.ways_weight(&self.pos, &ResultChannel::Win);
+            let mut text = String::new();
+            text.push_str(&format!(
+                "File Vert Hori Baro Sini
+"
             ));
+            text.push_str(&format!(
+                "---- ---- ---- ---- ----
+"
+            ));
+            let file = 0;
+            text.push_str(&format!(
+                "   a {0 } {1 } {2 } {3 }
+",
+                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+            ));
+            let file = 1;
+            text.push_str(&format!(
+                "   b {0 } {1 } {2 } {3 }
+",
+                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+            ));
+            let file = 2;
+            text.push_str(&format!(
+                "   c {0 } {1 } {2 } {3 }
+",
+                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+            ));
+            let file = 3;
+            text.push_str(&format!(
+                "   d {0 } {1 } {2 } {3 }
+",
+                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+            ));
+            let file = 4;
+            text.push_str(&format!(
+                "   e {0 } {1 } {2 } {3 }
+",
+                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+            ));
+            let file = 5;
+            text.push_str(&format!(
+                "   f {0 } {1 } {2 } {3 }
+",
+                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+            ));
+            let file = 6;
+            text.push_str(&format!(
+                "   g {0 } {1 } {2 } {3 }
+",
+                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+            ));
+            Log::print_info(&text);
         } else if p.starts_with("go") {
             let mut search = Search::default();
             search.start_pieces_num = self.pos.pieces_num;

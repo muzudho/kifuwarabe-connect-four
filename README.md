@@ -116,6 +116,7 @@ Let's larning a computer thinking.
     * [x] ways_weight.
     * [x] Save.
     * [x] Load.
+    * [ ] Print some feature.
 * [ ] Step 13. `computer_player/learn.rs`
 
 Finally.
