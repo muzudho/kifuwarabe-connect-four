@@ -62,7 +62,7 @@ pub fn test() {
 
   let mut search = Search::default();
   search.start_pieces_num = pos.pieces_num;
-  Log::print_debug(&format!("pv=|{}|", pos.pv_json));
+  Log::print_debug(&format!("pv=|{}|", pos.pv_json()));
   // pv=||
   // 適当な内容を入れて、入れ物として、入れた中身を見せてくれるか、チェックしろだぜ☆（＾～＾）
   let mut search_info = SearchInfo::default();
@@ -78,7 +78,7 @@ pub fn test() {
   ];
   search_info.nps = 123;
   search_info.nodes = search.nodes;
-  search_info.pv_json = pos.pv_json.to_string();
+  search_info.pv_json = pos.pv_json();
   search_info.search_direction = SearchDirection::Forward;
   search_info.chosen_file = Some('d');
   search_info.leaf = false;
@@ -100,7 +100,7 @@ pub fn test() {
   ];
   search_info.nps = 456;
   search_info.nodes = search.nodes;
-  search_info.pv_json = pos.pv_json.to_string();
+  search_info.pv_json = pos.pv_json();
   search_info.search_direction = SearchDirection::Forward;
   search_info.chosen_file = Some('d');
   search_info.leaf = true;
@@ -123,7 +123,7 @@ pub fn test() {
   ];
   search_info.nps = 789;
   search_info.nodes = search.nodes;
-  search_info.pv_json = pos.pv_json.to_string();
+  search_info.pv_json = pos.pv_json();
   search_info.search_direction = SearchDirection::Backward;
   search_info.chosen_file = Some('d');
   search_info.leaf = false;

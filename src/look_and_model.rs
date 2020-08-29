@@ -37,12 +37,29 @@ impl Default for Position {
             board: [None; BOARD_LEN],
             history: [' '; SQUARES_NUM],
             pieces_num: 0,
-            pv_json: String::new(),
             info_enabled: true,
         }
     }
 }
 impl Position {
+    /// Write on the pv.
+    /// 読み筋に書きます。
+    pub fn pv_json(&self) -> String {
+        let mut text = String::new();
+
+        for file in self.history.iter() {
+            if *file == ' ' {
+                break;
+            } else if text.is_empty() {
+                text.push_str(&format!("\"{}\"", file).to_string());
+            } else {
+                text.push_str(&format!(",\"{}\"", file).to_string());
+            }
+        }
+
+        text
+    }
+
     /// Display of square.  
     /// マスの表示。  
     fn cell(&self, index: usize) -> String {

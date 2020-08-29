@@ -22,7 +22,7 @@ impl Learning {
             Log::print_info(&format!("Trial={}", trial));
             engine.enter("pos");
             engine.enter("xfen");
-            Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json));
+            Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json()));
             loop {
                 engine.enter("uh");
                 engine.enter("go");
@@ -32,7 +32,7 @@ impl Learning {
                         engine.enter(&format!("do {}", chosen_file));
                         engine.enter("pos");
                         engine.enter("xfen");
-                        Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json));
+                        Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json()));
                         if let Some(_) = engine.game_result {
                             break;
                         }
@@ -47,13 +47,13 @@ impl Learning {
             Log::print_info(&format!("Undo={}", engine.undone));
             engine.enter("pos");
             engine.enter("xfen");
-            Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json));
+            Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json()));
             while engine.undone {
                 engine.enter("undo");
                 Log::print_info(&format!("Undo={}", engine.undone));
                 engine.enter("pos");
                 engine.enter("xfen");
-                Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json));
+                Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json()));
             }
             Log::print_info("Save.");
             engine.evaluation.save(EVALUATION_FILE_NAME);

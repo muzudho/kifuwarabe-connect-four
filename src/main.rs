@@ -170,10 +170,6 @@ pub struct Position {
     /// 現在、盤の上に有る石の数。  
     pub pieces_num: usize,
 
-    /// Principal variation.
-    /// 今読んでる読み筋。
-    pub pv_json: String,
-
     /// Display info during search. It is not info level in the log.  
     /// 探索中の info 表示を行います。 ログの情報レベルのことではありません。  
     pub info_enabled: bool,

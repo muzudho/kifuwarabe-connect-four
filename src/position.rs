@@ -10,13 +10,6 @@ impl Position {
     /// Place the stone.  
     /// １手指します。  
     pub fn do_move(&mut self, file: char) {
-        // Write on the pv.
-        // 読み筋に書きます。
-        if self.pv_json.is_empty() {
-            self.pv_json.push_str(&format!("\"{}\"", file).to_string());
-        } else {
-            self.pv_json.push_str(&format!(",\"{}\"", file).to_string());
-        }
         self.redo_move(file);
     }
 
@@ -47,7 +40,7 @@ impl Position {
     /// Undone.
     /// アンドゥした。
     pub fn undo_move(&mut self) -> bool {
-        if self.pv_json.len() < 1 {
+        if self.history.len() < 1 || self.pieces_num < 1 {
             return false;
         }
 
@@ -60,26 +53,10 @@ impl Position {
         self.pieces_num -= 1;
         // Remove from the pv.
         // 読み筋から消します。
-        if 3 < self.pv_json.len() {
-            // ,
-            self.pv_json.pop();
-            // "
-            self.pv_json.pop();
-            // alphabet
-            self.pv_json.pop();
-            // "
-            self.pv_json.pop();
-        } else if 3 == self.pv_json.len() {
-            // "
-            self.pv_json.pop();
-            // alphabet
-            self.pv_json.pop();
-            // "
-            self.pv_json.pop();
-        }
+        let file = self.history[self.pieces_num];
+        self.history[self.pieces_num] = ' ';
         // Turn off the stone.
         // 石を消します。
-        let file = self.history[self.pieces_num];
         if let Some(sq) = self.peak_sq_in_file(file) {
             self.board[sq] = None;
         }
