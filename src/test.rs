@@ -2,6 +2,7 @@
 //! テストしながら開発を進めましょう。  
 
 use crate::command_line_seek::CommandLineSeek;
+use crate::computer_player::Evaluation;
 use crate::log::LogExt;
 use crate::look_and_model::{
   EvaluationWay, GameResult, Piece, Position, Search, SearchDirection, SearchInfo,
@@ -400,6 +401,10 @@ pub fn test() {
   // End.
   test_win_lose_judgement();
   */
+
+  // Step.12
+  let evaluation = Evaluation::default();
+  evaluation.save("test-evaluation.csv");
 
   // Wait for logging to complete.
   // ロギングが完了するまで待ちます。
