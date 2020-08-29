@@ -6,6 +6,10 @@ pub mod search;
 use crate::GameResult;
 use std::time::Instant;
 
+/// Vertical, Horizontal Baroque diagonal, Sinister diagonal.  
+/// 垂直、水平、右上がりナナメ、左上がりナナメ。  
+pub const FEATURE_V_H_B_S_LEN: usize = 4;
+
 /// Nought and cross.
 /// 先後。
 pub const NOUGHT_AND_CROSS_LEN: usize = 2;

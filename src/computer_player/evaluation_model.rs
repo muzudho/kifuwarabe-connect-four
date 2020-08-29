@@ -1,4 +1,5 @@
 use crate::computer_player::Evaluation;
+use crate::computer_player::FEATURE_V_H_B_S_LEN;
 use crate::computer_player::{
     N3POW4, N3POW5, N3POW6, N3POW7, NOUGHT_AND_CROSS_LEN, WIN_AND_DRAW_LEN,
 };
@@ -40,7 +41,7 @@ impl Evaluation {
         &self,
         pos: &Position,
         result_channel: &ResultChannel,
-    ) -> [[u8; 4]; FILE_LEN] {
+    ) -> [[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN] {
         // マスの特徴量を求めます。
         // 7つの指し手のマスを調べます。
         let win_way_values = [
@@ -69,10 +70,10 @@ impl Evaluation {
         pos: &Position,
         file: char,
         result_channel: &ResultChannel,
-    ) -> [u8; 4] {
+    ) -> [u8; FEATURE_V_H_B_S_LEN] {
         let sq = pos.fallen_sq_or_none(file);
 
-        let features: [Option<u8>; 4] = self.get_elemental_features_by_sq(sq);
+        let features: [Option<u8>; FEATURE_V_H_B_S_LEN] = self.get_elemental_features_by_sq(sq);
         [
             self.get_value_by_feature(pos, features[0], result_channel),
             self.get_value_by_feature(pos, features[1], result_channel),
@@ -185,7 +186,7 @@ impl Evaluation {
 
     /// Elemental features of the square.
     /// そのマスの成分特徴。
-    fn get_elemental_features_by_sq(&self, sq: Option<usize>) -> [Option<u8>; 4] {
+    fn get_elemental_features_by_sq(&self, sq: Option<usize>) -> [Option<u8>; FEATURE_V_H_B_S_LEN] {
         if let Some(sq) = sq {
             match sq {
                 0 => [Some(1), Some(13), None, Some(22)],

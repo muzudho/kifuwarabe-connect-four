@@ -10,6 +10,7 @@ mod uxi_protocol;
 mod win_lose_judgment;
 
 use crate::computer_player::Evaluation;
+use crate::computer_player::FEATURE_V_H_B_S_LEN;
 use crate::engine::Response;
 use crate::log::LogExt;
 use crate::test::test;
@@ -197,7 +198,7 @@ pub struct SearchInfo {
     /// 指し手確率の重み。  
     ///
     /// [[0-255; vertical, horizontal, baroque diagonal, sinister diagonal]; a, b, c, d, e, f ,g]  
-    pub weight_tensor: [[u8; 4]; FILE_LEN],
+    pub weight_tensor: [[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
 
     /// Node per seconds.  
     /// 秒間状態ノード数。  
