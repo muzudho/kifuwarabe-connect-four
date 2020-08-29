@@ -83,54 +83,82 @@ Let's input from `pos`.
             let tensor = self.evaluation.ways_weight(&self.pos, &ResultChannel::Win);
             let mut text = String::new();
             text.push_str(&format!(
-                "File Vert Hori Baro Sini
+                "File Vert Hori Baro Sini Total
 "
             ));
             text.push_str(&format!(
-                "---- ---- ---- ---- ----
+                "---- ---- ---- ---- ---- -----
 "
             ));
             let file = 0;
             text.push_str(&format!(
-                "   a {0 } {1 } {2 } {3 }
+                "   a {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
 ",
-                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+                tensor[file][0],
+                tensor[file][1],
+                tensor[file][2],
+                tensor[file][3],
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
             ));
             let file = 1;
             text.push_str(&format!(
-                "   b {0 } {1 } {2 } {3 }
+                "   b {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
 ",
-                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+                tensor[file][0],
+                tensor[file][1],
+                tensor[file][2],
+                tensor[file][3],
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
             ));
             let file = 2;
             text.push_str(&format!(
-                "   c {0 } {1 } {2 } {3 }
+                "   c {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
 ",
-                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+                tensor[file][0],
+                tensor[file][1],
+                tensor[file][2],
+                tensor[file][3],
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
             ));
             let file = 3;
             text.push_str(&format!(
-                "   d {0 } {1 } {2 } {3 }
+                "   d {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
 ",
-                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+                tensor[file][0],
+                tensor[file][1],
+                tensor[file][2],
+                tensor[file][3],
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
             ));
             let file = 4;
             text.push_str(&format!(
-                "   e {0 } {1 } {2 } {3 }
+                "   e {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
 ",
-                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+                tensor[file][0],
+                tensor[file][1],
+                tensor[file][2],
+                tensor[file][3],
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
             ));
             let file = 5;
             text.push_str(&format!(
-                "   f {0 } {1 } {2 } {3 }
+                "   f {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
 ",
-                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+                tensor[file][0],
+                tensor[file][1],
+                tensor[file][2],
+                tensor[file][3],
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
             ));
             let file = 6;
             text.push_str(&format!(
-                "   g {0 } {1 } {2 } {3 }
+                "   g {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}
 ",
-                tensor[file][0], tensor[file][1], tensor[file][2], tensor[file][3]
+                tensor[file][0],
+                tensor[file][1],
+                tensor[file][2],
+                tensor[file][3],
+                tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3]
             ));
             Log::print_info(&text);
         } else if p.starts_with("go") {
