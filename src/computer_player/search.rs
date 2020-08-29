@@ -113,7 +113,7 @@ impl Search {
         bestmove
     }
 
-    fn node_exit(
+    pub fn node_exit(
         &mut self,
         pos: &mut Position,
         evaluation: &Evaluation,
@@ -328,7 +328,9 @@ impl Search {
         result_channel: &ResultChannel,
     ) -> (Option<char>, SearchInfo) {
         let tensor = evaluation.ways_weight(pos, result_channel);
-        let mut search_info = SearchInfo::new(result_channel, &tensor);
+        let mut search_info = SearchInfo::default();
+        search_info.result_channel = *result_channel;
+        search_info.weight_tensor = tensor;
         let w_a: u16 = {
             let file = 0;
             tensor[file][0] as u16

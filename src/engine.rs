@@ -3,9 +3,9 @@
 
 use crate::{
     command_line_seek::CommandLineSeek,
-    computer_player::{Evaluation, Learning, Search},
+    computer_player::{Bestmove, Evaluation, Learning, Search},
     log::LogExt,
-    Engine, Position, ResultChannel,
+    Engine, Position, ResultChannel, SearchInfo,
 };
 use casual_logger::Log;
 
@@ -80,6 +80,18 @@ Let's input from `pos`.
         } else if p.starts_with("feat") {
             let mut search = Search::default();
             search.start_pieces_num = self.pos.pieces_num;
+
+            let mut search_info = SearchInfo::default();
+            let mut bestmove = Bestmove::default();
+            search.node_exit(
+                &mut self.pos,
+                &self.evaluation,
+                &ResultChannel::Win,
+                'a',
+                &mut search_info,
+                &mut bestmove,
+            );
+
             let tensor = self.evaluation.ways_weight(&self.pos, &ResultChannel::Win);
             let mut text = String::new();
             text.push_str(&format!(

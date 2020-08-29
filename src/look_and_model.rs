@@ -1,6 +1,5 @@
 //! Display and data structure.  
 //! 表示と、データ構造です。  
-use crate::computer_player::FEATURE_V_H_B_S_LEN;
 use crate::{
     GameResult, Piece, Position, ResultChannel, SearchDirection, SearchInfo, BOARD_LEN, FILE_LEN,
     SQUARES_NUM,
@@ -137,17 +136,19 @@ impl Position {
     }
 }
 
-impl SearchInfo {
-    /// # Arguments
-    ///
-    /// * `weight_tensor` - [[0-255; vertical, horizontal, baroque diagonal, sinister diagonal]; a, b, c, d, e, f ,g]
-    pub fn new(
-        result_channel: &ResultChannel,
-        weight_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
-    ) -> Self {
+impl Default for SearchInfo {
+    fn default() -> Self {
         SearchInfo {
-            result_channel: *result_channel,
-            weight_tensor: *weight_tensor,
+            result_channel: ResultChannel::Win,
+            weight_tensor: [
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
             nps: 0,
             nodes: 0,
             pv: "".to_string(),
@@ -160,6 +161,8 @@ impl SearchInfo {
             comment: None,
         }
     }
+}
+impl SearchInfo {
     pub fn get_total_weight(&self) -> u16 {
         let mut sum: u16 = 0;
         for i in 0..FILE_LEN {
