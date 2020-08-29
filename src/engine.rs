@@ -2,8 +2,10 @@
 //! 思考エンジン。  
 
 use crate::{
-    command_line_seek::CommandLineSeek, computer_player::Learning, log::LogExt, Engine, Position,
-    Search,
+    command_line_seek::CommandLineSeek,
+    computer_player::{Learning, Search},
+    log::LogExt,
+    Engine, Position,
 };
 use casual_logger::Log;
 
@@ -77,7 +79,8 @@ Let's input from `pos`.
                 self.pos.do_(rest);
             }
         } else if p.starts_with("go") {
-            let mut search = Search::new(self.pos.pieces_num);
+            let mut search = Search::default();
+            search.start_pieces_num = self.pos.pieces_num;
             let (sq, result) = search.go(&mut self.pos);
             Log::print_info(&format!(
                 "info string result={:?} nps={}",

@@ -1,12 +1,10 @@
 //! Display and data structure.  
 //! 表示と、データ構造です。  
-use crate::computer_player::Evaluation;
 use crate::{
-    EvaluationWay, GameResult, Piece, Position, Search, SearchDirection, SearchInfo, BOARD_LEN,
-    FILE_LEN, SQUARES_NUM,
+    EvaluationWay, GameResult, Piece, Position, SearchDirection, SearchInfo, BOARD_LEN, FILE_LEN,
+    SQUARES_NUM,
 };
 use std::fmt;
-use std::time::Instant;
 
 impl fmt::Display for Piece {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -133,17 +131,6 @@ impl Position {
             GameResult::Win => Some(format!("win {}", winner.unwrap()).to_string()),
             GameResult::Draw => Some(format!("draw").to_string()),
             GameResult::Lose => None,
-        }
-    }
-}
-
-impl Search {
-    pub fn new(start_pieces_num: usize) -> Self {
-        Search {
-            start_pieces_num: start_pieces_num,
-            nodes: 0,
-            stopwatch: Instant::now(),
-            evaluation: Evaluation::default(),
         }
     }
 }

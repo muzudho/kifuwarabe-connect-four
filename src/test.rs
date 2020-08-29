@@ -4,7 +4,9 @@
 use crate::command_line_seek::CommandLineSeek;
 use crate::computer_player::Evaluation;
 use crate::log::LogExt;
-use crate::{EvaluationWay, GameResult, Piece, Position, Search, SearchDirection, SearchInfo};
+use crate::{
+  computer_player::Search, EvaluationWay, GameResult, Piece, Position, SearchDirection, SearchInfo,
+};
 use casual_logger::Log;
 use std::{thread, time};
 // use std;
@@ -58,7 +60,8 @@ pub fn test() {
   Log::print_debug(&Position::result(GameResult::Win, Some(Piece::Nought)).unwrap());
   // win O
 
-  let search = Search::new(pos.pieces_num);
+  let mut search = Search::default();
+  search.start_pieces_num = pos.pieces_num;
   Log::print_debug(&format!("pv=|{}|", pos.pv));
   // pv=||
   // 適当な内容を入れて、入れ物として、入れた中身を見せてくれるか、チェックしろだぜ☆（＾～＾）

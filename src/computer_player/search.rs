@@ -4,10 +4,25 @@
 //! 詳しくは 'look_and_model' の 'Search' 構造体 を見てください。  
 use crate::log::LogExt;
 use crate::{
-    EvaluationWay, GameResult, Position, Search, SearchDirection, SearchInfo, SQUARES_NUM,
+    computer_player::{Evaluation, Search},
+    EvaluationWay, GameResult, Position, SearchDirection, SearchInfo, SQUARES_NUM,
 };
 use casual_logger::{Level, Log};
 use rand::Rng;
+use std::time::Instant;
+
+/// Search.  
+/// 探索部。  
+impl Default for Search {
+    fn default() -> Self {
+        Search {
+            start_pieces_num: 0,
+            nodes: 0,
+            stopwatch: Instant::now(),
+            evaluation: Evaluation::default(),
+        }
+    }
+}
 
 /// Search.  
 /// 探索部。  

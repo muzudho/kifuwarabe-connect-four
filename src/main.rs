@@ -9,12 +9,10 @@ mod test;
 mod uxi_protocol;
 mod win_lose_judgment;
 
-use crate::computer_player::Evaluation;
-use crate::engine::*;
+use crate::engine::Response;
 use crate::log::LogExt;
 use crate::test::test;
 use casual_logger::{Level, Log, Table};
-use std::time::Instant;
 
 fn main() {
     // Log file name.
@@ -168,23 +166,6 @@ pub enum SearchDirection {
     /// Backward search.
     /// 後ろ向き探索。
     Backward,
-}
-
-/// Search.  
-/// 探索部。  
-pub struct Search {
-    /// The number of stones on the board at the start of this search.  
-    /// この探索の開始時に盤の上に有った石の数。  
-    pub start_pieces_num: usize,
-    /// Number of state nodes searched.  
-    /// 探索した状態ノード数。  
-    pub nodes: u32,
-    /// Start the stopwatch when this structure is created.  
-    /// この構造体を生成した時点からストップ・ウォッチを開始します。  
-    pub stopwatch: Instant,
-    /// Evaluation.
-    /// 評価値。
-    pub evaluation: Evaluation,
 }
 
 /// Win evaluation and draw evaluation.  

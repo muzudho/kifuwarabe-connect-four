@@ -1,17 +1,17 @@
-use crate::computer_player::{Evaluation, Learning};
+use crate::computer_player::{Evaluation, Learning, Search};
 use crate::Engine;
 
 impl Default for Learning {
     fn default() -> Self {
         Learning {
-            evaluation: Evaluation::default(),
+            search: Search::default(),
         }
     }
 }
 impl Learning {
     pub fn learn(&mut self, engine: &mut Engine) {
-        self.evaluation.load("evaluation.csv");
+        self.search.evaluation.load("evaluation.csv");
 
-        self.evaluation.save("evaluation.csv");
+        self.search.evaluation.save("evaluation.csv");
     }
 }

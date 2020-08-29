@@ -1,6 +1,6 @@
 //! Measure performance.  
 //! 性能を測ります。  
-use crate::Search;
+use crate::computer_player::Search;
 
 /// Search.  
 /// 探索部。  
