@@ -1,5 +1,5 @@
-use crate::computer_player::{Learning, Search};
-use crate::Engine;
+use crate::computer_player::Learning;
+use crate::{Engine, EVALUATION_FILE_NAME};
 
 impl Default for Learning {
     fn default() -> Self {
@@ -8,11 +8,8 @@ impl Default for Learning {
 }
 impl Learning {
     pub fn learn(&mut self, engine: &mut Engine) {
-        /*
-        self.search.evaluation.load("evaluation.csv");
-        self.search.start_pieces_num = engine.pos.pieces_num;
+        engine.enter("go");
 
-        self.search.evaluation.save("evaluation.csv");
-        */
+        engine.evaluation.save(EVALUATION_FILE_NAME);
     }
 }

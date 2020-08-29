@@ -9,10 +9,15 @@ mod test;
 mod uxi_protocol;
 mod win_lose_judgment;
 
+use crate::computer_player::Evaluation;
 use crate::engine::Response;
 use crate::log::LogExt;
 use crate::test::test;
 use casual_logger::{Level, Log, Table};
+
+/// Evaluation file name.  
+/// 評価値のファイル名。  
+pub const EVALUATION_FILE_NAME: &'static str = "evaluation.csv";
 
 fn main() {
     // Log file name.
@@ -36,6 +41,7 @@ fn main() {
     }
 
     let mut engine = Engine::default();
+    engine.evaluation.load(EVALUATION_FILE_NAME);
     engine.title();
 
     // End the loop with 'quit'. Forced termination with [Ctrl]+[C].
@@ -104,6 +110,10 @@ pub struct Engine {
     /// Starting position.  
     /// 初期局面。  
     pos: Position,
+
+    /// Evaluation.  
+    /// 評価値。  
+    evaluation: Evaluation,
 }
 
 /// It is a game that can be playout, so please use the result instead of the evaluation value.  

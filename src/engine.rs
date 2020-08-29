@@ -12,9 +12,8 @@ use casual_logger::Log;
 impl Default for Engine {
     fn default() -> Self {
         Engine {
-            // Starting position.
-            // 初期局面。
             pos: Position::default(),
+            evaluation: Evaluation::default(),
         }
     }
 }
@@ -80,9 +79,8 @@ Let's input from `pos`.
             }
         } else if p.starts_with("go") {
             let mut search = Search::default();
-            let evaluation = Evaluation::default();
             search.start_pieces_num = self.pos.pieces_num;
-            let (sq, result) = search.go(&mut self.pos, &evaluation);
+            let (sq, result) = search.go(&mut self.pos, &self.evaluation);
             Log::print_info(&format!(
                 "info string result={:?} nps={}",
                 result,
