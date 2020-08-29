@@ -1,7 +1,7 @@
 //! Display and data structure.  
 //! 表示と、データ構造です。  
 use crate::computer_player::Evaluation;
-use crate::{GameResult, Piece, Position, BOARD_LEN, FILE_LEN, SQUARES_NUM};
+use crate::{GameResult, Piece, Position, SearchDirection, BOARD_LEN, FILE_LEN, SQUARES_NUM};
 use std::fmt;
 use std::time::Instant;
 
@@ -132,19 +132,6 @@ impl Position {
             GameResult::Lose => None,
         }
     }
-}
-
-/// Proceeding from the root toward the leaves is called a forward search.  
-/// The process of returning from the leaves toward the root is called backward search.  
-/// 根から葉に向かって進んでいることを前向き探索と呼びます。  
-/// 葉から根に戻っていることを後ろ向き探索と呼びます。  
-pub enum SearchDirection {
-    /// Forward search.
-    /// 前向き探索。
-    Forward,
-    /// Backward search.
-    /// 後ろ向き探索。
-    Backward,
 }
 
 /// Search.  

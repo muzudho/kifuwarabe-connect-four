@@ -155,6 +155,19 @@ pub struct Position {
     pub info_enabled: bool,
 }
 
+/// Proceeding from the root toward the leaves is called a forward search.  
+/// The process of returning from the leaves toward the root is called backward search.  
+/// 根から葉に向かって進んでいることを前向き探索と呼びます。  
+/// 葉から根に戻っていることを後ろ向き探索と呼びます。  
+pub enum SearchDirection {
+    /// Forward search.
+    /// 前向き探索。
+    Forward,
+    /// Backward search.
+    /// 後ろ向き探索。
+    Backward,
+}
+
 /// # Return
 ///
 /// square on top row.

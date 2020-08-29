@@ -4,8 +4,8 @@
 use crate::command_line_seek::CommandLineSeek;
 use crate::computer_player::Evaluation;
 use crate::log::LogExt;
-use crate::look_and_model::{EvaluationWay, Search, SearchDirection, SearchInfo};
-use crate::{GameResult, Piece, Position};
+use crate::look_and_model::{EvaluationWay, Search, SearchInfo};
+use crate::{GameResult, Piece, Position, SearchDirection};
 use casual_logger::Log;
 use std::{thread, time};
 // use std;
