@@ -5,8 +5,7 @@ use crate::computer_player::{
 use crate::log::LogExt;
 use crate::look_and_model::EvaluationWay;
 use crate::look_and_model::Position;
-use crate::look_and_model::FILE_LEN;
-use crate::Piece;
+use crate::{Piece, FILE_LEN};
 use casual_logger::Log;
 
 /// Initial value of evaluation.

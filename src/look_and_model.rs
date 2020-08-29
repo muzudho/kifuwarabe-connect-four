@@ -1,7 +1,7 @@
 //! Display and data structure.  
 //! 表示と、データ構造です。  
 use crate::computer_player::Evaluation;
-use crate::Piece;
+use crate::{GameResult, Piece, BOARD_LEN, FILE_LEN, SQUARES_NUM};
 use std::fmt;
 use std::time::Instant;
 
@@ -15,14 +15,6 @@ impl fmt::Display for Piece {
     }
 }
 
-/// It is a game that can be playout, so please use the result instead of the evaluation value.  
-/// プレイアウトできるゲームなので、評価値ではなく結果を使います。  
-#[derive(Clone, Copy, Debug)]
-pub enum GameResult {
-    Win,
-    Draw,
-    Lose,
-}
 impl fmt::Display for GameResult {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use crate::look_and_model::GameResult::*;
@@ -33,26 +25,6 @@ impl fmt::Display for GameResult {
         }
     }
 }
-
-/// The addresses of the squares start with 0 and end with 41.  
-/// The array starts at 0, so the size is 42.  
-/// マスの番地は 0 から始まり 41 で終わります。  
-/// 配列は 0 から始まるのでサイズは 42 です。  
-pub const BOARD_LEN: usize = 42;
-
-/// There are 7 columns from a to g.  
-/// a～gの7列です。  
-pub const FILE_LEN: usize = 7;
-
-/// There are 6 rows from 1 to 6.  
-/// 1～6の6列です。  
-pub const RANK_LEN: usize = 6;
-
-/// The maximum number of stones that can be placed on the board.  
-/// Since there are only 42 squares, it will be 42.  
-/// 盤上に置ける石の最大数。  
-/// 42マスしかないから42です。  
-pub const SQUARES_NUM: usize = 42;
 
 /// A record of the game used to suspend or resume it.  
 /// ゲームを中断したり、再開したりするときに使うゲームの記録です。  

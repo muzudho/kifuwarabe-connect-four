@@ -69,6 +69,26 @@ fn main() {
     Log::flush();
 }
 
+/// The addresses of the squares start with 0 and end with 41.  
+/// The array starts at 0, so the size is 42.  
+/// マスの番地は 0 から始まり 41 で終わります。  
+/// 配列は 0 から始まるのでサイズは 42 です。  
+pub const BOARD_LEN: usize = 42;
+
+/// There are 7 columns from a to g.  
+/// a～gの7列です。  
+pub const FILE_LEN: usize = 7;
+
+/// There are 6 rows from 1 to 6.  
+/// 1～6の6列です。  
+pub const RANK_LEN: usize = 6;
+
+/// The maximum number of stones that can be placed on the board.  
+/// Since there are only 42 squares, it will be 42.  
+/// 盤上に置ける石の最大数。  
+/// 42マスしかないから42です。  
+pub const SQUARES_NUM: usize = 42;
+
 /// Circle and cross mark. It corresponds to the stone in Go.  
 /// 丸と十字の印です。囲碁で言うところの石に当たります。  
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -85,6 +105,15 @@ pub struct Engine {
     /// Starting position.  
     /// 初期局面。  
     pos: Position,
+}
+
+/// It is a game that can be playout, so please use the result instead of the evaluation value.  
+/// プレイアウトできるゲームなので、評価値ではなく結果を使います。  
+#[derive(Clone, Copy, Debug)]
+pub enum GameResult {
+    Win,
+    Draw,
+    Lose,
 }
 
 /// # Return
