@@ -195,6 +195,60 @@ pub enum EvaluationWay {
     Draw,
 }
 
+/// It is for displaying the thinking process.  
+/// 思考過程の表示用です。  
+pub struct SearchInfo {
+    /// Win evaluation or Draw evaluation.  
+    /// 勝ち評価または、引き分け評価。  
+    pub way: EvaluationWay,
+
+    /// Weight of move probability.  
+    /// 指し手確率の重み。  
+    ///
+    /// [a, b, c, d, e, f, g]  
+    pub ways_weight: [u8; FILE_LEN],
+
+    /// Node per seconds.  
+    /// 秒間状態ノード数。  
+    pub nps: u64,
+
+    /// Searched nodes.  
+    /// 探索状態ノード数。  
+    pub nodes: u32,
+
+    /// Principal variation.  
+    /// 読みの本筋。  
+    pub pv: String,
+
+    /// Search direction.  
+    /// 探索方向。  
+    pub search_direction: SearchDirection,
+
+    /// Chosen file.  
+    /// 選んだ列。  
+    pub chosen_file: Option<char>,
+
+    /// Is leaf?  
+    /// 葉ですか？  
+    pub leaf: bool,
+
+    /// The number of pieces on the board.  
+    /// 盤に置いてあるピースの数。  
+    pub pieces_num: Option<usize>,
+
+    /// Result.  
+    /// 結果。  
+    pub result: Option<GameResult>,
+
+    /// Turn.  
+    /// 手番。  
+    pub turn: Piece,
+
+    /// Comment.  
+    /// コメント。  
+    pub comment: Option<String>,
+}
+
 /// # Return
 ///
 /// square on top row.
