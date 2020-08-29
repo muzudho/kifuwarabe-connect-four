@@ -26,8 +26,15 @@ impl Learning {
         let old_info_enabled = engine.pos.info_enabled;
         engine.pos.info_enabled = false;
 
-        let result_channel = ResultChannel::Win;
+        self.uh_by_result_channel(engine, ResultChannel::Win);
+        self.uh_by_result_channel(engine, ResultChannel::Draw);
 
+        engine.pos.info_enabled = old_info_enabled;
+    }
+
+    /// uh...  
+    /// うーん……。  
+    pub fn uh_by_result_channel(&mut self, engine: &mut Engine, result_channel: ResultChannel) {
         let mut search = Search::default();
         search.start_pieces_num = engine.pos.pieces_num;
 
@@ -371,8 +378,6 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take
             take_values[file]
         ));
         Log::print_info(&text);
-
-        engine.pos.info_enabled = old_info_enabled;
     }
 
     fn give(tensor: &mut [[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN], file: usize) -> u16 {
