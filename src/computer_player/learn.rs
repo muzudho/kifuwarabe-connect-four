@@ -458,147 +458,110 @@ File Vert Hori Baro Sini Total Best File   Result Learn Give Take Rest Next
 ---- ---- ---- ---- ---- -----      ------ ------       ---- ---- ---- -----
 "
         ));
-        let file = 0;
-        text.push_str(&format!(
-            "   a {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
-",
-            old_tensor[file][0],
-            old_tensor[file][1],
-            old_tensor[file][2],
-            old_tensor[file][3],
-            old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = files_way[file].file {
-                file.to_string()
-            } else {
-                "resign".to_string()
-            },
-            &format!("{:?}", files_way[file].result),
-            give_values[file],
-            take1_values[file],
-            rest_values[file],
-            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+        text.push_str(&self.file_line_str(
+            0,
+            'a',
+            &old_tensor,
+            &tensor,
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
         ));
-        let file = 1;
-        text.push_str(&format!(
-            "   b {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
-",
-            old_tensor[file][0],
-            old_tensor[file][1],
-            old_tensor[file][2],
-            old_tensor[file][3],
-            old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = files_way[file].file {
-                file.to_string()
-            } else {
-                "resign".to_string()
-            },
-            &format!("{:?}", files_way[file].result),
-            give_values[file],
-            take1_values[file],
-            rest_values[file],
-            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+        text.push_str(&self.file_line_str(
+            1,
+            'b',
+            &old_tensor,
+            &tensor,
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
         ));
-        let file = 2;
-        text.push_str(&format!(
-            "   c {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
-",
-            old_tensor[file][0],
-            old_tensor[file][1],
-            old_tensor[file][2],
-            old_tensor[file][3],
-            old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = files_way[file].file {
-                file.to_string()
-            } else {
-                "resign".to_string()
-            },
-            &format!("{:?}", files_way[file].result),
-            give_values[file],
-            take1_values[file],
-            rest_values[file],
-            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+        text.push_str(&self.file_line_str(
+            2,
+            'c',
+            &old_tensor,
+            &tensor,
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
         ));
-        let file = 3;
-        text.push_str(&format!(
-            "   d {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
-",
-            old_tensor[file][0],
-            old_tensor[file][1],
-            old_tensor[file][2],
-            old_tensor[file][3],
-            old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = files_way[file].file {
-                file.to_string()
-            } else {
-                "resign".to_string()
-            },
-            &format!("{:?}", files_way[file].result),
-            give_values[file],
-            take1_values[file],
-            rest_values[file],
-            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+        text.push_str(&self.file_line_str(
+            3,
+            'd',
+            &old_tensor,
+            &tensor,
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
         ));
-        let file = 4;
-        text.push_str(&format!(
-            "   e {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
-",
-            old_tensor[file][0],
-            old_tensor[file][1],
-            old_tensor[file][2],
-            old_tensor[file][3],
-            old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = files_way[file].file {
-                file.to_string()
-            } else {
-                "resign".to_string()
-            },
-            &format!("{:?}", files_way[file].result),
-            give_values[file],
-            take1_values[file],
-            rest_values[file],
-            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+        text.push_str(&self.file_line_str(
+            4,
+            'e',
+            &old_tensor,
+            &tensor,
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
         ));
-        let file = 5;
-        text.push_str(&format!(
-            "   f {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
-",
-            old_tensor[file][0],
-            old_tensor[file][1],
-            old_tensor[file][2],
-            old_tensor[file][3],
-            old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = files_way[file].file {
-                file.to_string()
-            } else {
-                "resign".to_string()
-            },
-            &format!("{:?}", files_way[file].result),
-            give_values[file],
-            take1_values[file],
-            rest_values[file],
-            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+        text.push_str(&self.file_line_str(
+            5,
+            'f',
+            &old_tensor,
+            &tensor,
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
         ));
-        let file = 6;
-        text.push_str(&format!(
-            "   g {0: >4} {1: >4} {2: >4} {3: >4} {4: >5}      {5: <6} {6: <6}       {7: >4} {8: >4} {9: >4} {10: >5}
-",
-            old_tensor[file][0],
-            old_tensor[file][1],
-            old_tensor[file][2],
-            old_tensor[file][3],
-            old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
-            if let Some(file) = files_way[file].file {
-                file.to_string()
-            } else {
-                "resign".to_string()
-            },
-            &format!("{:?}", files_way[file].result),
-            give_values[file],
-            take1_values[file],
-            rest_values[file],
-            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+        text.push_str(&self.file_line_str(
+            6,
+            'g',
+            &old_tensor,
+            &tensor,
+            &files_way,
+            &give_values,
+            &take1_values,
+            &rest_values,
         ));
         Log::print_info(&text);
+    }
+
+    fn file_line_str(
+        &self,
+        file: usize,
+        file_ch: char,
+        old_tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
+        tensor: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
+        files_way: &[Bestmove; FILE_LEN],
+        give_values: &[u16],
+        take1_values: &[u16],
+        rest_values: &[u16],
+    ) -> String {
+        format!(
+            "   {0} {1: >4} {2: >4} {3: >4} {4: >4} {5: >5}      {6: <6} {7: <6}       {8: >4} {9: >4} {10: >4} {11: >5}
+",
+            file_ch,
+            old_tensor[file][0],
+            old_tensor[file][1],
+            old_tensor[file][2],
+            old_tensor[file][3],
+            old_tensor[file][0] + old_tensor[file][1] + old_tensor[file][2] + old_tensor[file][3],
+            if let Some(file) = files_way[file].file {
+                file.to_string()
+            } else {
+                "resign".to_string()
+            },
+            &format!("{:?}", files_way[file].result),
+            give_values[file],
+            take1_values[file],
+            rest_values[file],
+            tensor[file][0] + tensor[file][1] + tensor[file][2] + tensor[file][3],
+        )
     }
 
     fn give(tensor: &mut [[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN], file: usize) -> u16 {
