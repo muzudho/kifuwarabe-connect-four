@@ -5,7 +5,7 @@ use crate::{
     command_line_seek::CommandLineSeek,
     computer_player::{Evaluation, Learning, Search},
     log::LogExt,
-    Engine, Position,
+    Engine, Position, ResultChannel,
 };
 use casual_logger::Log;
 
@@ -77,6 +77,14 @@ Let's input from `pos`.
             if let Some(rest) = p.rest() {
                 self.pos.do_(rest);
             }
+        } else if p.starts_with("feat") {
+            let mut search = Search::default();
+            search.start_pieces_num = self.pos.pieces_num;
+            let w = self.evaluation.ways_weight(&self.pos, &ResultChannel::Win);
+            Log::print_info(&format!(
+                "feat: a={} b={} c={} d={} e={} f={} g={}",
+                w[0], w[1], w[2], w[3], w[4], w[5], w[6]
+            ));
         } else if p.starts_with("go") {
             let mut search = Search::default();
             search.start_pieces_num = self.pos.pieces_num;

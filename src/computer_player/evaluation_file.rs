@@ -157,9 +157,9 @@ impl Evaluation {
         state: &[[u8; NOUGHT_AND_CROSS_LEN]; WIN_AND_DRAW_LEN],
         text: &mut String,
     ) {
-        for win_draw in 0..WIN_AND_DRAW_LEN {
+        for result_channel in 0..WIN_AND_DRAW_LEN {
             for turn in 0..NOUGHT_AND_CROSS_LEN {
-                text.push_str(&format!("{},", state[win_draw][turn]));
+                text.push_str(&format!("{},", state[result_channel][turn]));
             }
         }
     }
@@ -190,10 +190,10 @@ impl Evaluation {
                     let feature_index = feature_from0 + 1;
                     match feature_index {
                         1 | 2 | 3 | 4 | 5 | 6 | 7 => {
-                            for win_draw in 0..WIN_AND_DRAW_LEN {
+                            for result_channel in 0..WIN_AND_DRAW_LEN {
                                 for turn in 0..NOUGHT_AND_CROSS_LEN {
-                                    self.features_1_to_7[feature_index - 1][state][win_draw]
-                                        [turn] = match tokens[token_index].parse() {
+                                    self.features_1_to_7[feature_index - 1][state]
+                                        [result_channel][turn] = match tokens[token_index].parse() {
                                         Ok(x) => x,
                                         Err(why) => panic!("couldn't read evaluation. : {}", why),
                                     };
@@ -202,10 +202,10 @@ impl Evaluation {
                             }
                         }
                         8 | 9 | 10 | 11 | 12 | 13 => {
-                            for win_draw in 0..WIN_AND_DRAW_LEN {
+                            for result_channel in 0..WIN_AND_DRAW_LEN {
                                 for turn in 0..NOUGHT_AND_CROSS_LEN {
-                                    self.features_8_to_13[feature_index - 8][state][win_draw]
-                                        [turn] = match tokens[token_index].parse() {
+                                    self.features_8_to_13[feature_index - 8][state]
+                                        [result_channel][turn] = match tokens[token_index].parse() {
                                         Ok(x) => x,
                                         Err(why) => panic!("couldn't read evaluation. : {}", why),
                                     };
@@ -214,7 +214,7 @@ impl Evaluation {
                             }
                         }
                         14 | 19 | 20 | 25 => {
-                            for win_draw in 0..WIN_AND_DRAW_LEN {
+                            for result_channel in 0..WIN_AND_DRAW_LEN {
                                 for turn in 0..NOUGHT_AND_CROSS_LEN {
                                     let array_index = match feature_index {
                                         14 => 0,
@@ -225,19 +225,17 @@ impl Evaluation {
                                             panic!("couldn't read evaluation. : {}", feature_index)
                                         }
                                     };
-                                    self.features_14_19_20_25[array_index][state][win_draw][turn] =
-                                        match tokens[token_index].parse() {
-                                            Ok(x) => x,
-                                            Err(why) => {
-                                                panic!("couldn't read evaluation. : {}", why)
-                                            }
-                                        };
+                                    self.features_14_19_20_25[array_index][state][result_channel]
+                                        [turn] = match tokens[token_index].parse() {
+                                        Ok(x) => x,
+                                        Err(why) => panic!("couldn't read evaluation. : {}", why),
+                                    };
                                     token_index += 1;
                                 }
                             }
                         }
                         15 | 18 | 21 | 24 => {
-                            for win_draw in 0..WIN_AND_DRAW_LEN {
+                            for result_channel in 0..WIN_AND_DRAW_LEN {
                                 for turn in 0..NOUGHT_AND_CROSS_LEN {
                                     let array_index = match feature_index {
                                         15 => 0,
@@ -248,19 +246,17 @@ impl Evaluation {
                                             panic!("couldn't read evaluation. : {}", feature_index)
                                         }
                                     };
-                                    self.features_15_18_21_24[array_index][state][win_draw][turn] =
-                                        match tokens[token_index].parse() {
-                                            Ok(x) => x,
-                                            Err(why) => {
-                                                panic!("couldn't read evaluation. : {}", why)
-                                            }
-                                        };
+                                    self.features_15_18_21_24[array_index][state][result_channel]
+                                        [turn] = match tokens[token_index].parse() {
+                                        Ok(x) => x,
+                                        Err(why) => panic!("couldn't read evaluation. : {}", why),
+                                    };
                                     token_index += 1;
                                 }
                             }
                         }
                         16 | 17 | 22 | 23 => {
-                            for win_draw in 0..WIN_AND_DRAW_LEN {
+                            for result_channel in 0..WIN_AND_DRAW_LEN {
                                 for turn in 0..NOUGHT_AND_CROSS_LEN {
                                     let array_index = match feature_index {
                                         16 => 0,
@@ -271,13 +267,11 @@ impl Evaluation {
                                             panic!("couldn't read evaluation. : {}", feature_index)
                                         }
                                     };
-                                    self.features_16_17_22_23[array_index][state][win_draw][turn] =
-                                        match tokens[token_index].parse() {
-                                            Ok(x) => x,
-                                            Err(why) => {
-                                                panic!("couldn't read evaluation. : {}", why)
-                                            }
-                                        };
+                                    self.features_16_17_22_23[array_index][state][result_channel]
+                                        [turn] = match tokens[token_index].parse() {
+                                        Ok(x) => x,
+                                        Err(why) => panic!("couldn't read evaluation. : {}", why),
+                                    };
                                     token_index += 1;
                                 }
                             }
