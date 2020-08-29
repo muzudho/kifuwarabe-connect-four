@@ -2,7 +2,8 @@
 //! 表示と、データ構造です。  
 use crate::computer_player::Evaluation;
 use crate::{
-    GameResult, Piece, Position, Search, SearchDirection, BOARD_LEN, FILE_LEN, SQUARES_NUM,
+    EvaluationWay, GameResult, Piece, Position, Search, SearchDirection, BOARD_LEN, FILE_LEN,
+    SQUARES_NUM,
 };
 use std::fmt;
 use std::time::Instant;
@@ -145,14 +146,6 @@ impl Search {
             evaluation: Evaluation::default(),
         }
     }
-}
-
-/// Win evaluation and draw evaluation.  
-/// 勝ち評価値と、引き分け評価値。  
-#[derive(Clone, Copy, Debug)]
-pub enum EvaluationWay {
-    Win,
-    Draw,
 }
 
 /// It is for displaying the thinking process.  

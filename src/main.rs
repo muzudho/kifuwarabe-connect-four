@@ -187,6 +187,14 @@ pub struct Search {
     pub evaluation: Evaluation,
 }
 
+/// Win evaluation and draw evaluation.  
+/// 勝ち評価値と、引き分け評価値。  
+#[derive(Clone, Copy, Debug)]
+pub enum EvaluationWay {
+    Win,
+    Draw,
+}
+
 /// # Return
 ///
 /// square on top row.

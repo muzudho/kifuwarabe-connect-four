@@ -3,8 +3,7 @@ use crate::computer_player::{
     N3POW4, N3POW5, N3POW6, N3POW7, NOUGHT_AND_CROSS_LEN, WIN_AND_DRAW_LEN,
 };
 use crate::log::LogExt;
-use crate::look_and_model::EvaluationWay;
-use crate::{Piece, Position, FILE_LEN};
+use crate::{EvaluationWay, Piece, Position, FILE_LEN};
 use casual_logger::Log;
 
 /// Initial value of evaluation.
