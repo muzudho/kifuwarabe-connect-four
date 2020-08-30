@@ -185,14 +185,14 @@ impl Learning {
         for file in 0..FILE_LEN {
             match result_channel {
                 ResultChannel::Win => match files_way[file].pred_result {
-                    WayValue::Win => {
+                    WayValue::PossiblyWin | WayValue::Win => {
                         obtainer[file] = true;
                         obtainer_count += 1;
                     }
                     _ => {}
                 },
                 ResultChannel::Draw => match files_way[file].pred_result {
-                    WayValue::Draw => {
+                    WayValue::PossiblyDraw | WayValue::Draw => {
                         obtainer[file] = true;
                         obtainer_count += 1;
                     }
