@@ -253,6 +253,13 @@ impl Search {
                     // I will continue.
                     // まだ続けます。
                 }
+                WayValue::PossiblyDraw => {
+                    // Possibly, draw.
+                    // 多分、引き分け。
+
+                    // I will continue.
+                    // まだ続けます。
+                }
                 WayValue::PossiblyWin | WayValue::Win => {
                     // Don't choose to lose.
                     // 自分が負ける手は選びません。
@@ -284,6 +291,12 @@ impl Search {
                         // If neither is wrong, draw.
                         // お互いがミスしなければ引き分け。
                         search_info.way_value = Some(WayValue::Draw);
+                        search_info.comment = Some("Fmmm.".to_string());
+                    }
+                    WayValue::PossiblyDraw => {
+                        // If neither is wrong, possibly draw.
+                        // お互いがミスしなければ多分引き分け。
+                        search_info.way_value = Some(WayValue::PossiblyDraw);
                         search_info.comment = Some("Fmmm.".to_string());
                     }
                     WayValue::PossiblyWin => {

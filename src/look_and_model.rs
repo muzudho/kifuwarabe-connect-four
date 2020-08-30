@@ -73,6 +73,7 @@ impl fmt::Display for WayValue {
             Win => write!(f, "win"),
             PossiblyWin => write!(f, "possibly_win"),
             Draw => write!(f, "draw"),
+            PossiblyDraw => write!(f, "possibly_draw"),
             PossiblyLose => write!(f, "possibly_lose"),
             Lose => write!(f, "lose"),
         }

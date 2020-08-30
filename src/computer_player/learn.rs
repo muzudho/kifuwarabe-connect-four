@@ -51,15 +51,19 @@ impl Learning {
             }
             engine.enter("undo");
             Log::print_info(&format!("Undo={}", engine.undone));
+            /*
             engine.enter("pos");
             engine.enter("xfen");
             Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json()));
+            */
             while engine.undone {
                 engine.enter("undo");
+                /*
                 Log::print_info(&format!("Undo={}", engine.undone));
                 engine.enter("pos");
                 engine.enter("xfen");
                 Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json()));
+                */
             }
             Log::print_info("Save.");
             engine.evaluation.save(EVALUATION_FILE_NAME);

@@ -44,7 +44,7 @@ fn main() {
 
     let mut engine = Engine::default();
     engine.evaluation.load(EVALUATION_FILE_NAME);
-    engine.title();
+    Log::print_notice(engine.title());
 
     // End the loop with 'quit'. Forced termination with [Ctrl]+[C].
     // 'quit' でループを終了。 [Ctrl]+[C] で強制終了。
@@ -146,6 +146,7 @@ pub enum WayValue {
     Win,
     PossiblyWin,
     Draw,
+    PossiblyDraw,
     PossiblyLose,
     Lose,
 }
