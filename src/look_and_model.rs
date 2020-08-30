@@ -1,8 +1,8 @@
 //! Display and data structure.  
 //! 表示と、データ構造です。  
 use crate::{
-    GameResult, Piece, Position, ResultChannel, SearchDirection, SearchInfo, WayValue, BOARD_LEN,
-    FILE_LEN, SQUARES_NUM,
+    Engine, GameResult, Piece, Position, ResultChannel, SearchDirection, SearchInfo, WayValue,
+    BOARD_LEN, FILE_LEN, SQUARES_NUM,
 };
 use std::fmt;
 
@@ -258,5 +258,44 @@ impl SearchInfo {
             self.pv_json,
         )
         .to_string()
+    }
+}
+
+impl Engine {
+    /// Display the title.  
+    /// タイトルを表示します。  
+    pub fn title(&self) -> &str {
+        "Kifuwarabe's connect-four
+きふわらべのコネクト・フォー
+
+Command:
+コマンド:
+`do d`      - Mark the d file.
+                手番のプレイヤーが、 7 列目に印を付けます。
+`go`        - The computer shows the next move.
+                コンピューターが次の1手を示します。
+`info-off`  - no info output.
+                info出力なし。
+`info-on`   - There is info output.(Default)
+                info出力あり(既定)。
+`learn`     - Learning.
+                学習。
+`pos`       - Position display.
+                局面表示。
+`position xfen 7/7/7/7/7/7 O moves d c`
+            - Starting position and moves.
+                初期局面と棋譜を入力。
+`uh`        - Step of learning.
+                学習のステップ。
+`undo`      - 1 back.
+                1手戻します。
+`uxi`       - Returns 'uxiok connect-four {protocol-version}'. It is a version of the protocol, not software.
+                'uxiok connect-four {protocol-version}' を返します。ソフトではなくプロトコルのバージョンです。
+`xfen`      - The current xfen string display.
+                現局面のxfen文字列表示。
+
+Let's input from `pos`.
+`pos` から入力してみましょう。
+"
     }
 }
