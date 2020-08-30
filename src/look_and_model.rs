@@ -34,6 +34,7 @@ impl fmt::Display for WayValue {
             Win => write!(f, "win"),
             PossiblyWin => write!(f, "possibly_win"),
             Draw => write!(f, "draw"),
+            PossiblyLose => write!(f, "possibly_lose"),
             Lose => write!(f, "lose"),
         }
     }
@@ -230,10 +231,10 @@ impl SearchInfo {
                 "              "
             },
             if let Some(way_value) = self.way_value {
-                // length of possibly_win is 12.
-                format!(", \"value\":\"{:12}\"", way_value)
+                // length of possibly_lose is 13.
+                format!(", \"value\":\"{:13}\"", way_value)
             } else {
-                "                        ".to_string()
+                "                         ".to_string()
             },
             if let Some(comment) = &self.comment {
                 format!(", \"{}\":\"{}\"", self.turn, comment).to_string()

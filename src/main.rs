@@ -146,6 +146,7 @@ pub enum WayValue {
     Win,
     PossiblyWin,
     Draw,
+    PossiblyLose,
     Lose,
 }
 

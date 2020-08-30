@@ -3,7 +3,7 @@ use crate::FILE_LEN;
 use crate::{
     computer_player::{Bestmove, Learning, Search, WayValue},
     log::LogExt,
-    Engine, GameResult, ResultChannel, SearchInfo, EVALUATION_FILE_NAME,
+    Engine, ResultChannel, SearchInfo, EVALUATION_FILE_NAME,
 };
 use casual_logger::Log;
 use rand::Rng;
