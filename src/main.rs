@@ -130,8 +130,8 @@ pub struct Engine {
     game_result: Option<GameResult>,
 }
 
-/// It is a game that can be playout, so please use the result instead of the evaluation value.  
-/// プレイアウトできるゲームなので、評価値ではなく結果を使います。  
+/// Game result.  
+/// ゲームの結果。  
 #[derive(Clone, Copy, Debug)]
 pub enum GameResult {
     Win,

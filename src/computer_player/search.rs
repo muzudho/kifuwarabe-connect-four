@@ -5,7 +5,7 @@
 use crate::computer_player::Bestmove;
 use crate::log::LogExt;
 use crate::{
-    computer_player::{Evaluation, Search},
+    computer_player::{Evaluation, Search, WayValue},
     GameResult, Position, ResultChannel, SearchDirection, SearchInfo, SQUARES_NUM,
 };
 use casual_logger::{Level, Log};
@@ -16,7 +16,7 @@ impl Default for Bestmove {
     fn default() -> Self {
         Bestmove {
             file: None,
-            pred_result: GameResult::Lose,
+            pred_result: WayValue::Lose,
         }
     }
 }
@@ -53,7 +53,7 @@ impl Search {
     pub fn go(&mut self, pos: &mut Position, evaluation: &Evaluation) -> Bestmove {
         let bestmove_to_win = self.node(pos, evaluation, &ResultChannel::Win);
         match bestmove_to_win.pred_result {
-            GameResult::Win => {
+            WayValue::Win => {
                 return bestmove_to_win;
             }
             _ => {}
@@ -61,7 +61,7 @@ impl Search {
 
         let bestmove_to_draw = self.node(pos, evaluation, &ResultChannel::Draw);
         match bestmove_to_draw.pred_result {
-            GameResult::Draw => {
+            WayValue::Draw => {
                 return bestmove_to_draw;
             }
             _ => {}
@@ -212,7 +212,7 @@ impl Search {
         bestmove: &mut Bestmove,
         forward_cut_off: Option<ForwardCutOff>,
         info_leaf: bool,
-        info_backwarding: Option<GameResult>,
+        info_backwarding: Option<WayValue>,
         search_info: &mut SearchInfo,
     ) {
         let mut backward_cut_off = None;
@@ -222,7 +222,7 @@ impl Search {
 
         if let Some(opponent_game_result) = info_backwarding {
             match opponent_game_result {
-                GameResult::Lose => {
+                WayValue::Lose => {
                     // I beat the opponent.
                     // 相手を負かしました。
 
@@ -230,23 +230,23 @@ impl Search {
                     // 探索を終了します。
                     backward_cut_off = Some(BackwardCutOff::YouWin);
                 }
-                GameResult::Draw => {
+                WayValue::Draw => {
                     // If neither is wrong, draw.
                     // お互いがミスしなければ引き分け。
 
                     match bestmove.pred_result {
-                        GameResult::Lose => {
+                        WayValue::Lose => {
                             // If it gets better, change it to this. Generally called 'Update alpha evaluation'.
                             // 良くなるならこの手に変えます。一般的には 'α評価値の更新' と呼びます。
                             bestmove.file = Some(file);
-                            bestmove.pred_result = GameResult::Draw;
+                            bestmove.pred_result = WayValue::Draw;
                         }
                         _ => {}
                     }
                     // I will continue.
                     // まだ続けます。
                 }
-                GameResult::Win => {
+                WayValue::PossiblyWin | WayValue::Win => {
                     // Don't choose to lose.
                     // 自分が負ける手は選びません。
 
@@ -261,19 +261,25 @@ impl Search {
         if Log::enabled(Level::Info) && pos.info_enabled {
             if let Some(opponent_game_result) = info_backwarding {
                 match opponent_game_result {
-                    GameResult::Lose => {
+                    WayValue::Lose => {
                         // I beat the opponent.
                         // 相手を負かしました。
                         search_info.result = Some(GameResult::Win);
                         search_info.comment = Some("Hooray!".to_string());
                     }
-                    GameResult::Draw => {
+                    WayValue::Draw => {
                         // If neither is wrong, draw.
                         // お互いがミスしなければ引き分け。
                         search_info.result = Some(GameResult::Draw);
                         search_info.comment = Some("Fmmm.".to_string());
                     }
-                    GameResult::Win => {
+                    WayValue::PossiblyWin => {
+                        // Don't choose to lose.
+                        // 自分が負ける手は選びません。
+                        search_info.result = Some(GameResult::Lose);
+                        search_info.comment = Some("Oh!".to_string());
+                    }
+                    WayValue::Win => {
                         // Don't choose to lose.
                         // 自分が負ける手は選びません。
                         search_info.result = Some(GameResult::Lose);
@@ -297,12 +303,12 @@ impl Search {
             match forward_cut_off {
                 ForwardCutOff::OpponentWin => {
                     bestmove.file = Some(file);
-                    bestmove.pred_result = GameResult::Win;
+                    bestmove.pred_result = WayValue::Win;
                     return;
                 }
                 ForwardCutOff::Draw => {
                     bestmove.file = Some(file);
-                    bestmove.pred_result = GameResult::Draw;
+                    bestmove.pred_result = WayValue::Draw;
                     return;
                 }
             }
@@ -310,7 +316,7 @@ impl Search {
             match backward_cut_off {
                 BackwardCutOff::YouWin => {
                     bestmove.file = Some(file);
-                    bestmove.pred_result = GameResult::Win;
+                    bestmove.pred_result = WayValue::Win;
                     return;
                 }
             }

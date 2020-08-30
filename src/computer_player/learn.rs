@@ -1,7 +1,7 @@
 use crate::computer_player::FEATURE_V_H_B_S_LEN;
 use crate::FILE_LEN;
 use crate::{
-    computer_player::{Bestmove, Learning, Search},
+    computer_player::{Bestmove, Learning, Search, WayValue},
     log::LogExt,
     Engine, GameResult, ResultChannel, SearchInfo, EVALUATION_FILE_NAME,
 };
@@ -18,12 +18,13 @@ impl Learning {
         let old_info_enabled = engine.pos.info_enabled;
         engine.pos.info_enabled = false;
 
-        for trial in 0..60 {
-            Log::print_info(&format!("Trial={}", trial));
+        for game in 0..60 {
+            Log::print_info(&format!("Game={}", game));
             engine.enter("pos");
             engine.enter("xfen");
             Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json()));
-            loop {
+            for retry_way in 0..10 {
+                Log::print_info(&format!("RetryWay={}", retry_way));
                 engine.enter("uh");
                 engine.enter("go");
                 let bestmove = &engine.bestmove;
@@ -34,13 +35,18 @@ impl Learning {
                         engine.enter("xfen");
                         Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json()));
                         if let Some(_) = engine.game_result {
+                            // Game end.
                             break;
                         }
                     } else {
-                        break;
+                        // Not found file. Retry.
+                        // 列が未指定。 リトライ。
+                        Log::print_info(&format!("Not found file. retry_way={}", retry_way));
                     }
                 } else {
-                    break;
+                    // Resign. Retry.
+                    // 投了。 リトライ。
+                    Log::print_info(&format!("Resign. retry_way={}", retry_way));
                 }
             }
             engine.enter("undo");
@@ -175,14 +181,14 @@ impl Learning {
         for file in 0..FILE_LEN {
             match result_channel {
                 ResultChannel::Win => match files_way[file].pred_result {
-                    GameResult::Win => {
+                    WayValue::Win => {
                         obtainer[file] = true;
                         obtainer_count += 1;
                     }
                     _ => {}
                 },
                 ResultChannel::Draw => match files_way[file].pred_result {
-                    GameResult::Draw => {
+                    WayValue::Draw => {
                         obtainer[file] = true;
                         obtainer_count += 1;
                     }
