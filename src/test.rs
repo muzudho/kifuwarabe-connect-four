@@ -6,6 +6,7 @@ use crate::computer_player::Evaluation;
 use crate::log::LogExt;
 use crate::{
   computer_player::Search, GameResult, Piece, Position, ResultChannel, SearchDirection, SearchInfo,
+  WayValue,
 };
 use casual_logger::Log;
 use std::{thread, time};
@@ -105,7 +106,7 @@ pub fn test() {
   search_info.chosen_file = Some('d');
   search_info.leaf = true;
   search_info.pieces_num = None;
-  search_info.result = Some(GameResult::Win);
+  search_info.way_value = Some(WayValue::Win);
   search_info.turn = Piece::Cross;
   search_info.comment = Some("Hello!".to_string());
   Log::print_debug(&search_info.to_string());
@@ -128,7 +129,7 @@ pub fn test() {
   search_info.chosen_file = Some('d');
   search_info.leaf = false;
   search_info.pieces_num = Some(pos.pieces_num);
-  search_info.result = Some(GameResult::Win);
+  search_info.way_value = Some(WayValue::Win);
   search_info.turn = Piece::Nought;
   search_info.comment = Some("Hello!".to_string());
   Log::print_debug(&search_info.to_string());

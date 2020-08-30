@@ -1,8 +1,8 @@
 //! Display and data structure.  
 //! 表示と、データ構造です。  
 use crate::{
-    GameResult, Piece, Position, ResultChannel, SearchDirection, SearchInfo, BOARD_LEN, FILE_LEN,
-    SQUARES_NUM,
+    GameResult, Piece, Position, ResultChannel, SearchDirection, SearchInfo, WayValue, BOARD_LEN,
+    FILE_LEN, SQUARES_NUM,
 };
 use std::fmt;
 
@@ -21,6 +21,18 @@ impl fmt::Display for GameResult {
         use crate::GameResult::*;
         match self {
             Win => write!(f, "win"),
+            Draw => write!(f, "draw"),
+            Lose => write!(f, "lose"),
+        }
+    }
+}
+
+impl fmt::Display for WayValue {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use crate::WayValue::*;
+        match self {
+            Win => write!(f, "win"),
+            PossiblyWin => write!(f, "possibly_win"),
             Draw => write!(f, "draw"),
             Lose => write!(f, "lose"),
         }
@@ -173,7 +185,7 @@ impl Default for SearchInfo {
             chosen_file: None,
             leaf: false,
             pieces_num: None,
-            result: None,
+            way_value: None,
             turn: Piece::Nought,
             comment: None,
         }
@@ -217,10 +229,11 @@ impl SearchInfo {
             } else {
                 "              "
             },
-            if let Some(result) = self.result {
-                format!(", \"result\":{:6}", format!("\"{}\"", result.to_string()))
+            if let Some(way_value) = self.way_value {
+                // length of possibly_win is 12.
+                format!(", \"value\":\"{:12}\"", way_value)
             } else {
-                "                 ".to_string()
+                "                        ".to_string()
             },
             if let Some(comment) = &self.comment {
                 format!(", \"{}\":\"{}\"", self.turn, comment).to_string()

@@ -169,7 +169,7 @@ impl Search {
             // The opponent wins.
             // 対戦相手の勝ち。
             if Log::enabled(Level::Info) && pos.info_enabled {
-                search_info.result = Some(GameResult::Win);
+                search_info.way_value = Some(WayValue::Win);
                 search_info.comment = Some("Resign.".to_string());
             }
             Some(ForwardCutOff::OpponentWin)
@@ -178,7 +178,7 @@ impl Search {
             // 置く場所が無ければ引き分け。
             if Log::enabled(Level::Info) && pos.info_enabled {
                 info_leaf = true;
-                search_info.result = Some(GameResult::Draw);
+                search_info.way_value = Some(WayValue::Draw);
                 search_info.comment = Some("It is ok.".to_string());
             }
             Some(ForwardCutOff::Draw)
@@ -259,30 +259,30 @@ impl Search {
         // (3) Outputs backward search information.
         // (三) 後ろ向き探索の情報を出力します。
         if Log::enabled(Level::Info) && pos.info_enabled {
-            if let Some(opponent_game_result) = info_backwarding {
-                match opponent_game_result {
+            if let Some(opponent_way_value) = info_backwarding {
+                match opponent_way_value {
                     WayValue::Lose => {
                         // I beat the opponent.
                         // 相手を負かしました。
-                        search_info.result = Some(GameResult::Win);
+                        search_info.way_value = Some(WayValue::Win);
                         search_info.comment = Some("Hooray!".to_string());
                     }
                     WayValue::Draw => {
                         // If neither is wrong, draw.
                         // お互いがミスしなければ引き分け。
-                        search_info.result = Some(GameResult::Draw);
+                        search_info.way_value = Some(WayValue::Draw);
                         search_info.comment = Some("Fmmm.".to_string());
                     }
                     WayValue::PossiblyWin => {
                         // Don't choose to lose.
                         // 自分が負ける手は選びません。
-                        search_info.result = Some(GameResult::Lose);
+                        search_info.way_value = Some(WayValue::Lose);
                         search_info.comment = Some("Oh!".to_string());
                     }
                     WayValue::Win => {
                         // Don't choose to lose.
                         // 自分が負ける手は選びません。
-                        search_info.result = Some(GameResult::Lose);
+                        search_info.way_value = Some(WayValue::Lose);
                         search_info.comment = Some("Damn!".to_string());
                     }
                 }

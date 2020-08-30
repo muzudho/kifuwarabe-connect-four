@@ -3,7 +3,7 @@ pub mod evaluation_model;
 mod learn;
 pub mod search;
 
-use crate::GameResult;
+use crate::WayValue;
 use std::time::Instant;
 
 /// Vertical, Horizontal Baroque diagonal, Sinister diagonal.  
@@ -67,14 +67,4 @@ pub struct Evaluation {
     pub features_14_19_20_25: [[[[u8; NOUGHT_AND_CROSS_LEN]; WIN_AND_DRAW_LEN]; N3POW4]; 4],
     pub features_15_18_21_24: [[[[u8; NOUGHT_AND_CROSS_LEN]; WIN_AND_DRAW_LEN]; N3POW5]; 4],
     pub features_16_17_22_23: [[[[u8; NOUGHT_AND_CROSS_LEN]; WIN_AND_DRAW_LEN]; N3POW6]; 4],
-}
-
-/// Prediction result. It is a game that can be playout, so please use the result instead of the evaluation value.  
-/// 結果の予測。 プレイアウトできるゲームなので、評価値ではなく結果を使います。  
-#[derive(Clone, Copy, Debug)]
-pub enum WayValue {
-    Win,
-    PossiblyWin,
-    Draw,
-    Lose,
 }

@@ -139,6 +139,16 @@ pub enum GameResult {
     Lose,
 }
 
+/// Evaluation value. It is a game that can be playout, so please use the prediction result instead of the evaluation value.  
+/// 評価値。 プレイアウトできるゲームなので、評価値ではなく予測結果を使います。  
+#[derive(Clone, Copy, Debug)]
+pub enum WayValue {
+    Win,
+    PossiblyWin,
+    Draw,
+    Lose,
+}
+
 /// A record of the game used to suspend or resume it.  
 /// ゲームを中断したり、再開したりするときに使うゲームの記録です。  
 pub struct Position {
@@ -237,9 +247,9 @@ pub struct SearchInfo {
     /// 盤に置いてあるピースの数。  
     pub pieces_num: Option<usize>,
 
-    /// Result.  
-    /// 結果。  
-    pub result: Option<GameResult>,
+    /// Way value.  
+    /// 指し手の価値。  
+    pub way_value: Option<WayValue>,
 
     /// Turn.  
     /// 手番。  
