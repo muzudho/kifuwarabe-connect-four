@@ -48,6 +48,7 @@ The first thing you have to create is your motive.
 It is important to start with the appearance.  
 
 * [x] Step 3. Create the 'main.rs' file and 'look_and_model.rs' file.
+  * [x] Engine - Title screen.
   * [x] Piece - "O", "X".
   * [x] Game result - Win/Draw/Lose.
   * [x] Position - It's the board.
