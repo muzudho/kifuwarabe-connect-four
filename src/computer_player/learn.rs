@@ -226,6 +226,7 @@ impl Learning {
         // It can move the evaluation value.
         // 評価値が移動できます。
         let tensor_before_give = engine.evaluation.ways_weight(&engine.pos, &result_channel);
+        let mut obtainer_files = Vec::<usize>::new();
         let give_values = [
             {
                 let file_ch = 'a';
@@ -492,13 +493,11 @@ impl Learning {
             },
         ];
         {
-            let mut obtainer_files = Vec::<usize>::new();
             for file in 0..FILE_LEN {
                 if obtainer[file] {
                     obtainer_files.push(file);
                 }
             }
-            Log::print_info(&format!("obtainer_files={:?}", obtainer_files));
             for _i in 0..rest_point {
                 take1_values
                     [obtainer_files[rand::thread_rng().gen_range(0, obtainer_count) as usize]] += 1;
@@ -590,6 +589,7 @@ impl Learning {
             sum
         };
         let mut refund1_values;
+        let mut refunder_files = Vec::<usize>::new();
         {
             let refund_point = refund_total / co_obtainer_count;
             let refund_rest_point = refund_total % co_obtainer_count;
@@ -645,13 +645,11 @@ impl Learning {
                 },
             ];
             {
-                let mut refunder_files = Vec::<usize>::new();
                 for file in 0..FILE_LEN {
                     if !obtainer[file] {
                         refunder_files.push(file);
                     }
                 }
-                Log::print_info(&format!("refunder_files={:?}", refunder_files));
                 for _i in 0..refund_rest_point {
                     refund1_values[refunder_files
                         [rand::thread_rng().gen_range(0, co_obtainer_count) as usize]] += 1;
@@ -736,6 +734,16 @@ impl Learning {
             "Gives total={} Takes total={} Refund total={}
 ",
             gives_total, takes_total, refund_total
+        ));
+        text.push_str(&format!(
+            "obtainer_files={:?}
+",
+            obtainer_files
+        ));
+        text.push_str(&format!(
+            "refunder_files={:?}
+",
+            refunder_files
         ));
 
         text.push_str(&format!(
