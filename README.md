@@ -398,6 +398,10 @@ Let's larning a computer thinking.
     * [x] Get value.
     * [x] Set value.
     * [ ] Print some feature.
+  * [ ] Allocation functions.
+    * [ ] TODO `posval` command.
+    * [ ] TODO `posdiffval {file}` command.
+    * [ ] TODO `posdifffeat {file}` function.
 * [ ] Step 13. `computer_player/learn.rs`
 
 Finally.
