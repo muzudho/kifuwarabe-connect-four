@@ -518,48 +518,6 @@ impl Learning {
 ",
             result_channel
         ));
-        text.push_str(&format!(
-            "\
-[Feature number]
-File Vert Hori Baro Sini
----- ---- ---- ---- ----
-"
-        ));
-        text.push_str(&self.feat_numbers_by_file(
-            0,
-            'a',
-            &engine.evaluation.ways_feat(&engine.pos),
-        ));
-        text.push_str(&self.feat_numbers_by_file(
-            1,
-            'b',
-            &engine.evaluation.ways_feat(&engine.pos),
-        ));
-        text.push_str(&self.feat_numbers_by_file(
-            2,
-            'c',
-            &engine.evaluation.ways_feat(&engine.pos),
-        ));
-        text.push_str(&self.feat_numbers_by_file(
-            3,
-            'd',
-            &engine.evaluation.ways_feat(&engine.pos),
-        ));
-        text.push_str(&self.feat_numbers_by_file(
-            4,
-            'e',
-            &engine.evaluation.ways_feat(&engine.pos),
-        ));
-        text.push_str(&self.feat_numbers_by_file(
-            5,
-            'f',
-            &engine.evaluation.ways_feat(&engine.pos),
-        ));
-        text.push_str(&self.feat_numbers_by_file(
-            6,
-            'g',
-            &engine.evaluation.ways_feat(&engine.pos),
-        ));
         Log::print_info(&text);
 
         let tensor_before_take = engine.evaluation.ways_weight(&engine.pos, &result_channel);
@@ -783,13 +741,15 @@ File Vert Hori Baro Sini
         text.push_str(&format!(
             "\
 [Learn]
-File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro Sini Total   Take Val  Rest Vert Hori Baro Sini Total Refund Val  Vert Hori Baro Sini Total
----- ---- ---- ---- ---- -----        ------ ------        ---- ---- ---- ---- ---- -----        ---- ---- ---- ---- ---- ---- -----        ---- ---- ---- ---- ---- -----
+     | Feature number      | Current evaluation        | Choice way    | Give                           | Take                                | Refund
+File | Vert Hori Baro Sini | Vert Hori Baro Sini Total | File   Result | Val  Vert Hori Baro Sini Total | Val  Rest Vert Hori Baro Sini Total | Val  Vert Hori Baro Sini Total
+---- + ---- ---- ---- ---- + ---- ---- ---- ---- ----- + ------ ------ + ---- ---- ---- ---- ---- ----- + ---- ---- ---- ---- ---- ---- ----- + ---- ---- ---- ---- ---- -----
 "
         ));
         text.push_str(&self.score_line_by_file(
             0,
             'a',
+            &engine.evaluation.ways_feat(&engine.pos),
             &tensor_before_give,
             &tensor_before_take,
             &tensor_before_refund,
@@ -803,6 +763,7 @@ File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro S
         text.push_str(&self.score_line_by_file(
             1,
             'b',
+            &engine.evaluation.ways_feat(&engine.pos),
             &tensor_before_give,
             &tensor_before_take,
             &tensor_before_refund,
@@ -816,6 +777,7 @@ File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro S
         text.push_str(&self.score_line_by_file(
             2,
             'c',
+            &engine.evaluation.ways_feat(&engine.pos),
             &tensor_before_give,
             &tensor_before_take,
             &tensor_before_refund,
@@ -829,6 +791,7 @@ File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro S
         text.push_str(&self.score_line_by_file(
             3,
             'd',
+            &engine.evaluation.ways_feat(&engine.pos),
             &tensor_before_give,
             &tensor_before_take,
             &tensor_before_refund,
@@ -842,6 +805,7 @@ File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro S
         text.push_str(&self.score_line_by_file(
             4,
             'e',
+            &engine.evaluation.ways_feat(&engine.pos),
             &tensor_before_give,
             &tensor_before_take,
             &tensor_before_refund,
@@ -855,6 +819,7 @@ File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro S
         text.push_str(&self.score_line_by_file(
             5,
             'f',
+            &engine.evaluation.ways_feat(&engine.pos),
             &tensor_before_give,
             &tensor_before_take,
             &tensor_before_refund,
@@ -868,6 +833,7 @@ File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro S
         text.push_str(&self.score_line_by_file(
             6,
             'g',
+            &engine.evaluation.ways_feat(&engine.pos),
             &tensor_before_give,
             &tensor_before_take,
             &tensor_before_refund,
@@ -881,43 +847,11 @@ File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro S
         Log::print_info(&text);
     }
 
-    fn feat_numbers_by_file(
-        &self,
-        file: usize,
-        file_ch: char,
-        feat_number_tensor: &[[Option<u8>; FEATURE_V_H_B_S_LEN]; FILE_LEN],
-    ) -> String {
-        format!(
-            "   {0} {1: >4} {2: >4} {3: >4} {4: >4}
-",
-            file_ch,
-            if let Some(num) = feat_number_tensor[file][0] {
-                num.to_string()
-            } else {
-                "    ".to_string()
-            },
-            if let Some(num) = feat_number_tensor[file][1] {
-                num.to_string()
-            } else {
-                "    ".to_string()
-            },
-            if let Some(num) = feat_number_tensor[file][2] {
-                num.to_string()
-            } else {
-                "    ".to_string()
-            },
-            if let Some(num) = feat_number_tensor[file][3] {
-                num.to_string()
-            } else {
-                "    ".to_string()
-            },
-        )
-    }
-
     fn score_line_by_file(
         &self,
         file: usize,
         file_ch: char,
+        tensor_of_feat_number: &[[Option<u8>; FEATURE_V_H_B_S_LEN]; FILE_LEN],
         tensor_before_give: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
         tensor_before_take: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
         tensor_before_refund: &[[u8; FEATURE_V_H_B_S_LEN]; FILE_LEN],
@@ -929,9 +863,29 @@ File Vert Hori Baro Sini Total   Best File   Result   Give Val  Vert Hori Baro S
         refund_values: &[u16],
     ) -> String {
         format!(
-            "   {} {: >4} {: >4} {: >4} {: >4} {: >5}        {: <6} {: <6}        {: >4} {: >4} {: >4} {: >4} {: >4} {: >5}        {: >4} {: >4} {: >4} {: >4} {: >4} {: >4} {: >5}        {: >4} {: >4} {: >4} {: >4} {: >4} {: >5}
+            "{: >4} | {: >4} {: >4} {: >4} {: >4} | {: >4} {: >4} {: >4} {: >4} {: >5} | {: <6} {: <6} | {: >4} {: >4} {: >4} {: >4} {: >4} {: >5} | {: >4} {: >4} {: >4} {: >4} {: >4} {: >4} {: >5} | {: >4} {: >4} {: >4} {: >4} {: >4} {: >5}
 ",
             file_ch,
+            if let Some(num) = tensor_of_feat_number[file][0] {
+                num.to_string()
+            } else {
+                "    ".to_string()
+            },
+            if let Some(num) = tensor_of_feat_number[file][1] {
+                num.to_string()
+            } else {
+                "    ".to_string()
+            },
+            if let Some(num) = tensor_of_feat_number[file][2] {
+                num.to_string()
+            } else {
+                "    ".to_string()
+            },
+            if let Some(num) = tensor_of_feat_number[file][3] {
+                num.to_string()
+            } else {
+                "    ".to_string()
+            },
             tensor_before_give[file][0],
             tensor_before_give[file][1],
             tensor_before_give[file][2],
