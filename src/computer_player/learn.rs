@@ -101,6 +101,7 @@ impl Learning {
                     'a',
                     &mut search_info,
                     &mut bestmove,
+                    0,
                 );
                 bestmove
             },
@@ -113,6 +114,7 @@ impl Learning {
                     'b',
                     &mut search_info,
                     &mut bestmove,
+                    0,
                 );
                 bestmove
             },
@@ -125,6 +127,7 @@ impl Learning {
                     'c',
                     &mut search_info,
                     &mut bestmove,
+                    0,
                 );
                 bestmove
             },
@@ -137,6 +140,7 @@ impl Learning {
                     'd',
                     &mut search_info,
                     &mut bestmove,
+                    0,
                 );
                 bestmove
             },
@@ -149,6 +153,7 @@ impl Learning {
                     'e',
                     &mut search_info,
                     &mut bestmove,
+                    0,
                 );
                 bestmove
             },
@@ -161,6 +166,7 @@ impl Learning {
                     'f',
                     &mut search_info,
                     &mut bestmove,
+                    0,
                 );
                 bestmove
             },
@@ -173,6 +179,7 @@ impl Learning {
                     'g',
                     &mut search_info,
                     &mut bestmove,
+                    0,
                 );
                 bestmove
             },

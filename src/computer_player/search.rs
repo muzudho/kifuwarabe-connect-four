@@ -51,7 +51,7 @@ impl Search {
     /// * `GameResult` - Evaluation.  
     ///                     評価値。  
     pub fn go(&mut self, pos: &mut Position, evaluation: &Evaluation) -> Bestmove {
-        let bestmove_to_win = self.node(pos, evaluation, &ResultChannel::Win);
+        let bestmove_to_win = self.node(pos, evaluation, &ResultChannel::Win, 0);
         match bestmove_to_win.pred_result {
             WayValue::Win => {
                 return bestmove_to_win;
@@ -59,7 +59,7 @@ impl Search {
             _ => {}
         }
 
-        let bestmove_to_draw = self.node(pos, evaluation, &ResultChannel::Draw);
+        let bestmove_to_draw = self.node(pos, evaluation, &ResultChannel::Draw, 0);
         match bestmove_to_draw.pred_result {
             WayValue::Draw => {
                 return bestmove_to_draw;
@@ -92,6 +92,7 @@ impl Search {
         pos: &mut Position,
         evaluation: &Evaluation,
         result_channel: &ResultChannel,
+        depth: usize,
     ) -> Bestmove {
         let mut bestmove = Bestmove::default();
 
@@ -105,6 +106,7 @@ impl Search {
                 file,
                 &mut search_info,
                 &mut bestmove,
+                depth,
             );
         }
 
@@ -121,18 +123,19 @@ impl Search {
         file: char,
         search_info: &mut SearchInfo,
         bestmove: &mut Bestmove,
+        depth: usize,
     ) {
         // I only look at the empty square.
         // 空きマスだけを見ます。
         if !pos.is_file_fill(file) {
             let mut info_backwarding = None;
             let (forward_cut_off, info_leaf_child) =
-                self.node_exit_to_child_side(pos, file, search_info);
+                self.node_exit_to_child_side(pos, file, search_info, depth);
 
             if let None = forward_cut_off {
                 // If you move forward, it's your opponent's turn.
                 // 前向きに探索したら、次は対戦相手の番です。
-                let opponent_bestmove = self.node(pos, evaluation, result_channel);
+                let opponent_bestmove = self.node(pos, evaluation, result_channel, depth + 1);
                 // I'm back.
                 // 戻ってきました。
                 info_backwarding = Some(opponent_bestmove.pred_result);
@@ -154,6 +157,7 @@ impl Search {
         pos: &mut Position,
         file: char,
         search_info: &mut SearchInfo,
+        depth: usize,
     ) -> (Option<ForwardCutOff>, bool) {
         let mut info_leaf = false;
         // Let's put a stone for now.
@@ -166,22 +170,45 @@ impl Search {
         // 前向き検索を行わない理由を調べてください。
         // 無ければ探索します。
         let forward_cut_off = if pos.is_opponent_win() {
-            // The opponent wins.
-            // 対戦相手の勝ち。
-            if Log::enabled(Level::Info) && pos.info_enabled {
-                search_info.way_value = Some(WayValue::Win);
-                search_info.comment = Some("Resign.".to_string());
+            if depth == 0 {
+                // The opponent wins.
+                // 対戦相手の勝ち。
+
+                if Log::enabled(Level::Info) && pos.info_enabled {
+                    search_info.way_value = Some(WayValue::Win);
+                    search_info.comment = Some("Resign.".to_string());
+                }
+                Some(ForwardCutOff::OpponentWin)
+            } else {
+                // The opponent possibly wins.
+                // 対戦相手の多分勝ち。
+
+                if Log::enabled(Level::Info) && pos.info_enabled {
+                    search_info.way_value = Some(WayValue::PossiblyWin);
+                    search_info.comment = Some("Possibly resign.".to_string());
+                }
+                Some(ForwardCutOff::OpponentPossiblyWin)
             }
-            Some(ForwardCutOff::OpponentWin)
         } else if SQUARES_NUM <= pos.pieces_num {
-            // Draw if there is no place to put.
-            // 置く場所が無ければ引き分け。
-            if Log::enabled(Level::Info) && pos.info_enabled {
-                info_leaf = true;
-                search_info.way_value = Some(WayValue::Draw);
-                search_info.comment = Some("It is ok.".to_string());
+            if depth == 0 {
+                // Draw if there is no place to put.
+                // 置く場所が無ければ引き分け。
+                if Log::enabled(Level::Info) && pos.info_enabled {
+                    info_leaf = true;
+                    search_info.way_value = Some(WayValue::Draw);
+                    search_info.comment = Some("It is ok.".to_string());
+                }
+                Some(ForwardCutOff::Draw)
+            } else {
+                // Possibly draw if there is no place to put.
+                // 置く場所が無ければ多分引き分け。
+                if Log::enabled(Level::Info) && pos.info_enabled {
+                    info_leaf = true;
+                    search_info.way_value = Some(WayValue::PossiblyDraw);
+                    search_info.comment = Some("It is ok.".to_string());
+                }
+                Some(ForwardCutOff::PossiblyDraw)
             }
-            Some(ForwardCutOff::Draw)
         } else {
             if Log::enabled(Level::Info) && pos.info_enabled {
                 search_info.comment = Some("Search.".to_string());
@@ -332,9 +359,19 @@ impl Search {
                     bestmove.pred_result = WayValue::Win;
                     return;
                 }
+                ForwardCutOff::OpponentPossiblyWin => {
+                    bestmove.file = Some(file);
+                    bestmove.pred_result = WayValue::PossiblyWin;
+                    return;
+                }
                 ForwardCutOff::Draw => {
                     bestmove.file = Some(file);
                     bestmove.pred_result = WayValue::Draw;
+                    return;
+                }
+                ForwardCutOff::PossiblyDraw => {
+                    bestmove.file = Some(file);
+                    bestmove.pred_result = WayValue::PossiblyDraw;
                     return;
                 }
             }
@@ -459,9 +496,15 @@ enum ForwardCutOff {
     /// End with a opponent win.  
     /// 相手の勝ちにつき、終了。  
     OpponentWin,
+    /// End with a opponent possibly win.  
+    /// 相手の多分勝ちにつき、終了。  
+    OpponentPossiblyWin,
     /// End with a draw.  
     /// 引き分けにつき、終了。  
     Draw,
+    /// End with a possibly draw.  
+    /// 多分引き分けにつき、終了。  
+    PossiblyDraw,
 }
 
 /// The reason for ending the backward search.  
