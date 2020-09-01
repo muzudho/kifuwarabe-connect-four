@@ -25,7 +25,6 @@ impl Learning {
             Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json()));
             for retry_way in 0..10 {
                 Log::print_info(&format!("RetryWay={}", retry_way));
-                engine.enter("uh");
                 engine.enter("go");
                 let bestmove = &engine.bestmove;
                 if let Some(bestmove) = bestmove {
@@ -49,22 +48,22 @@ impl Learning {
                     Log::print_info(&format!("Resign. retry_way={}", retry_way));
                 }
             }
-            engine.enter("undo");
-            Log::print_info(&format!("Undo={}", engine.undone));
-            /*
+            Log::print_info(&"[Finished]");
+            // Points are distributed during rewind.
+            // 巻き戻し中にポイントが分配されます。
             engine.enter("pos");
             engine.enter("xfen");
-            Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json()));
-            */
+            engine.enter("undo");
             while engine.undone {
-                engine.enter("undo");
-                /*
-                Log::print_info(&format!("Undo={}", engine.undone));
                 engine.enter("pos");
                 engine.enter("xfen");
-                Log::print_info(&format!("PV_JSON={}", engine.pos.pv_json()));
-                */
+                // Learning.
+                engine.enter("uh");
+                // Undo.
+                engine.enter("undo");
             }
+            engine.enter("pos");
+            engine.enter("xfen");
             Log::print_info("Save.");
             engine.evaluation.save(EVALUATION_FILE_NAME);
         }

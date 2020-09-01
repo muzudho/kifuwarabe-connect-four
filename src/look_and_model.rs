@@ -248,7 +248,7 @@ impl SearchInfo {
     /// 前向き/後ろ向き 探索中の情報。  
     pub fn to_string(&self) -> String {
         format!(
-            "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"result_channel\":{:?}, \"choose\":\"{}\", \"total\":{}, \"a\":{}, \"b\":{}, \"c\":{}, \"d\":{}, \"e\":{}, \"f\":{}, \"g\":{}, \"pv\":[{}] }}",
+            "info json {{ \"nps\":{: >6}, \"nodes\":{: >6}{}{}{}{}{}, \"channel1\":{:?}, \"choose\":\"{}\", \"total\":{}, \"a\":{}, \"b\":{}, \"c\":{}, \"d\":{}, \"e\":{}, \"f\":{}, \"g\":{}, \"pv\":[{}] }}",
             self.nps,
             self.nodes,
             if let Some(file) = self.chosen_file {
