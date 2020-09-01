@@ -1,3 +1,15 @@
+// Publish:
+//
+// (1) `cargo test`
+// (2) `cargo run`
+// (3) Open auto-generated log file. I check it.
+// (4) Remove the log file.
+// (5) Version up on Cargo.toml.
+// (6) `cargo doc --open`
+// (7) Comit to Git-hub.
+// (8) `cargo publish --dry-run`
+// (9) `cargo publish`
+
 mod command_line_seek;
 mod computer_player;
 mod engine;
