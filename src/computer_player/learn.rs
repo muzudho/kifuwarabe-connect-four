@@ -874,31 +874,15 @@ File | Vert Hori Baro Sini | Vert Hori Baro Sini Total | File   Result | Val  Ve
             "{: >4} | {: >4} {: >4} {: >4} {: >4} | {: >4} {: >4} {: >4} {: >4} {: >5} | {: <6} {: <6} | {: >4} {: >4} {: >4} {: >4} {: >4} {: >5} | {: >4} {: >4} {: >4} {: >4} {: >4} {: >4} {: >5} | {: >4} {: >4} {: >4} {: >4} {: >4} {: >5}
 ",
             file_ch,
-            if let Some(num) = tensor_of_feat_number[file][0] {
-                num.to_string()
-            } else {
-                "    ".to_string()
-            },
-            if let Some(num) = tensor_of_feat_number[file][1] {
-                num.to_string()
-            } else {
-                "    ".to_string()
-            },
-            if let Some(num) = tensor_of_feat_number[file][2] {
-                num.to_string()
-            } else {
-                "    ".to_string()
-            },
-            if let Some(num) = tensor_of_feat_number[file][3] {
-                num.to_string()
-            } else {
-                "    ".to_string()
-            },
-            tensor_before_give[file][0],
-            tensor_before_give[file][1],
-            tensor_before_give[file][2],
-            tensor_before_give[file][3],
-            tensor_before_give[file][0] as u16 + tensor_before_give[file][1] as u16 + tensor_before_give[file][2] as u16 + tensor_before_give[file][3] as u16,
+            Learning::none_zero_to_point(tensor_of_feat_number[file][0]),
+            Learning::none_zero_to_point(tensor_of_feat_number[file][1]),
+            Learning::none_zero_to_point(tensor_of_feat_number[file][2]),
+            Learning::none_zero_to_point(tensor_of_feat_number[file][3]),
+            Learning::zero_to_point(tensor_before_give[file][0] as u16),
+            Learning::zero_to_point(tensor_before_give[file][1] as u16),
+            Learning::zero_to_point(tensor_before_give[file][2] as u16),
+            Learning::zero_to_point(tensor_before_give[file][3] as u16),
+            Learning::zero_to_point(tensor_before_give[file][0] as u16 + tensor_before_give[file][1] as u16 + tensor_before_give[file][2] as u16 + tensor_before_give[file][3] as u16),
             //
             if let Some(file) = files_way[file].file {
                 file.to_string()
@@ -907,27 +891,47 @@ File | Vert Hori Baro Sini | Vert Hori Baro Sini Total | File   Result | Val  Ve
             },
             &format!("{:?}", files_way[file].pred_result),
             //
-            give_values[file],
-            tensor_before_take[file][0],
-            tensor_before_take[file][1],
-            tensor_before_take[file][2],
-            tensor_before_take[file][3],
-            tensor_before_take[file][0] as u16 + tensor_before_take[file][1] as u16 + tensor_before_take[file][2] as u16 + tensor_before_take[file][3] as u16,
+            Learning::zero_to_point(give_values[file]),
+            Learning::zero_to_point(tensor_before_take[file][0]as u16),
+            Learning::zero_to_point(tensor_before_take[file][1]as u16),
+            Learning::zero_to_point(tensor_before_take[file][2]as u16),
+            Learning::zero_to_point(tensor_before_take[file][3]as u16),
+            Learning::zero_to_point(tensor_before_take[file][0] as u16 + tensor_before_take[file][1] as u16 + tensor_before_take[file][2] as u16 + tensor_before_take[file][3] as u16),
             //
-            take1_values[file],
-            rest_values[file],
-            tensor_before_refund[file][0],
-            tensor_before_refund[file][1],
-            tensor_before_refund[file][2],
-            tensor_before_refund[file][3],
-            tensor_before_refund[file][0] as u16 + tensor_before_refund[file][1] as u16 + tensor_before_refund[file][2] as u16 + tensor_before_refund[file][3] as u16,
+            Learning::zero_to_point(take1_values[file]as u16),
+            Learning::zero_to_point(rest_values[file]as u16),
+            Learning::zero_to_point(tensor_before_refund[file][0]as u16),
+            Learning::zero_to_point(tensor_before_refund[file][1]as u16),
+            Learning::zero_to_point(tensor_before_refund[file][2]as u16),
+            Learning::zero_to_point(tensor_before_refund[file][3]as u16),
+            Learning::zero_to_point(tensor_before_refund[file][0] as u16 + tensor_before_refund[file][1] as u16 + tensor_before_refund[file][2] as u16 + tensor_before_refund[file][3] as u16),
             //
-            refund_values[file],
-            new_tensor[file][0],
-            new_tensor[file][1],
-            new_tensor[file][2],
-            new_tensor[file][3],
-            new_tensor[file][0] as u16 + new_tensor[file][1] as u16 + new_tensor[file][2] as u16 + new_tensor[file][3] as u16,
+            Learning::zero_to_point(refund_values[file]as u16),
+            Learning::zero_to_point(new_tensor[file][0]as u16),
+            Learning::zero_to_point(new_tensor[file][1]as u16),
+            Learning::zero_to_point(new_tensor[file][2]as u16),
+            Learning::zero_to_point(new_tensor[file][3]as u16),
+            Learning::zero_to_point(new_tensor[file][0] as u16 + new_tensor[file][1] as u16 + new_tensor[file][2] as u16 + new_tensor[file][3] as u16),
         )
+    }
+
+    fn none_zero_to_point(num: Option<u8>) -> String {
+        if let Some(num) = num {
+            if num == 0 {
+                ".".to_string()
+            } else {
+                num.to_string()
+            }
+        } else {
+            ".".to_string()
+        }
+    }
+
+    fn zero_to_point(num: u16) -> String {
+        if num == 0 {
+            ".".to_string()
+        } else {
+            num.to_string()
+        }
     }
 }
